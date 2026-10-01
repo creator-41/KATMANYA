@@ -15,7 +15,8 @@
     canvas.hidden = true;
     story.style.height = '110svh';
   }
-  if (!gl) { fallback(); return; }
+  const ctx = gl ? null : canvas.getContext('2d');
+  if (!gl && !ctx) { fallback(); return; }
   const vertex = `
     attribute vec3 aPosition; attribute vec3 aNormal;
     uniform mat4 uModel; uniform mat4 uVP;
@@ -43,13 +44,13 @@
     if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s;
   }
   let program;
-  try { program=gl.createProgram();gl.attachShader(program,shader(gl.VERTEX_SHADER,vertex));gl.attachShader(program,shader(gl.FRAGMENT_SHADER,fragment));gl.linkProgram(program);
+  if(gl) try { program=gl.createProgram();gl.attachShader(program,shader(gl.VERTEX_SHADER,vertex));gl.attachShader(program,shader(gl.FRAGMENT_SHADER,fragment));gl.linkProgram(program);
     if(!gl.getProgramParameter(program,gl.LINK_STATUS)) throw new Error('3D program could not link');
   } catch(err){ console.error(err); fallback(); return; }
-  gl.useProgram(program);gl.enable(gl.DEPTH_TEST);gl.clearColor(0,0,0,0);
-  const loc={}; ['uModel','uVP','uColor','uClip','uRibs','uGlow','uEye'].forEach(n=>loc[n]=gl.getUniformLocation(program,n));
+  if(gl){gl.useProgram(program);gl.enable(gl.DEPTH_TEST);gl.clearColor(0,0,0,0);}
+  const loc={}; if(gl){ ['uModel','uVP','uColor','uClip','uRibs','uGlow','uEye'].forEach(n=>loc[n]=gl.getUniformLocation(program,n));
   loc.pos=gl.getAttribLocation(program,'aPosition');loc.normal=gl.getAttribLocation(program,'aNormal');
-  gl.enableVertexAttribArray(loc.pos);gl.enableVertexAttribArray(loc.normal);
+  gl.enableVertexAttribArray(loc.pos);gl.enableVertexAttribArray(loc.normal);}
   const TAU=Math.PI*2, clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
   const smooth=(a,b,v)=>{const t=clamp((v-a)/(b-a));return t*t*(3-2*t);};
   const sub=(a,b)=>a.map((x,i)=>x-b[i]);
@@ -68,33 +69,62 @@
     const f=1/Math.tan(36*Math.PI/360),near=.1,far=40;
     const proj=[f/aspect,0,0,0,0,f,0,0,0,0,(far+near)/(near-far),-1,0,0,2*far*near/(near-far),0];return mult(proj,view);
   }
-  function mesh(data,mode=gl.TRIANGLES,dynamic=false){const buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(data),dynamic?gl.DYNAMIC_DRAW:gl.STATIC_DRAW);return{buffer,count:data.length/6,mode};}
+  const TRIANGLES=4,LINES=1,LINE_STRIP=3;
+  function mesh(data,mode=TRIANGLES,dynamic=false){if(!gl)return {data,mode,count:data.length/6};const buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(data),dynamic?gl.DYNAMIC_DRAW:gl.STATIC_DRAW);return{buffer,count:data.length/6,mode};}
   function tri(data,a,b,c,na,nb,nc){const n=na||norm(cross(sub(b,a),sub(c,a)));[a,b,c].forEach((v,i)=>data.push(...v,...([na,nb,nc][i]||n)));}
   function quad(d,a,b,c,e){tri(d,a,b,c);tri(d,a,c,e);}
   const cubeData=[];
   [ [[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]], [[1,-1,-1],[-1,-1,-1],[-1,1,-1],[1,1,-1]], [[1,-1,1],[1,-1,-1],[1,1,-1],[1,1,1]], [[-1,-1,-1],[-1,-1,1],[-1,1,1],[-1,1,-1]], [[-1,1,1],[1,1,1],[1,1,-1],[-1,1,-1]], [[-1,-1,-1],[1,-1,-1],[1,-1,1],[-1,-1,1]] ].forEach(q=>quad(cubeData,...q.map(v=>v.map(x=>x*.5))));
   const cube=mesh(cubeData);
-  function cylinder(rt=1,rb=1,segments=40){const d=[];for(let i=0;i<segments;i++){let a=i/segments*TAU,b=(i+1)/segments*TAU;const p=[Math.cos(a)*rb,-.5,Math.sin(a)*rb],q=[Math.cos(b)*rb,-.5,Math.sin(b)*rb],r=[Math.cos(b)*rt,.5,Math.sin(b)*rt],s=[Math.cos(a)*rt,.5,Math.sin(a)*rt];quad(d,p,s,r,q);tri(d,[0,.5,0],r,s,[0,1,0],[0,1,0],[0,1,0]);tri(d,[0,-.5,0],p,q,[0,-1,0],[0,-1,0],[0,-1,0]);}return mesh(d);}
+  function cylinder(rt=1,rb=1,segments=gl?40:16){const d=[];for(let i=0;i<segments;i++){let a=i/segments*TAU,b=(i+1)/segments*TAU;const p=[Math.cos(a)*rb,-.5,Math.sin(a)*rb],q=[Math.cos(b)*rb,-.5,Math.sin(b)*rb],r=[Math.cos(b)*rt,.5,Math.sin(b)*rt],s=[Math.cos(a)*rt,.5,Math.sin(a)*rt];quad(d,p,s,r,q);tri(d,[0,.5,0],r,s,[0,1,0],[0,1,0],[0,1,0]);tri(d,[0,-.5,0],p,q,[0,-1,0],[0,-1,0],[0,-1,0]);}return mesh(d);}
   const cyl=cylinder(),cone=cylinder(1,.22,24);
   const H=1.3,bedY=.29;
   function radius(t,a){return .355+.09*Math.sin(t*TAU)+.035*Math.sin(t*Math.PI)+.026*Math.cos(12*a-t*6);}
   function point(t,a,inner=false){const r=radius(t,a)-(inner?.025:0);return [r*Math.cos(a),t*H,r*Math.sin(a)];}
   function normal(t,a){const p=point(t,a),pa=point(t,a+.002),py=point(t+.002,a);return norm(cross(sub(py,p),sub(pa,p)));}
   const vaseData=[];
-  for(let j=0;j<130;j++)for(let i=0;i<96;i++){
-    const t=j/130,u=(j+1)/130,a=i/96*TAU,b=(i+1)/96*TAU;
+  const rows=gl?130:36,cols=gl?96:48;
+  for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){
+    const t=j/rows,u=(j+1)/rows,a=i/cols*TAU,b=(i+1)/cols*TAU;
     const pa=point(t,a),pb=point(t,b),pc=point(u,b),pd=point(u,a),na=normal(t,a),nb=normal(t,b),nc=normal(u,b),nd=normal(u,a);
     tri(vaseData,pa,pb,pc,na,nb,nc);tri(vaseData,pa,pc,pd,na,nc,nd);
     const ia=point(t,a,true),ib=point(t,b,true),ic=point(u,b,true),id=point(u,a,true);
     tri(vaseData,ia,ic,ib,na.map(x=>-x),nc.map(x=>-x),nb.map(x=>-x));tri(vaseData,ia,id,ic,na.map(x=>-x),nd.map(x=>-x),nc.map(x=>-x));
   }
-  const vase=mesh(vaseData),ring=mesh([],gl.TRIANGLES,true),filament=mesh([],gl.LINE_STRIP,true);
-  const gridData=[];for(let i=-8;i<=8;i++){const n=i*.12;gridData.push(-.96,0,n,0,1,0,.96,0,n,0,1,0,n,0,-.96,0,1,0,n,0,.96,0,1,0);}const grid=mesh(gridData,gl.LINES);
-  function updateMesh(m,data){gl.bindBuffer(gl.ARRAY_BUFFER,m.buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(data),gl.DYNAMIC_DRAW);m.count=data.length/6;}
+  const vase=mesh(vaseData),ring=mesh([],TRIANGLES,true),filament=mesh([],LINE_STRIP,true);
+  const gridData=[];for(let i=-8;i<=8;i++){const n=i*.12;gridData.push(-.96,0,n,0,1,0,.96,0,n,0,1,0,n,0,-.96,0,1,0,n,0,.96,0,1,0);}const grid=mesh(gridData,LINES);
+  function updateMesh(m,data){if(!gl){m.data=data;m.count=data.length/6;return;}gl.bindBuffer(gl.ARRAY_BUFFER,m.buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(data),gl.DYNAMIC_DRAW);m.count=data.length/6;}
   const colors={frame:[.14,.17,.15],dark:[.055,.068,.06],edge:[.29,.33,.28],silver:[.51,.57,.49],acid:[.69,.94,.29],brass:[.66,.42,.15]};
   function draw(m,p,s,color,rot=[0,0,0],clip=99,ribs=0,glow=0,matrix=null){
+    if(!gl){softDraw(m,matrix||transform(p,s,rot),color,clip,glow);return;}
     gl.bindBuffer(gl.ARRAY_BUFFER,m.buffer);gl.vertexAttribPointer(loc.pos,3,gl.FLOAT,false,24,0);gl.vertexAttribPointer(loc.normal,3,gl.FLOAT,false,24,12);
     gl.uniformMatrix4fv(loc.uModel,false,matrix||transform(p,s,rot));gl.uniform3fv(loc.uColor,color);gl.uniform1f(loc.uClip,clip);gl.uniform1f(loc.uRibs,ribs);gl.uniform1f(loc.uGlow,glow);gl.drawArrays(m.mode,0,m.count);
+  }
+
+  // Perspective Canvas renderer keeps the same live geometry on devices without WebGL.
+  let softVP,faces=[];
+  function softDraw(mesh,model,color,clip,glow){
+    const data=mesh.data, combined=mult(softVP,model);
+    const project=p=>{const v=[...p,1],q=[0,0,0,0];for(let r=0;r<4;r++)for(let c=0;c<4;c++)q[r]+=combined[c*4+r]*v[c];return [(q[0]/q[3]+1)*canvas.width/2,(1-q[1]/q[3])*canvas.height/2,q[2]/q[3]];};
+    const vertex=i=>data.slice(i*6,i*6+3);
+    if(mesh.mode!==TRIANGLES){
+      const step=mesh.mode===LINES?2:1;
+      for(let i=0;i<mesh.count-1;i+=step){const points=[project(vertex(i)),project(vertex(i+1))];faces.push({points,z:(points[0][2]+points[1][2])/2,color:'rgb('+color.map(x=>Math.round(x*200)).join(',')+')',line:true});}return;
+    }
+    for(let i=0;i<mesh.count;i+=3){
+      let poly=[vertex(i),vertex(i+1),vertex(i+2)];
+      if(poly.every(v=>v[1]>clip))continue;
+      if(poly.some(v=>v[1]>clip)){
+        const out=[];for(let j=0;j<poly.length;j++){const a=poly[j],b=poly[(j+1)%poly.length];if(a[1]<=clip)out.push(a);if((a[1]<=clip)!==(b[1]<=clip)){const t=(clip-a[1])/(b[1]-a[1]);out.push(a.map((v,k)=>v+(b[k]-v)*t));}}poly=out;
+      }
+      const n=data.slice(i*6+3,i*6+6),worldN=norm([model[0]*n[0]+model[4]*n[1]+model[8]*n[2],model[1]*n[0]+model[5]*n[1]+model[9]*n[2],model[2]*n[0]+model[6]*n[1]+model[10]*n[2]]);
+      let light=.36+.62*Math.max(0,dot(worldN,[-.424,.707,.566]))+.18*Math.max(0,dot(worldN,[.64,.43,-.64]));light=light*(1-glow)+glow;
+      const points=poly.map(project);faces.push({points,z:points.reduce((a,p)=>a+p[2],0)/points.length,color:'rgb('+color.map(x=>Math.round(Math.min(1,x*light)*255)).join(',')+')'});
+    }
+  }
+  function softFlush(){
+    faces.sort((a,b)=>b.z-a.z);ctx.lineJoin='round';
+    for(const face of faces){ctx.beginPath();face.points.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.strokeStyle=face.color;ctx.lineWidth=face.line?1:.45;if(face.line){ctx.stroke();}else{ctx.closePath();ctx.fillStyle=face.color;ctx.fill();ctx.stroke();}}
   }
   const box=(p,s,c=colors.frame)=>draw(cube,p,s,c);
   function rod(a,b,r,c){const d=sub(b,a),length=Math.hypot(...d),direction=norm(d);let u=norm(cross(Math.abs(direction[1])>.99?[1,0,0]:[0,1,0],direction)),v=cross(u,direction);
@@ -103,20 +133,21 @@
   }
   let w=0,h=0,target=0,current=0,raf=0,last=0,visible=true,dirty=true;
   const chaptersAt=[0,.22,.52,.9];
-  function measure(){const rect=canvas.getBoundingClientRect();w=rect.width;h=rect.height;const dpr=Math.min(devicePixelRatio||1,1.65);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);gl.viewport(0,0,canvas.width,canvas.height);dirty=true;scroll();}
+  function measure(){const rect=canvas.getBoundingClientRect();w=rect.width;h=rect.height;const dpr=Math.min(devicePixelRatio||1,1.65);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);if(gl)gl.viewport(0,0,canvas.width,canvas.height);dirty=true;scroll();}
   function scroll(){const rect=story.getBoundingClientRect();target=clamp(-rect.top/Math.max(1,story.offsetHeight-window.innerHeight));dirty=true;start();}
   function setCopy(p){
     chapters.forEach((el,i)=>{let opacity=1;if(i>0)opacity*=smooth(chaptersAt[i]-.055,chaptersAt[i]+.025,p);if(i<3)opacity*=1-smooth(chaptersAt[i+1]-.07,chaptersAt[i+1]-.015,p);if(reduced.matches)opacity=i===0?1:0;
       el.style.opacity=opacity;el.style.visibility=opacity>.002?'visible':'hidden';el.style.pointerEvents=opacity>.6?'auto':'none';el.setAttribute('aria-hidden',opacity>.5?'false':'true');el.style.transform=window.innerWidth>800?'translateY(calc(-50% + '+((1-opacity)*18)+'px))':'translateY('+((1-opacity)*12)+'px)';});
   }
   function render(p){
-    gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+    if(gl)gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);else{ctx.clearRect(0,0,canvas.width,canvas.height);faces=[];}
     const progress=reduced.matches?1:clamp((p-.10)/.77),finished=smooth(.88,1,p);
     const yaw=.48+Math.sin(p*Math.PI)*.16+finished*.62;
     const mobile=window.innerWidth<=800;
     const dist=mobile?7.1:6.8;
     const eye=[Math.sin(yaw)*dist,3.3+finished*.15,Math.cos(yaw)*dist];
-    gl.uniform3fv(loc.uEye,eye);gl.uniformMatrix4fv(loc.uVP,false,camera(eye,[.12,1.35+finished*.08,0],w/h));
+    softVP=camera(eye,[.12,1.35+finished*.08,0],w/h);
+    if(gl){gl.uniform3fv(loc.uEye,eye);gl.uniformMatrix4fv(loc.uVP,false,softVP);}
     // Low plinth, inset feet and a brushed build plate.
     box([0,.03,0],[2.5,.15,2.02],colors.dark);
     for(const x of [-1.03,1.03])for(const z of [-.79,.79])box([x,-.085,z],[.22,.12,.24],colors.dark);
@@ -179,6 +210,7 @@
     // Front control panel and two indicator buttons.
     box([.79,.09,1.027],[.39,.12,.025],colors.dark);box([.76,.105,1.045],[.18,.04,.006],[.26,.4,.10]);
     draw(cyl,[.91,.1,1.058],[.034,.012,.034],colors.silver,[Math.PI/2,0,0]);
+    if(!gl)softFlush();
     const pct=Math.round(progress*100);bar.style.width=pct+'%';percent.innerHTML=pct+'<span>%</span>';layer.textContent='KATMAN '+String(Math.round(progress*120)).padStart(3,'0')+' / 120';
     status.textContent=progress===0?'ÜRETİME HAZIR':progress>=1?'BASKI TAMAMLANDI':'KATMANLAR ŞEKİL ALIYOR';setCopy(p);
   }
