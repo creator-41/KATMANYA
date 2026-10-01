@@ -16,6 +16,7 @@ if ("IntersectionObserver" in window && !reducedMotion) {
 
 const steps = [...document.querySelectorAll(".step")];
 const stageWord = document.querySelector("#stage-word");
+const stageIndex = document.querySelector(".stage-index");
 const stageCube = document.querySelector(".stage-cube");
 const words = ["FİKRİNİ ANLAT", "BİRLİKTE NETLEŞTİR", "ÜRETİME GEÇ"];
 if ("IntersectionObserver" in window && steps.length) {
@@ -25,6 +26,7 @@ if ("IntersectionObserver" in window && steps.length) {
       const index = Number(entry.target.dataset.step);
       steps.forEach((step) => step.classList.toggle("is-active", step === entry.target));
       stageWord.textContent = words[index];
+      stageIndex.textContent = `0${index + 1}`;
       stageCube.style.transform = ["rotateX(-27deg) rotateY(-38deg)", "rotateX(28deg) rotateY(52deg)", "rotateX(-20deg) rotateY(142deg)"][index];
     });
   }, { rootMargin: "-35% 0px -35% 0px", threshold: 0 });
