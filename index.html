@@ -1,92 +1,34 @@
 <!doctype html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101212">
-  <meta name="description" content="Veysel 3D — fikirleri katman katman gerçeğe dönüştürüyoruz. Özel 3D baskı ve üretim.">
-  <title>Veysel 3D — Fikrini katman katman üret</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101212"><meta name="description" content="Veysel 3D. Fikrinden ilk katmana, ilk katmandan elindeki objeye.">
+  <title>Veysel 3D — Fikrine bir boyut daha.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=2">
 </head>
 <body>
-  <div class="grain" aria-hidden="true"></div>
-  <header class="topbar">
-    <a class="brand" href="#top" aria-label="Veysel 3D ana sayfa">
-      <span class="brand-mark"><i></i><i></i><i></i></span>
-      <span>VEYSEL<span class="brand-light">/3D</span></span>
-    </a>
-    <nav aria-label="Ana menü">
-      <a href="#surec">Süreç</a><a href="#isler">Üretimler</a><a href="#teklif">Teklif al</a>
-    </nav>
-    <a class="nav-cta" href="#teklif">Projeni anlat <span>↗</span></a>
-    <button class="menu-toggle" aria-label="Menüyü aç" aria-expanded="false"><span></span><span></span></button>
-  </header>
-
+  <header class="topbar"><a class="brand" href="#top" aria-label="Veysel 3D ana sayfa"><span class="brand-mark"><i></i><i></i><i></i></span>VEYSEL<span class="brand-light">/3D</span></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Atölye</a><a href="#fikir">Bir fikrim var <span>↗</span></a></nav><a class="mobile-nav" href="#atolye">Atölye ↗</a></header>
   <main id="top">
-    <section class="hero">
-      <div class="hero-copy reveal">
-        <p class="eyebrow"><span class="live-dot"></span> FİKİRDEN FİZİKSELE · 3D BASKI</p>
-        <h1>Hayal et.<br><em>Katman katman</em><br>gerçek olsun.</h1>
-        <p class="hero-intro">Aklındaki parçayı, objeyi ya da prototipi birlikte üretelim. Sen fikrini anlat; biz onu gerçeğe dönüştürelim.</p>
-        <div class="hero-actions">
-          <a class="button button-primary" href="#teklif">Baskı fikrini anlat <span>↗</span></a>
-          <a class="text-link" href="#isler">Atölyeyi keşfet <span>↓</span></a>
+    <section class="print-story" id="deneyim" aria-label="Kaydırmayla ilerleyen üç boyutlu baskı deneyimi">
+      <div class="print-sticky">
+        <div class="ambient" aria-hidden="true"></div>
+        <div class="scene-wrap"><canvas id="printer" aria-label="Kaydırdıkça hareket eden üç boyutlu yazıcı ve büyüyen spiral vazo modeli"></canvas><div class="scene-fallback" hidden><span>01 / FİKİRDEN ÜRETİME</span><p>Fikrine bir boyut daha.</p><small>Bu cihazda 3D görünüm açılamadı. Atölyeyi aşağıdan keşfedebilirsin.</small></div></div>
+        <div class="story-copies">
+          <article class="chapter active" data-chapter="0"><p class="eyebrow"><span class="live-dot"></span> VEYSEL 3D · FİKİRDEN ÜRETİME</p><h1>Fikrine<br> bir boyut<br> <em>daha.</em></h1><p class="chapter-desc">Bir çizginin nasıl bir objeye dönüştüğünü izle.<br> Üretim sen kaydırdıkça ilerler.</p><a class="scroll-invite" href="#baski-baslangici"><span class="scroll-line"></span> KEŞFETMEK İÇİN KAYDIR <b>↓</b></a></article>
+          <article class="chapter" data-chapter="1" aria-hidden="true"><p class="eyebrow">01 / İLK İZ</p><h2>Her şey<br> <em>bir çizgiyle</em><br> başlar.</h2><p class="chapter-desc">Nozul yolunu çizer.<br> Fikrin ilk katmanı yerini bulur.</p></article>
+          <article class="chapter" data-chapter="2" aria-hidden="true"><p class="eyebrow">02 / ŞEKİL ALIYOR</p><h2>Katmanlar<br> birikir.<br> <em>Fikrin büyür.</em></h2><p class="chapter-desc">Her dönüşte yeni bir detay.<br> Her katmanda biraz daha gerçek.</p></article>
+          <article class="chapter" data-chapter="3" aria-hidden="true"><p class="eyebrow">03 / FİKİRDEN FİZİKSELE</p><h2>Artık<br> <em>dokunabileceğin</em><br> bir fikir.</h2><p class="chapter-desc">Kişisel bir obje, işlevsel bir parça,<br> ya da henüz kimsenin düşünmediği bir şey.</p><a class="button" href="#atolye">Atölyeyi keşfet <span>↗</span></a></article>
         </div>
-        <div class="hero-note"><span class="note-line"></span><span>Özel tasarım · Özenli üretim · Sana özel</span></div>
+        <div class="scene-label"><span class="label-cross">+</span><span>FORM ÇALIŞMASI / 001<br> <b>SPİRAL VAZO</b></span></div>
+        <div class="print-hud"><div class="hud-status"><span class="live-dot"></span><span id="print-status">ÜRETİME HAZIR</span></div><div class="hud-track"><span id="print-bar"></span></div><div class="hud-values"><span id="layer-value">KATMAN 000 / 120</span><strong id="print-percent">0<span>%</span></strong></div></div>
+        <div class="scene-footer"><span>DİJİTAL BASKI DENEYİMİ</span><span>HAREKET SENİN ELİNDE <b>↓</b></span></div>
       </div>
-      <div class="hero-art" aria-label="Katman katman üretilen soyut 3D obje">
-        <div class="art-grid"></div><div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
-        <div class="art-object"><div class="object-top"></div><div class="object-core"></div><div class="object-base"></div><div class="object-shine"></div></div>
-        <div class="art-label label-top"><span>01 / 03</span><b>MODEL</b></div>
-        <div class="art-label label-bottom"><span>FİKRİNİ</span><b>ÜRETİYORUZ</b></div>
-        <div class="art-cross cross-one">+</div><div class="art-cross cross-two">+</div>
-        <div class="scroll-cue"><span></span> AŞAĞI KAYDIR</div>
-      </div>
+      <span class="story-anchor" id="baski-baslangici"></span>
     </section>
-
-    <section class="marquee" aria-label="Veysel 3D yaklaşımı">
-      <div class="marquee-track"><span>FİKRİNİ ÜRET</span><b>✳</b><span>DETAYI ÖNEMSE</span><b>✳</b><span>KATMAN KATMAN</span><b>✳</b><span>FİKRİNİ ÜRET</span><b>✳</b><span>DETAYI ÖNEMSE</span><b>✳</b><span>KATMAN KATMAN</span><b>✳</b></div>
-    </section>
-
-    <section class="process section-wrap" id="surec">
-      <div class="section-heading reveal">
-        <p class="eyebrow">NASIL ÇALIŞIYORUZ <span>01—03</span></p>
-        <h2>Bir fikir.<br><em>Üç adım.</em></h2>
-        <p>Dosyan hazır olsun ya da yalnızca aklında bir fikir bulunsun. Başlangıç için ikisi de yeter.</p>
-      </div>
-      <div class="process-stage">
-        <div class="stage-visual">
-          <div class="stage-grid"></div><div class="stage-ring"></div>
-          <div class="stage-cube"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-          <div class="stage-caption"><span class="stage-index">01</span><span id="stage-word">FİKRİNİ ANLAT</span></div>
-        </div>
-        <div class="steps">
-          <article class="step is-active" data-step="0"><span class="step-num">01</span><div><h3>Fikrini anlat</h3><p>Ne üretmek istediğini, ölçülerini ve varsa model dosyanı gönder.</p></div><span class="step-arrow">↗</span></article>
-          <article class="step" data-step="1"><span class="step-num">02</span><div><h3>Birlikte netleştirelim</h3><p>Malzeme, renk ve baskı detaylarını ihtiyacına göre belirleyelim.</p></div><span class="step-arrow">↗</span></article>
-          <article class="step" data-step="2"><span class="step-num">03</span><div><h3>Üretime geçelim</h3><p>Onayından sonra parçanı özenle basalım ve teslimata hazırlayalım.</p></div><span class="step-arrow">↗</span></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="work section-wrap" id="isler">
-      <div class="work-head reveal"><div><p class="eyebrow">ATÖLYEDEN ÇIKANLAR <span>02—03</span></p><h2>Her baskıda<br><em>yeni bir fikir.</em></h2></div><p class="work-desc">İlk üretimlerimiz hazırlanıyor. Atölyeden çıkan yeni parçalar burada yerini alacak.</p></div>
-      <div class="work-grid">
-        <article class="work-card work-card-large reveal"><div class="work-image image-one"><span class="image-shape shape-one"></span><span class="image-tag">ÖZEL ÜRETİM</span><span class="image-counter">01 / ∞</span></div><div class="work-meta"><h3>İhtiyacına göre tasarlanır</h3><span>FİKRİN → PARÇAN</span></div></article>
-        <article class="work-card reveal"><div class="work-image image-two"><span class="image-shape shape-two"></span><span class="image-tag">PROTOTİP</span><span class="image-counter">02 / ∞</span></div><div class="work-meta"><h3>Denemeden gerçeğe</h3><span>MODEL → ÜRETİM</span></div></article>
-        <article class="work-card reveal"><div class="work-image image-three"><span class="image-shape shape-three"></span><span class="image-tag">GÜNLÜK OBJE</span><span class="image-counter">03 / ∞</span></div><div class="work-meta"><h3>Küçük detaylar, iyi fikirler</h3><span>FONKSİYON + FORM</span></div></article>
-      </div>
-    </section>
-
-    <section class="quote-band" id="teklif">
-      <div class="quote-orb" aria-hidden="true"></div>
-      <div class="quote-content reveal"><p class="eyebrow">SIRADAKİ FİKİR SENİN <span>03—03</span></p><h2>Ne üretmek<br><em>isterdin?</em></h2><p>Dosyanı ya da fikrini paylaş. Uygun üretim yöntemini ve fiyatı birlikte netleştirelim.</p><a class="button button-dark" href="mailto:">Projemi anlat <span>↗</span></a><small>İletişim adresini eklediğimizde bu buton aktif olacak.</small></div>
-      <div class="quote-index">V / 3D</div>
-    </section>
-  </main>
-  <footer><a class="brand" href="#top"><span class="brand-mark"><i></i><i></i><i></i></span><span>VEYSEL<span class="brand-light">/3D</span></span></a><p>Fikrini katman katman üret.</p><span>© <span id="year"></span> VEYSEL 3D</span></footer>
-  <script src="main.js"></script>
-</body>
-</html>
+    <section class="atelier" id="atolye"><div class="section-top"><p class="eyebrow">KÜÇÜK BİR ATÖLYE. BÜYÜK OLASILIKLAR.</p><span>VEYSEL / 3D</span></div><div class="atelier-intro"><h2>Aklında varsa,<br> <em>bir başlangıcı var.</em></h2><p>İlk yazıcımız çalışmaya başladı. Şimdi yeni fikirler deniyor, malzemeleri tanıyor ve her baskıda bir adım daha ilerliyoruz.</p></div><div class="possibilities"><article><span class="card-number">01 — KİŞİSEL</span><div class="card-art art-vase" aria-hidden="true"><svg viewBox="0 0 300 220"><defs><linearGradient id="v"><stop stop-color="#6f943a"/><stop offset=".4" stop-color="#d0f88a"/><stop offset="1" stop-color="#72943e"/></linearGradient><pattern id="layers" width="4" height="4" patternUnits="userSpaceOnUse"><path d="M0 3.5H300" stroke="#0b1c04" stroke-opacity=".2" stroke-width=".7"/></pattern></defs><ellipse cx="150" cy="194" rx="58" ry="10" fill="#000" opacity=".15"/><path id="vase" d="M112 40Q150 26 188 40C170 93 202 122 187 184Q150 201 113 184C98 122 130 93 112 40Z" fill="url(#v)"/><use href="#vase" fill="url(#layers)"/><ellipse cx="150" cy="40" rx="38" ry="9" fill="#566d2e"/><ellipse cx="150" cy="41" rx="32" ry="5" fill="#253516"/></svg></div><h3>Sadece sana ait.</h3><p>Masan için bir obje. Sevdiğin biri için anlamı olan bir hediye.</p></article><article><span class="card-number">02 — İŞLEVSEL</span><div class="card-art art-part" aria-hidden="true"><svg viewBox="0 0 300 220"><defs><linearGradient id="p"><stop stop-color="#b4c0b5"/><stop offset="1" stop-color="#66746b"/></linearGradient></defs><ellipse cx="154" cy="178" rx="70" ry="12" fill="#000" opacity=".13"/><path d="M90 76L166 46L219 81L141 112Z" fill="#d2dad1"/><path d="M90 76L141 112V176L90 140Z" fill="#62736a"/><path d="M141 112L219 81V145L141 176Z" fill="url(#p)"/><ellipse cx="156" cy="78" rx="26" ry="12" fill="#374a40"/><path d="M174 116V142L202 131V105Z" fill="#3a4c43"/></svg></div><h3>Bir ihtiyaca cevap.</h3><p>Hayatını kolaylaştıracak bir tutucu, düzenleyici ya da özel parça.</p></article><article><span class="card-number">03 — DENEYSEL</span><div class="card-art art-orbit" aria-hidden="true"><svg viewBox="0 0 300 220"><g transform="translate(150 110) rotate(-25)" fill="none" stroke="#b99065" stroke-width="7"><ellipse rx="75" ry="32"/><ellipse rx="75" ry="32" transform="rotate(60)"/><ellipse rx="75" ry="32" transform="rotate(120)"/></g><circle cx="150" cy="110" r="20" fill="#caaa86"/></svg></div><h3>Önce bir deneyelim.</h3><p>Çizimden ilk modele. Aklındaki tasarımın ilk fiziksel denemesi.</p></article></div><p class="concept-note">Görseller tasarım çalışmalarını temsil eder. Gerçek baskı örnekleri yakında burada.</p></section>
+    <section class="closing" id="fikir"><p class="eyebrow">SIRADAKİ KATMANDA SENİN FİKRİN VAR.</p><h2>Peki sen,<br> <em>ne üretirdin?</em><span>↗</span></h2><div class="closing-bottom"><p>Atölyenin ilk üretimleri hazırlanıyor.<br> Çok yakında fikirlerini birlikte şekillendireceğiz.</p><a href="#top">DENEYİMİ BAŞTAN YAŞA ↑</a></div></section>
+  </main><footer><a class="brand" href="#top">VEYSEL<span class="brand-light">/3D</span></a><span>FİKRİNE BİR BOYUT DAHA.</span><small>© <span id="year">2026</span></small></footer>
+  <script src="main.js?v=2" defer></script>
+</body></html>
