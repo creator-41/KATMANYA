@@ -48,4 +48,5 @@
 @media(max-width:800px){
   .chapter h1,.chapter h2,.chapter[data-chapter="6"] h2,.process h2,.brief h2,.atelier h2,.closing h2,.install-dialog h2{font-size:37px}
   .product-slide h2{font-size:37px;line-height:1.04;white-space:nowrap}
+  .chapter[data-chapter="3"] h2{font-size:37px}
 }
