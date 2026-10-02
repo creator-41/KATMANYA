@@ -89,23 +89,21 @@
   const logoMesh=pixelLogo();
   function cylinder(rt=1,rb=1,segments=gl?40:16){const d=[];for(let i=0;i<segments;i++){let a=i/segments*TAU,b=(i+1)/segments*TAU;const p=[Math.cos(a)*rb,-.5,Math.sin(a)*rb],q=[Math.cos(b)*rb,-.5,Math.sin(b)*rb],r=[Math.cos(b)*rt,.5,Math.sin(b)*rt],s=[Math.cos(a)*rt,.5,Math.sin(a)*rt];quad(d,p,s,r,q);tri(d,[0,.5,0],r,s,[0,1,0],[0,1,0],[0,1,0]);tri(d,[0,-.5,0],p,q,[0,-1,0],[0,-1,0],[0,-1,0]);}return mesh(d);}
   const cyl=cylinder(),cone=cylinder(1,.22,24);
-  const H=1.3,bedY=.29;
-  function radius(t,a){return .355+.09*Math.sin(t*TAU)+.035*Math.sin(t*Math.PI)+.026*Math.cos(12*a-t*6);}
-  function point(t,a,inner=false){const r=radius(t,a)-(inner?.025:0);return [r*Math.cos(a),t*H,r*Math.sin(a)];}
-  function normal(t,a){const p=point(t,a),pa=point(t,a+.002),py=point(t+.002,a);return norm(cross(sub(py,p),sub(pa,p)));}
-  const vaseData=[];
-  const rows=gl?130:36,cols=gl?96:48;
-  for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){
-    const t=j/rows,u=(j+1)/rows,a=i/cols*TAU,b=(i+1)/cols*TAU;
-    const pa=point(t,a),pb=point(t,b),pc=point(u,b),pd=point(u,a),na=normal(t,a),nb=normal(t,b),nc=normal(u,b),nd=normal(u,a);
-    tri(vaseData,pa,pb,pc,na,nb,nc);tri(vaseData,pa,pc,pd,na,nc,nd);
-    const ia=point(t,a,true),ib=point(t,b,true),ic=point(u,b,true),id=point(u,a,true);
-    tri(vaseData,ia,ic,ib,na.map(x=>-x),nc.map(x=>-x),nb.map(x=>-x));tri(vaseData,ia,id,ic,na.map(x=>-x),nd.map(x=>-x),nc.map(x=>-x));
+  const H=1.3;
+  function helmetMesh(){
+    const d=[],sections=[[0,.32,.23],[.10,.43,.30],[.33,.50,.34],[.64,.53,.31],[.88,.45,.27],[1.08,.30,.20],[1.25,.12,.10],[1.30,.025,.025]],steps=12;
+    for(let j=0;j<sections.length-1;j++)for(let i=0;i<steps;i++){
+      const [y0,x0,z0]=sections[j],[y1,x1,z1]=sections[j+1],a=i/steps*TAU,b=(i+1)/steps*TAU;
+      const p=[x0*Math.sin(a),y0,z0*Math.cos(a)],q=[x0*Math.sin(b),y0,z0*Math.cos(b)],r=[x1*Math.sin(b),y1,z1*Math.cos(b)],t=[x1*Math.sin(a),y1,z1*Math.cos(a)];quad(d,p,q,r,t);
+    }
+    const top=sections.at(-1);for(let i=0;i<steps;i++){const a=i/steps*TAU,b=(i+1)/steps*TAU;tri(d,[0,1.3,0],[top[1]*Math.sin(a),top[0],top[2]*Math.cos(a)],[top[1]*Math.sin(b),top[0],top[2]*Math.cos(b)]);}
+    return mesh(d);
   }
-  const vase=mesh(vaseData),ring=mesh([],TRIANGLES,true),filament=mesh([],LINE_STRIP,true);
+  function visorMesh(){const d=[],p=[[-.34,.43,.298],[-.49,.56,.303],[-.43,.72,.300],[.43,.72,.300],[.49,.56,.303],[.34,.43,.298]];for(let i=1;i<p.length-1;i++)tri(d,p[0],p[i],p[i+1],[0,0,1],[0,0,1],[0,0,1]);return mesh(d);}
+  const helmet=helmetMesh(),visor=visorMesh(),filament=mesh([],LINE_STRIP,true);
   const gridData=[];for(let i=-8;i<=8;i++){const n=i*.12;gridData.push(-.96,0,n,0,1,0,.96,0,n,0,1,0,n,0,-.96,0,1,0,n,0,.96,0,1,0);}const grid=mesh(gridData,LINES);
   function updateMesh(m,data){if(!gl){m.data=data;m.count=data.length/6;return;}gl.bindBuffer(gl.ARRAY_BUFFER,m.buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(data),gl.DYNAMIC_DRAW);m.count=data.length/6;}
-  const colors={frame:[.14,.17,.15],dark:[.055,.068,.06],edge:[.29,.33,.28],silver:[.51,.57,.49],acid:[.69,.94,.29],brass:[.66,.42,.15]};
+  const colors={frame:[.14,.17,.15],dark:[.055,.068,.06],edge:[.29,.33,.28],silver:[.51,.57,.49],acid:[.69,.94,.29],brass:[.66,.42,.15],helmet:[.78,.82,.84],visor:[.018,.035,.052],blue:[.10,.20,.92],green:[.08,.65,.26]};
   function draw(m,p,s,color,rot=[0,0,0],clip=99,ribs=0,glow=0,matrix=null){
     if(!gl){softDraw(m,matrix||transform(p,s,rot),color,clip,glow);return;}
     gl.bindBuffer(gl.ARRAY_BUFFER,m.buffer);gl.vertexAttribPointer(loc.pos,3,gl.FLOAT,false,24,0);gl.vertexAttribPointer(loc.normal,3,gl.FLOAT,false,24,12);
@@ -197,26 +195,37 @@
       draw(cyl,[x+.026,2.22,-.70],[.084,.009,.084],colors.edge,[0,0,Math.PI/2]);
       for(let i=0;i<6;i++){const a=spin+i*TAU/6;rod([x+.025,2.22+Math.cos(a)*.12,-.70+Math.sin(a)*.12],[x+.025,2.22+Math.cos(a)*.28,-.70+Math.sin(a)*.28],.011,colors.edge);}
     }
-    const height=progress*H,angle=progress*TAU*28,rr=radius(progress,angle);
+    const height=progress*H,angle=progress*TAU*28;
     const intro=1-smooth(0,.10,p),park=finished;
-    const nx=(rr*Math.cos(angle))*(1-intro)*(1-park)-.81*(intro+park);
-    const nz=rr*Math.sin(angle)*(1-intro)*(1-park)-.25*(intro+park);
+    const nx=(.58*Math.cos(angle))*(1-intro)*(1-park)-.81*(intro+park);
+    const nz=(.42*Math.sin(angle))*(1-intro)*(1-park)-.25*(intro+park);
     const tipY=homeY+.012+intro*.25+park*.36;
     // Top-mounted XY carriage moves the nozzle while the build plate lowers.
     box([0,2.54,nz],[2.07,.085,.10],colors.silver);
     box([0,2.59,nz],[2.08,.024,.024],colors.dark);
     box([nx,2.45,nz],[.23,.23,.22],colors.frame);
     box([nx,2.35,nz+.13],[.18,.18,.018],colors.dark);
+    // The print is an original low-poly robot helmet, revealed layer by layer.
+    if(height>.001){
+      draw(helmet,[0,bedY+.027,0],[1,1,1],colors.helmet,[0,0,0],height);
+      draw(visor,[0,bedY+.027,0],[1,1,1],colors.visor,[0,0,0],height);
+      if(height>.40){
+        box([-.46,bedY+.47,.20],[.17,.18,.15],colors.green);box([.46,bedY+.47,.20],[.17,.18,.15],colors.green);
+        box([-.46,bedY+.47,.282],[.115,.12,.018],colors.dark);box([.46,bedY+.47,.282],[.115,.12,.018],colors.dark);
+      }
+      if(height>.82){box([0,bedY+1.02,.10],[.43,.20,.34],colors.blue);box([0,bedY+1.12,.115],[.28,.08,.32],[.20,.35,1]);}
+      if(height>.65){box([-.32,bedY+.58,.285],[.12,.10,.025],colors.helmet);box([.32,bedY+.58,.285],[.12,.10,.025],colors.helmet);}
+    }
     // Hot end, heatsink, fan housing and brass nozzle follow the deposition path.
-    box([nx,tipY+.27,nz],[.22,.25,.2],colors.dark);
-    box([nx,tipY+.27,nz+.106],[.18,.18,.013],colors.frame);
-    draw(cyl,[nx,tipY+.27,nz+.12],[.063,.022,.063],colors.dark,[Math.PI/2,0,0]);
-    for(let i=0;i<5;i++){const a=angle*2+i*TAU/5;rod([nx+Math.cos(a)*.022,tipY+.27+Math.sin(a)*.022,nz+.14],[nx+Math.cos(a+.4)*.048,tipY+.2+Math.sin(a+.4)*.048,nz+.14],.007,colors.edge);}
-    box([nx+.067,tipY+.37,nz+.116],[.016,.028,.006],colors.acid);
-    for(let i=0;i<4;i++)draw(cyl,[nx,tipY+.153+i*.013,nz],[.046,.008,.046],colors.silver);
-    box([nx,tipY+.125,nz],[.067,.027,.058],colors.silver);
-    draw(cone,[nx,tipY-.028,nz],[.028,.042,.028],colors.brass);
-    if(progress>.001&&progress<.999)draw(cyl,[nx,tipY-.004,nz],[.016,.003,.016],[.91,1,.64],[0,0,0],99,0,1);
+    box([nx,tipY+.22,nz],[.22,.25,.2],colors.dark);
+    box([nx,tipY+.22,nz+.106],[.18,.18,.013],colors.frame);
+    draw(cyl,[nx,tipY+.22,nz+.12],[.063,.022,.063],colors.dark,[Math.PI/2,0,0]);
+    for(let i=0;i<5;i++){const a=angle*2+i*TAU/5;rod([nx+Math.cos(a)*.022,tipY+.22+Math.sin(a)*.022,nz+.14],[nx+Math.cos(a+.4)*.048,tipY+.15+Math.sin(a+.4)*.048,nz+.14],.007,colors.edge);}
+    box([nx+.067,tipY+.32,nz+.116],[.016,.028,.006],colors.acid);
+    for(let i=0;i<4;i++)draw(cyl,[nx,tipY+.10+i*.013,nz],[.046,.008,.046],colors.silver);
+    box([nx,tipY+.075,nz],[.067,.027,.058],colors.silver);
+    draw(cone,[nx,tipY+.023,nz],[.028,.042,.028],colors.brass);
+    if(progress>.001&&progress<.999)draw(cyl,[nx,tipY+.047,nz],[.016,.003,.016],[.91,1,.64],[0,0,0],99,0,1);
     // Flexible feed line arches from the spool to the print head.
     const curve=[];for(let i=0;i<=48;i++){const t=i/48,u=1-t;const a=[1.45,2.52,-.70],b=[.9,3.10,-.4],c=[nx,2.95,nz],d=[nx,tipY+.45,nz];const v=a.map((_,k)=>u*u*u*a[k]+3*u*u*t*b[k]+3*u*t*t*c[k]+t*t*t*d[k]);curve.push(...v,0,1,0);}
     updateMesh(filament,curve);draw(filament,[0,0,0],[1,1,1],colors.acid,[0,0,0],99,0,.65);
