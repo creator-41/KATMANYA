@@ -38,7 +38,7 @@
 @media(max-width:800px){.install-app{padding:9px 11px;font-size:9px}.install-long{display:none}.install-short{display:inline}.install-help{padding:25px}.install-instructions span{font-size:13px}}
 
 @media(max-width:800px){
-  .product-slide h2{font-size:clamp(36px,8.8vw,43px);line-height:1.04;margin-bottom:10px}
+  .product-slide h2{font-size:clamp(33px,7.8vw,39px);line-height:1.04;margin-bottom:10px}
   .product-slide h2 br:first-of-type{display:inline}
   .product-slide h2 em{white-space:nowrap}
 }
