@@ -147,15 +147,18 @@
       const step=mesh.mode===LINES?2:1;
       for(let i=0;i<mesh.count-1;i+=step){const points=[project(vertex(i)),project(vertex(i+1))];faces.push({points,z:(points[0][2]+points[1][2])/2,color:'rgb('+color.map(x=>Math.round(x*200)).join(',')+')',line:true});}return;
     }
-    for(let i=0;i<mesh.count;i+=3){
-      let poly=[vertex(i),vertex(i+1),vertex(i+2)];
+    const stride=mesh===cube?6:3;
+    for(let i=0;i<mesh.count;i+=stride){
+      let poly=stride===6?[vertex(i),vertex(i+1),vertex(i+2),vertex(i+5)]:[vertex(i),vertex(i+1),vertex(i+2)];
       if(poly.every(v=>v[1]>clip))continue;
       if(poly.some(v=>v[1]>clip)){
         const out=[];for(let j=0;j<poly.length;j++){const a=poly[j],b=poly[(j+1)%poly.length];if(a[1]<=clip)out.push(a);if((a[1]<=clip)!==(b[1]<=clip)){const t=(clip-a[1])/(b[1]-a[1]);out.push(a.map((v,k)=>v+(b[k]-v)*t));}}poly=out;
       }
       const n=data.slice(i*6+3,i*6+6),worldN=norm([model[0]*n[0]+model[4]*n[1]+model[8]*n[2],model[1]*n[0]+model[5]*n[1]+model[9]*n[2],model[2]*n[0]+model[6]*n[1]+model[10]*n[2]]);
       let light=.36+.62*Math.max(0,dot(worldN,[-.424,.707,.566]))+.18*Math.max(0,dot(worldN,[.64,.43,-.64]));light=light*(1-glow)+glow;
-      const points=poly.map(project);faces.push({points,z:points.reduce((a,p)=>a+p[2],0)/points.length,color:'rgb('+color.map(x=>Math.round(Math.min(1,x*light)*255)).join(',')+')'});
+      const points=poly.map(project);
+      if(points.length<3||(points[1][0]-points[0][0])*(points[2][1]-points[0][1])-(points[1][1]-points[0][1])*(points[2][0]-points[0][0])>=0)continue;
+      faces.push({points,z:points.reduce((a,p)=>a+p[2],0)/points.length,color:'rgb('+color.map(x=>Math.round(Math.min(1,x*light)*255)).join(',')+')'});
     }
   }
   function softFlush(){
