@@ -8,7 +8,7 @@
   const percent = document.querySelector('#print-percent');
   const layer = document.querySelector('#layer-value');
   const status = document.querySelector('#print-status');
-  document.querySelector('#year').textContent = new Date().getFullYear();
+  const year=document.querySelector('#year'); if(year)year.textContent=new Date().getFullYear();
   const gl = canvas.getContext('webgl', { alpha: true, antialias: true, powerPreference: 'low-power' });
   function fallback() {
     document.querySelector('.scene-fallback').hidden = false;
