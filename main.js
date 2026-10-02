@@ -206,7 +206,7 @@
     draw(cyl,[0,0,0],[1,1,1],c,[0,0,0],99,0,0,m);
   }
   let w=0,h=0,target=0,current=0,raf=0,last=0,visible=true,dirty=true;
-  const chaptersAt=[0,.28,.60,.84];
+  const chaptersAt=[0,.20,.36,.52,.70,.86];
   function measure(){const rect=canvas.getBoundingClientRect();w=rect.width;h=rect.height;const dpr=gl?Math.min(devicePixelRatio||1,1.65):Math.min(devicePixelRatio||1,800/Math.max(w,h));canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);if(gl)gl.viewport(0,0,canvas.width,canvas.height);dirty=true;scroll();}
   function scroll(){const rect=story.getBoundingClientRect();target=clamp(-rect.top/Math.max(1,story.offsetHeight-window.innerHeight));dirty=true;start();}
   function setCopy(p){
