@@ -96,50 +96,19 @@
     armor(points.map(v=>[-v[0],v[1],v[2]]).reverse(),color,depth);
   }
   const porcelain=[.94,.95,.94],recess=[.57,.62,.63],blue=[.16,.22,.85],blueEdge=[.28,.36,.98],green=[.08,.63,.26],black=[.025,.033,.045];
-  const shellData=[],sections=[[0,.43,.34],[.10,.52,.43],[.32,.61,.52],[.62,.64,.55],[.96,.62,.52],[1.22,.56,.46],[1.43,.43,.35],[1.58,.24,.21],[1.65,.02,.02]],steps=40;
+  const shellData=[],sections=[[0,.14,.12],[.10,.25,.24],[.32,.40,.34],[.62,.49,.40],[.96,.53,.40],[1.22,.48,.36],[1.43,.36,.28],[1.58,.21,.17],[1.65,.02,.02]],steps=32;
   for(let j=0;j<sections.length-1;j++)for(let i=0;i<steps;i++){
     const [y0,x0,z0]=sections[j],[y1,x1,z1]=sections[j+1],a=i/steps*TAU,b=(i+1)/steps*TAU;
     const v=(x,y,z,t)=>[x*Math.sin(t),y,z*Math.cos(t)-.045];
     quad(shellData,v(x0,y0,z0,a),v(x0,y0,z0,b),v(x1,y1,z1,b),v(x1,y1,z1,a));
   }
-  helmetParts.push({mesh:mesh(shellData),color:[.86,.89,.89]});
-  const crownCap=[],capCenter=[0,1.65,-.045];
-  for(let i=0;i<steps;i++){
-    const a=i/steps*TAU,b=(i+1)/steps*TAU;
-    tri(crownCap,capCenter,[.02*Math.sin(a),1.65,.02*Math.cos(a)-.045],[.02*Math.sin(b),1.65,.02*Math.cos(b)-.045],[0,1,0],[0,1,0],[0,1,0]);
-  }
-  helmetParts.push({mesh:mesh(crownCap),color:[.86,.89,.89]});
-  // A padded inner rim makes the open lower edge read as a wearable helmet.
-  const rimData=[],ringSegments=48,tubeSegments=10,ringY=.09,ringX=.49,ringZ=.40,tube=.038;
-  const rimPoint=(a,b,inner=0)=>{const c=Math.cos(b),sn=Math.sin(b),r=tube-inner;return [(ringX+r*c)*Math.sin(a),ringY+r*sn,(ringZ+r*c)*Math.cos(a)-.045];};
-  for(let i=0;i<ringSegments;i++)for(let j=0;j<tubeSegments;j++){
-    const a=i/ringSegments*TAU,aa=(i+1)/ringSegments*TAU,b=j/tubeSegments*TAU,bb=(j+1)/tubeSegments*TAU;
-    quad(rimData,rimPoint(a,b),rimPoint(aa,b),rimPoint(aa,bb),rimPoint(a,bb));
-  }
-  helmetParts.push({mesh:mesh(rimData),color:[.14,.18,.19]});
-  const liningData=[],liningSections=sections.slice(1,-1).map(([y,x,z])=>[y,Math.max(.035,x-.075),Math.max(.035,z-.075)]);
-  for(let j=0;j<liningSections.length-1;j++)for(let i=0;i<ringSegments;i++){
-    const [y0,x0,z0]=liningSections[j],[y1,x1,z1]=liningSections[j+1],a=i/ringSegments*TAU,b=(i+1)/ringSegments*TAU;
-    const v=(x,y,z,t)=>[x*Math.sin(t),y,z*Math.cos(t)-.045];
-    quad(liningData,v(x0,y0,z0,a),v(x0,y0,z0,b),v(x1,y1,z1,b),v(x1,y1,z1,a));
-  }
-  helmetParts.push({mesh:mesh(liningData),color:[.22,.27,.28]});
-  // Rear neck strap and molded ventilation ribs break up the skull shell.
-  function backBand(y0,y1,start,end,offset,color){
-    const d=[],steps=32;
-    const profile=y=>{for(let i=0;i<sections.length-1;i++){const a=sections[i],b=sections[i+1];if(y>=a[0]&&y<=b[0]){const t=(y-a[0])/(b[0]-a[0]);return [a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t];}}return [sections.at(-2)[1],sections.at(-2)[2]];};
-    const point=(y,t)=>{const angle=start+(end-start)*t,[rx,rz]=profile(y),out=offset;return [(rx+out)*Math.sin(angle),y,(rz+out)*Math.cos(angle)-.045];};
-    for(let i=0;i<steps;i++){const t=i/steps,u=(i+1)/steps;quad(d,point(y0,t),point(y0,u),point(y1,u),point(y1,t));}
-    helmetParts.push({mesh:mesh(d),color});
-  }
-  backBand(.16,.27,Math.PI*.54,Math.PI*1.46,.022,[.16,.20,.21]);
-  for(const y of [.43,.57,.71,.85])backBand(y,y+.028,Math.PI*.62,Math.PI*1.38,.028,[.36,.40,.40]);
+  helmetParts.push({mesh:mesh(shellData),color:recess});
   // Deep continuous V visor, wrapped around the cheeks rather than a flat slit.
   mirrored([[0,.32,.435],[.24,.47,.455],[.44,.78,.385],[.49,1.09,.27],[.27,1.10,.455],[0,.92,.515]],black,.065);
   mirrored([[.08,.48,.444],[.20,.58,.465],[.39,.87,.395],[.27,.72,.455]],[.085,.10,.12],.006);
   // White brow and tapered central face shield.
-  mirrored([[0,.72,.555],[.16,.80,.55],[.28,1.04,.49],[.26,1.34,.365],[.12,1.49,.29],[0,1.51,.33]].map(v=>[v[0],v[1],v[2]+.085]),porcelain,.075);
-  mirrored([[.16,.80,.55],[.33,.93,.43],[.40,1.18,.33],[.26,1.34,.365],[.28,1.04,.49]].map(v=>[v[0],v[1],v[2]+.065]),[.83,.87,.87],.055);
+  mirrored([[0,.72,.555],[.16,.80,.55],[.28,1.04,.49],[.26,1.34,.365],[.12,1.49,.29],[0,1.51,.33]],porcelain,.075);
+  mirrored([[.16,.80,.55],[.33,.93,.43],[.40,1.18,.33],[.26,1.34,.365],[.28,1.04,.49]],[.83,.87,.87],.055);
   // Pointed chin ring follows the visor, leaving its full black V exposed.
   mirrored([[0,.025,.30],[.17,.09,.355],[.34,.29,.40],[.47,.55,.335],[.43,.68,.37],[.24,.38,.47],[0,.22,.485]],porcelain,.075);
   mirrored([[0,.025,.30],[.17,.09,.355],[.24,.22,.425],[0,.16,.45]],[.80,.84,.84],.03);
@@ -149,8 +118,8 @@
   mirrored([[.49,1.17,.12],[.61,1.29,-.07],[.69,1.22,-.27],[.56,1.08,-.14]],porcelain,.055);
   mirrored([[.51,.86,-.06],[.67,.94,-.26],[.66,.77,-.39],[.50,.67,-.20]],[.64,.69,.70],.06);
   // Blue crown is a raised, tapered plate, with an inset top panel.
-  armor([[-.19,1.25,.40],[.19,1.25,.40],[.22,1.46,.30],[.15,1.62,.16],[-.15,1.62,.16],[-.22,1.46,.30]].map(v=>[v[0],v[1],v[2]+.17]),blue,.065);
-  armor([[-.14,1.31,.421],[.14,1.31,.421],[.155,1.46,.329],[.10,1.54,.246],[-.10,1.54,.246],[-.155,1.46,.329]].map(v=>[v[0],v[1],v[2]+.17]),blueEdge,.012);
+  armor([[-.19,1.25,.40],[.19,1.25,.40],[.22,1.46,.30],[.15,1.62,.16],[-.15,1.62,.16],[-.22,1.46,.30]],blue,.065);
+  armor([[-.14,1.31,.421],[.14,1.31,.421],[.155,1.46,.329],[.10,1.54,.246],[-.10,1.54,.246],[-.155,1.46,.329]],blueEdge,.012);
   // Cobalt jaw modules and green temple clasps from the reference.
   mirrored([[.32,.27,.402],[.46,.34,.358],[.52,.58,.31],[.41,.63,.371],[.30,.48,.439]],blue,.09);
   mirrored([[.36,.32,.421],[.425,.37,.399],[.45,.52,.362],[.39,.55,.390],[.34,.46,.444]],blueEdge,.014);
@@ -239,7 +208,7 @@
   let w=0,h=0,target=0,current=0,raf=0,last=0,visible=true,dirty=true;
   const chaptersAt=[0,.22,.52,.9];
   function measure(){const rect=canvas.getBoundingClientRect();w=rect.width;h=rect.height;const dpr=gl?Math.min(devicePixelRatio||1,1.65):Math.min(devicePixelRatio||1,800/Math.max(w,h));canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);if(gl)gl.viewport(0,0,canvas.width,canvas.height);dirty=true;scroll();}
-  function scroll(){const rect=story.getBoundingClientRect(),travel=clamp(-rect.top/Math.max(1,story.offsetHeight-window.innerHeight));target=clamp(travel/.88);dirty=true;start();}
+  function scroll(){const rect=story.getBoundingClientRect();target=clamp(-rect.top/Math.max(1,story.offsetHeight-window.innerHeight));dirty=true;start();}
   function setCopy(p){
     chapters.forEach((el,i)=>{let opacity=1;if(i>0)opacity*=smooth(chaptersAt[i]-.025,chaptersAt[i]+.020,p);if(i<3)opacity*=1-smooth(chaptersAt[i+1]-.07,chaptersAt[i+1]-.025,p);if(reduced.matches)opacity=i===0?1:0;
       el.style.opacity=opacity;el.style.visibility=opacity>.002?'visible':'hidden';el.style.pointerEvents=opacity>.6?'auto':'none';el.setAttribute('aria-hidden',opacity>.5?'false':'true');el.style.transform=window.innerWidth>800?'translateY(calc(-50% + '+((1-opacity)*18)+'px))':'translateY('+((1-opacity)*12)+'px)';});
@@ -247,8 +216,7 @@
   function render(p){
     if(gl)gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);else{ctx.clearRect(0,0,canvas.width,canvas.height);faces=[];}
     const progress=reduced.matches?1:clamp((p-.10)/.77),finished=smooth(.88,1,p);
-    const finale=smooth(.82,.99,p);
-    const yaw=.36+Math.sin(p*Math.PI)*.12+finished*.06+finale*.16;
+    const yaw=.36+Math.sin(p*Math.PI)*.12+finished*.06;
     const mobile=window.innerWidth<=800;
     const dist=mobile?7.5:7.1;
     const eye=[Math.sin(yaw)*dist,3.3+finished*.15,Math.cos(yaw)*dist];
@@ -286,12 +254,12 @@
     draw(grid,[0,bedY+.02,0],[.96,1,.86],[.22,.28,.16],[0,0,0],99,0,.25);
     box([0,bedY-.09,.969],[1.92,.012,.014],colors.acid);
     // Four individual reels in an external two-level material rack.
-    const reelColors=[porcelain,[.11,.12,.14],blue,green],spin=progress*TAU*2.5;
-    const reels=[[1.57,2.24,.48],[1.82,2.24,-.54],[1.57,1.32,.48],[1.82,1.32,-.54]];
+    const reelColors=[porcelain,black,blue,green],spin=progress*TAU*2.5;
+    const reels=[[1.57,2.24,.48],[1.57,2.24,-.46],[1.57,1.32,.48],[1.57,1.32,-.46]];
     box([1.38,1.79,-.02],[.06,1.86,1.68],colors.dark);
     for(let ri=0;ri<reels.length;ri++){
       const [rx,ry,rz]=reels[ri],rc=reelColors[ri];
-      rod([1.30,ry,rz],[rx+.29,ry,rz],.035,colors.silver);
+      rod([1.30,ry,rz],[1.86,ry,rz],.035,colors.silver);
       draw(cyl,[rx,ry,rz],[.305,.26,.305],rc,[0,0,Math.PI/2],99,1);
       // Fine exposed rings leave the filament colors visible between the rims.
       for(const x of [rx-.15,rx+.15]){
@@ -317,7 +285,7 @@
     box([nx,2.35,nz+.13],[.18,.18,.018],colors.dark);
     // All detailed armor surfaces grow continuously through the same horizontal layer.
     if(height>.001)for(const part of helmetParts)
-      draw(part.mesh,[0,bedY+.027,0],[1,.82,1],part.color,[0,TAU*finale,0],height,1);
+      draw(part.mesh,[0,bedY+.027,0],[1,1,1],part.color,[0,0,0],height,1);
     // Hot end, heatsink, fan housing and brass nozzle follow the deposition path.
     box([nx,tipY+.22,nz],[.22,.25,.2],colors.dark);
     box([nx,tipY+.22,nz+.106],[.18,.18,.013],colors.frame);
