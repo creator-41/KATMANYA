@@ -210,7 +210,7 @@
   function measure(){const rect=canvas.getBoundingClientRect();w=rect.width;h=rect.height;const dpr=gl?Math.min(devicePixelRatio||1,1.65):Math.min(devicePixelRatio||1,800/Math.max(w,h));canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);if(gl)gl.viewport(0,0,canvas.width,canvas.height);dirty=true;scroll();}
   const navLinks=[...document.querySelectorAll('.topbar nav a')],mobileNav=document.querySelector('.mobile-nav');
   function setActiveNav(progress){
-    const active=progress<.16?0:progress<.715?1:progress<.82?2:3;
+    const active=progress<.16?0:progress<.75?1:progress<.82?2:3;
     navLinks.forEach((link,index)=>{if(index===active){link.classList.add('is-active');link.setAttribute('aria-current','location');}else{link.classList.remove('is-active');link.removeAttribute('aria-current');}});
     mobileNav?.classList.toggle('is-active',active===1);
   }
