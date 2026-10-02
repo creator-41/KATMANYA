@@ -81,7 +81,7 @@
     const word='VEYSEL',cell=.047,gap=.012,letterGap=.055,total=word.length*(5*(cell+gap)-gap)+(word.length-1)*letterGap,verts=[];
     let left=-total/2-.42;
     for(const ch of word){const rows=glyphs[ch];for(let r=0;r<7;r++)for(let c=0;c<5;c++)if(rows[r][c]==='1'){
-      const cx=left+c*(cell+gap)+cell/2,cy=2.735+(3-r)*(cell+gap);
+      const cx=left+c*(cell+gap)+cell/2,cy=2.77+(3-r)*(cell+gap);
       for(let i=0;i<cubeData.length;i+=6)verts.push(cx+cubeData[i]*cell,cy+cubeData[i+1]*cell,1.071+cubeData[i+2]*.016,cubeData[i+3],cubeData[i+4],cubeData[i+5]);
     }left+=5*(cell+gap)-gap+letterGap;}
     return mesh(verts);
@@ -173,7 +173,8 @@
     box([0,2.91,-.94],[2.4,.18,.18],colors.frame);
     box([0,2.91,.94],[2.4,.18,.18],colors.frame);
     for(const x of [-1.12,1.12])box([x,2.91,0],[.18,.18,1.9],colors.frame);
-    box([0,2.91,1.045],[1.95,.075,.025],colors.dark);
+    box([0,2.77,1.035],[2.40,.36,.16],colors.frame);
+    box([-.40,2.77,1.121],[1.98,.27,.014],colors.dark);
     draw(logoMesh,[0,0,0],[1,1,1],colors.acid,[0,0,0]);
     // Twin Z lead screws and guide rods under the bed.
     for(const x of [-.91,.91])for(const z of [-.73,.73]){
@@ -230,8 +231,8 @@
     const curve=[];for(let i=0;i<=48;i++){const t=i/48,u=1-t;const a=[1.45,2.52,-.70],b=[.9,3.10,-.4],c=[nx,2.95,nz],d=[nx,tipY+.45,nz];const v=a.map((_,k)=>u*u*u*a[k]+3*u*u*t*b[k]+3*u*t*t*c[k]+t*t*t*d[k]);curve.push(...v,0,1,0);}
     updateMesh(filament,curve);draw(filament,[0,0,0],[1,1,1],colors.acid,[0,0,0],99,0,.65);
     // Front control panel and two indicator buttons.
-    box([.72,2.57,1.055],[.34,.43,.10],colors.dark);box([.72,2.57,1.111],[.27,.30,.012],[.12,.16,.12]);
-    box([.72,2.36,1.12],[.25,.022,.012],colors.acid);
+    box([.72,2.77,1.13],[.34,.32,.07],colors.dark);box([.72,2.77,1.17],[.27,.23,.012],[.12,.16,.12]);
+    box([.72,2.60,1.178],[.24,.018,.008],colors.acid);
     if(!gl)softFlush();
     const pct=Math.round(progress*100);bar.style.width=pct+'%';percent.innerHTML=pct+'<span>%</span>';layer.textContent='KATMAN '+String(Math.round(progress*120)).padStart(3,'0')+' / 120';
     status.textContent=progress===0?'ÜRETİME HAZIR':progress>=1?'BASKI TAMAMLANDI':'KATMANLAR ŞEKİL ALIYOR';setCopy(p);
