@@ -102,13 +102,13 @@
     const v=(x,y,z,t)=>[x*Math.sin(t),y,z*Math.cos(t)-.045];
     quad(shellData,v(x0,y0,z0,a),v(x0,y0,z0,b),v(x1,y1,z1,b),v(x1,y1,z1,a));
   }
-  helmetParts.push({mesh:mesh(shellData),color:recess});
+  helmetParts.push({mesh:mesh(shellData),color:[.81,.85,.85]});
   // Deep continuous V visor, wrapped around the cheeks rather than a flat slit.
   mirrored([[0,.32,.435],[.24,.47,.455],[.44,.78,.385],[.49,1.09,.27],[.27,1.10,.455],[0,.92,.515]],black,.065);
   mirrored([[.08,.48,.444],[.20,.58,.465],[.39,.87,.395],[.27,.72,.455]],[.085,.10,.12],.006);
   // White brow and tapered central face shield.
-  mirrored([[0,.72,.555],[.16,.80,.55],[.28,1.04,.49],[.26,1.34,.365],[.12,1.49,.29],[0,1.51,.33]],porcelain,.075);
-  mirrored([[.16,.80,.55],[.33,.93,.43],[.40,1.18,.33],[.26,1.34,.365],[.28,1.04,.49]],[.83,.87,.87],.055);
+  mirrored([[0,.72,.555],[.16,.80,.55],[.28,1.04,.49],[.26,1.34,.365],[.12,1.49,.29],[0,1.51,.33]].map(v=>[v[0],v[1],v[2]+.085]),porcelain,.075);
+  mirrored([[.16,.80,.55],[.33,.93,.43],[.40,1.18,.33],[.26,1.34,.365],[.28,1.04,.49]].map(v=>[v[0],v[1],v[2]+.065]),[.83,.87,.87],.055);
   // Pointed chin ring follows the visor, leaving its full black V exposed.
   mirrored([[0,.025,.30],[.17,.09,.355],[.34,.29,.40],[.47,.55,.335],[.43,.68,.37],[.24,.38,.47],[0,.22,.485]],porcelain,.075);
   mirrored([[0,.025,.30],[.17,.09,.355],[.24,.22,.425],[0,.16,.45]],[.80,.84,.84],.03);
@@ -118,8 +118,8 @@
   mirrored([[.49,1.17,.12],[.61,1.29,-.07],[.69,1.22,-.27],[.56,1.08,-.14]],porcelain,.055);
   mirrored([[.51,.86,-.06],[.67,.94,-.26],[.66,.77,-.39],[.50,.67,-.20]],[.64,.69,.70],.06);
   // Blue crown is a raised, tapered plate, with an inset top panel.
-  armor([[-.19,1.25,.40],[.19,1.25,.40],[.22,1.46,.30],[.15,1.62,.16],[-.15,1.62,.16],[-.22,1.46,.30]],blue,.065);
-  armor([[-.14,1.31,.421],[.14,1.31,.421],[.155,1.46,.329],[.10,1.54,.246],[-.10,1.54,.246],[-.155,1.46,.329]],blueEdge,.012);
+  armor([[-.19,1.25,.40],[.19,1.25,.40],[.22,1.46,.30],[.15,1.62,.16],[-.15,1.62,.16],[-.22,1.46,.30]].map(v=>[v[0],v[1],v[2]+.17]),blue,.065);
+  armor([[-.14,1.31,.421],[.14,1.31,.421],[.155,1.46,.329],[.10,1.54,.246],[-.10,1.54,.246],[-.155,1.46,.329]].map(v=>[v[0],v[1],v[2]+.17]),blueEdge,.012);
   // Cobalt jaw modules and green temple clasps from the reference.
   mirrored([[.32,.27,.402],[.46,.34,.358],[.52,.58,.31],[.41,.63,.371],[.30,.48,.439]],blue,.09);
   mirrored([[.36,.32,.421],[.425,.37,.399],[.45,.52,.362],[.39,.55,.390],[.34,.46,.444]],blueEdge,.014);
@@ -254,12 +254,12 @@
     draw(grid,[0,bedY+.02,0],[.96,1,.86],[.22,.28,.16],[0,0,0],99,0,.25);
     box([0,bedY-.09,.969],[1.92,.012,.014],colors.acid);
     // Four individual reels in an external two-level material rack.
-    const reelColors=[porcelain,black,blue,green],spin=progress*TAU*2.5;
-    const reels=[[1.57,2.24,.48],[1.57,2.24,-.46],[1.57,1.32,.48],[1.57,1.32,-.46]];
+    const reelColors=[porcelain,[.11,.12,.14],blue,green],spin=progress*TAU*2.5;
+    const reels=[[1.57,2.24,.48],[1.82,2.24,-.54],[1.57,1.32,.48],[1.82,1.32,-.54]];
     box([1.38,1.79,-.02],[.06,1.86,1.68],colors.dark);
     for(let ri=0;ri<reels.length;ri++){
       const [rx,ry,rz]=reels[ri],rc=reelColors[ri];
-      rod([1.30,ry,rz],[1.86,ry,rz],.035,colors.silver);
+      rod([1.30,ry,rz],[rx+.29,ry,rz],.035,colors.silver);
       draw(cyl,[rx,ry,rz],[.305,.26,.305],rc,[0,0,Math.PI/2],99,1);
       // Fine exposed rings leave the filament colors visible between the rims.
       for(const x of [rx-.15,rx+.15]){
