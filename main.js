@@ -208,6 +208,12 @@
   let w=0,h=0,target=0,current=0,raf=0,last=0,visible=true,dirty=true;
   const chaptersAt=[0,.16,.30,.44,.58,.74,.89];
   function measure(){const rect=canvas.getBoundingClientRect();w=rect.width;h=rect.height;const dpr=gl?Math.min(devicePixelRatio||1,1.65):Math.min(devicePixelRatio||1,800/Math.max(w,h));canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);if(gl)gl.viewport(0,0,canvas.width,canvas.height);dirty=true;scroll();}
+  const navLinks=[...document.querySelectorAll('.topbar nav a')],mobileNav=document.querySelector('.mobile-nav');
+  function setActiveNav(progress){
+    const active=progress<.16?0:progress<.715?1:progress<.82?2:3;
+    navLinks.forEach((link,index)=>{if(index===active){link.classList.add('is-active');link.setAttribute('aria-current','location');}else{link.classList.remove('is-active');link.removeAttribute('aria-current');}});
+    mobileNav?.classList.toggle('is-active',active===1);
+  }
   function scroll(){const rect=story.getBoundingClientRect();target=clamp(-rect.top/Math.max(1,story.offsetHeight-window.innerHeight));dirty=true;start();}
   function setCopy(p){
     chapters.forEach((el,i)=>{let opacity=1;if(i>0)opacity*=smooth(chaptersAt[i]-.025,chaptersAt[i]+.020,p);if(i<chapters.length-1)opacity*=1-smooth(chaptersAt[i+1]-.07,chaptersAt[i+1]-.025,p);
@@ -215,7 +221,7 @@
   }
   function render(p){
     if(gl)gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);else{ctx.clearRect(0,0,canvas.width,canvas.height);faces=[];}
-    const progress=reduced.matches?1:clamp(p),finished=smooth(.92,1,p);
+    const progress=reduced.matches?1:clamp(p),finished=smooth(.92,1,p);setActiveNav(clamp(p));
     const yaw=.36+Math.sin(p*Math.PI)*.12+finished*.06;
     const mobile=window.innerWidth<=800;
     const dist=mobile?7.5:7.1;
