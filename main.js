@@ -140,7 +140,7 @@
   function render(p){
     if(gl)gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);else{ctx.clearRect(0,0,canvas.width,canvas.height);faces=[];}
     const progress=reduced.matches?1:clamp((p-.10)/.77),finished=smooth(.88,1,p);
-    const yaw=.48+Math.sin(p*Math.PI)*.16+finished*.62;
+    const yaw=.48+Math.sin(p*Math.PI)*.16+finished*.15;
     const mobile=window.innerWidth<=800;
     const dist=mobile?7.1:6.8;
     const eye=[Math.sin(yaw)*dist,3.3+finished*.15,Math.cos(yaw)*dist];
