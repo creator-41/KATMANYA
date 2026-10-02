@@ -76,6 +76,17 @@
   const cubeData=[];
   [ [[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]], [[1,-1,-1],[-1,-1,-1],[-1,1,-1],[1,1,-1]], [[1,-1,1],[1,-1,-1],[1,1,-1],[1,1,1]], [[-1,-1,-1],[-1,-1,1],[-1,1,1],[-1,1,-1]], [[-1,1,1],[1,1,1],[1,1,-1],[-1,1,-1]], [[-1,-1,-1],[1,-1,-1],[1,-1,1],[-1,-1,1]] ].forEach(q=>quad(cubeData,...q.map(v=>v.map(x=>x*.5))));
   const cube=mesh(cubeData);
+  function pixelLogo(){
+    const glyphs={V:['10001','10001','10001','01010','01010','00100','00100'],E:['11111','10000','10000','11110','10000','10000','11111'],Y:['10001','10001','01010','00100','00100','00100','00100'],S:['11111','10000','10000','11111','00001','00001','11111'],L:['10000','10000','10000','10000','10000','10000','11111']};
+    const word='VEYSEL',cell=.047,gap=.012,letterGap=.055,total=word.length*(5*(cell+gap)-gap)+(word.length-1)*letterGap,verts=[];
+    let left=-total/2-.42;
+    for(const ch of word){const rows=glyphs[ch];for(let r=0;r<7;r++)for(let c=0;c<5;c++)if(rows[r][c]==='1'){
+      const cx=left+c*(cell+gap)+cell/2,cy=2.735+(3-r)*(cell+gap);
+      for(let i=0;i<cubeData.length;i+=6)verts.push(cx+cubeData[i]*cell,cy+cubeData[i+1]*cell,1.071+cubeData[i+2]*.016,cubeData[i+3],cubeData[i+4],cubeData[i+5]);
+    }left+=5*(cell+gap)-gap+letterGap;}
+    return mesh(verts);
+  }
+  const logoMesh=pixelLogo();
   function cylinder(rt=1,rb=1,segments=gl?40:16){const d=[];for(let i=0;i<segments;i++){let a=i/segments*TAU,b=(i+1)/segments*TAU;const p=[Math.cos(a)*rb,-.5,Math.sin(a)*rb],q=[Math.cos(b)*rb,-.5,Math.sin(b)*rb],r=[Math.cos(b)*rt,.5,Math.sin(b)*rt],s=[Math.cos(a)*rt,.5,Math.sin(a)*rt];quad(d,p,s,r,q);tri(d,[0,.5,0],r,s,[0,1,0],[0,1,0],[0,1,0]);tri(d,[0,-.5,0],p,q,[0,-1,0],[0,-1,0],[0,-1,0]);}return mesh(d);}
   const cyl=cylinder(),cone=cylinder(1,.22,24);
   const H=1.3,bedY=.29;
@@ -148,68 +159,70 @@
     const eye=[Math.sin(yaw)*dist,3.3+finished*.15,Math.cos(yaw)*dist];
     softVP=camera(eye,[.12,1.35+finished*.08,0],w/h);
     if(gl){gl.uniform3fv(loc.uEye,eye);gl.uniformMatrix4fv(loc.uVP,false,softVP);}
-    // Low plinth, inset feet and a brushed build plate.
-    box([0,.03,0],[2.5,.15,2.02],colors.dark);
-    for(const x of [-1.03,1.03])for(const z of [-.79,.79])box([x,-.085,z],[.22,.12,.24],colors.dark);
-    box([0,.14,0],[2.36,.11,1.96],colors.frame);
-    box([0,.225,0],[2.04,.07,1.86],[.21,.235,.195]);
-    box([0,.268,0],[1.98,.014,1.80],[.12,.15,.12]);
-    draw(grid,[0,.277,0],[.95,1,.87],[.22,.28,.16],[0,0,0],99,0,.25);
-    box([0,.17,.984],[1.92,.012,.015],colors.acid);
-    // Aluminium uprights and top brace, with visible guide rails.
-    for(const x of [-1.1,1.1]){
-      box([x,1.43,-.63],[.16,2.5,.19],colors.frame);
-      box([x-.041,1.43,-.525],[.022,2.4,.012],colors.silver);
-      box([x+.036,1.43,-.526],[.022,2.4,.012],colors.dark);
-      draw(cyl,[x,1.4,-.43],[.018,2.27,.018],colors.silver);
-      box([x,2.7,-.62],[.23,.1,.23],colors.dark);
+    // Ender-5 Max inspired square frame, front badge, moving Z bed and top CoreXY gantry.
+    const homeY=1.62,bedY=homeY-progress*H;
+    box([0,.05,0],[2.64,.17,2.28],colors.dark);
+    for(const x of [-1.08,1.08])for(const z of [-.91,.91])box([x,-.07,z],[.25,.12,.24],colors.dark);
+    box([0,.17,0],[2.48,.12,2.12],colors.frame);
+    box([0,.24,0],[2.30,.08,1.98],[.21,.235,.195]);
+    // Four tall corner extrusions make the distinctive open cube chassis.
+    for(const x of [-1.12,1.12])for(const z of [-.94,.94]){
+      box([x,1.53,z],[.16,2.78,.17],colors.frame);
+      box([x-.04,1.53,z+.09],[.022,2.66,.014],colors.silver);
+      box([x+.04,1.53,z+.09],[.022,2.66,.014],colors.dark);
     }
-    box([0,2.63,-.63],[2.4,.19,.2],colors.frame);
-    box([0,2.64,-.515],[1.94,.027,.012],colors.dark);
-    box([-.63,2.64,-.50],[.31,.02,.015],colors.acid);
-    // Filament spool mounted on the right. Its spokes turn with the print.
-    const spool=[1.47,2.1,-.61],spin=progress*TAU*2.5;
-    rod([1.1,2.1,-.61],[1.75,2.1,-.61],.038,colors.silver);
-    draw(cyl,spool,[.30,.23,.30],colors.acid,[0,0,Math.PI/2],99,1);
-    for(const x of [1.32,1.62]){
-      draw(cyl,[x,2.1,-.61],[.37,.045,.37],colors.dark,[0,0,Math.PI/2]);
-      draw(cyl,[x+.026,2.1,-.61],[.087,.009,.087],colors.edge,[0,0,Math.PI/2]);
-      for(let i=0;i<6;i++){const a=spin+i*TAU/6;rod([x+.025,2.1+Math.cos(a)*.13,-.61+Math.sin(a)*.13],[x+.025,2.1+Math.cos(a)*.29,-.61+Math.sin(a)*.29],.012,colors.edge);}
+    // Upper rectangular frame; the front rail carries Veysel's custom badge.
+    box([0,2.91,-.94],[2.4,.18,.18],colors.frame);
+    box([0,2.91,.94],[2.4,.18,.18],colors.frame);
+    for(const x of [-1.12,1.12])box([x,2.91,0],[.18,.18,1.9],colors.frame);
+    box([0,2.91,1.045],[1.95,.075,.025],colors.dark);
+    draw(logoMesh,[0,0,0],[1,1,1],colors.acid,[0,0,0]);
+    // Twin Z lead screws and guide rods under the bed.
+    for(const x of [-.91,.91])for(const z of [-.73,.73]){
+      draw(cyl,[x,1.02,z],[.024,1.68,.024],colors.silver);
+      draw(cyl,[x+.095,1.02,z],[.018,1.68,.018],colors.edge);
+    }
+    // The broad plate descends as each layer is added, like the real Ender-5 Max.
+    box([0,bedY-.12,0],[2.17,.16,1.92],colors.dark);
+    box([0,bedY-.025,0],[2.07,.06,1.82],[.21,.235,.195]);
+    box([0,bedY+.012,0],[1.99,.014,1.74],[.12,.15,.12]);
+    draw(grid,[0,bedY+.02,0],[.96,1,.86],[.22,.28,.16],[0,0,0],99,0,.25);
+    box([0,bedY-.09,.969],[1.92,.012,.014],colors.acid);
+    // Right-side spool and filament guide loop visible in the supplied reference.
+    const spool=[1.45,2.22,-.70],spin=progress*TAU*2.5;
+    rod([1.16,2.22,-.70],[1.73,2.22,-.70],.038,colors.silver);
+    draw(cyl,spool,[.29,.21,.29],colors.acid,[0,0,Math.PI/2],99,1);
+    for(const x of [1.30,1.60]){
+      draw(cyl,[x,2.22,-.70],[.36,.04,.36],colors.dark,[0,0,Math.PI/2]);
+      draw(cyl,[x+.026,2.22,-.70],[.084,.009,.084],colors.edge,[0,0,Math.PI/2]);
+      for(let i=0;i<6;i++){const a=spin+i*TAU/6;rod([x+.025,2.22+Math.cos(a)*.12,-.70+Math.sin(a)*.12],[x+.025,2.22+Math.cos(a)*.28,-.70+Math.sin(a)*.28],.011,colors.edge);}
     }
     const height=progress*H,angle=progress*TAU*28,rr=radius(progress,angle);
     const intro=1-smooth(0,.10,p),park=finished;
     const nx=(rr*Math.cos(angle))*(1-intro)*(1-park)-.81*(intro+park);
     const nz=rr*Math.sin(angle)*(1-intro)*(1-park)-.25*(intro+park);
-    const tipY=bedY+height+.012+intro*.25+park*.36;
-    // Moving X carriage and short depth rail form one continuous mechanism.
-    box([0,tipY+.27,-.47],[2.19,.10,.10],colors.silver);
-    box([0,tipY+.35,-.56],[2.18,.025,.025],colors.dark);
-    for(const x of [-1.1,1.1])box([x,tipY+.27,-.54],[.22,.26,.22],colors.dark);
-    box([nx,tipY+.26,-.46],[.22,.23,.2],colors.frame);
-    box([nx,tipY+.29,.07],[.06,.055,1.28],colors.silver);
-    box([nx+.06,tipY+.3,.07],[.018,.025,1.26],colors.dark);
-    if(progress>.0002){
-      draw(vase,[0,bedY,0],[1,1,1],colors.acid,[0,0,0],height,1);
-      draw(cyl,[0,bedY+.003,0],[.325,.006,.325],colors.acid);
-      const ringData=[];for(let i=0;i<96;i++){let a=i/96*TAU,b=(i+1)/96*TAU;quad(ringData,point(progress,a),point(progress,b),point(progress,b,true),point(progress,a,true));}
-      updateMesh(ring,ringData);draw(ring,[0,bedY+.001,0],[1,1,1],[.82,1,.46],[0,0,0],99,0,.15);
-    }
+    const tipY=homeY+.012+intro*.25+park*.36;
+    // Top-mounted XY carriage moves the nozzle while the build plate lowers.
+    box([0,2.54,nz],[2.07,.085,.10],colors.silver);
+    box([0,2.59,nz],[2.08,.024,.024],colors.dark);
+    box([nx,2.45,nz],[.23,.23,.22],colors.frame);
+    box([nx,2.35,nz+.13],[.18,.18,.018],colors.dark);
     // Hot end, heatsink, fan housing and brass nozzle follow the deposition path.
-    box([nx,tipY+.20,nz],[.22,.25,.2],colors.dark);
-    box([nx,tipY+.20,nz+.106],[.18,.18,.013],colors.frame);
-    draw(cyl,[nx,tipY+.2,nz+.12],[.063,.022,.063],colors.dark,[Math.PI/2,0,0]);
-    for(let i=0;i<5;i++){const a=angle*2+i*TAU/5;rod([nx+Math.cos(a)*.022,tipY+.2+Math.sin(a)*.022,nz+.14],[nx+Math.cos(a+.4)*.048,tipY+.2+Math.sin(a+.4)*.048,nz+.14],.007,colors.edge);}
-    box([nx+.067,tipY+.30,nz+.116],[.016,.028,.006],colors.acid);
-    for(let i=0;i<4;i++)draw(cyl,[nx,tipY+.083+i*.013,nz],[.046,.008,.046],colors.silver);
-    box([nx,tipY+.055,nz],[.067,.027,.058],colors.silver);
-    draw(cone,[nx,tipY+.023,nz],[.028,.042,.028],colors.brass);
+    box([nx,tipY+.27,nz],[.22,.25,.2],colors.dark);
+    box([nx,tipY+.27,nz+.106],[.18,.18,.013],colors.frame);
+    draw(cyl,[nx,tipY+.27,nz+.12],[.063,.022,.063],colors.dark,[Math.PI/2,0,0]);
+    for(let i=0;i<5;i++){const a=angle*2+i*TAU/5;rod([nx+Math.cos(a)*.022,tipY+.27+Math.sin(a)*.022,nz+.14],[nx+Math.cos(a+.4)*.048,tipY+.2+Math.sin(a+.4)*.048,nz+.14],.007,colors.edge);}
+    box([nx+.067,tipY+.37,nz+.116],[.016,.028,.006],colors.acid);
+    for(let i=0;i<4;i++)draw(cyl,[nx,tipY+.153+i*.013,nz],[.046,.008,.046],colors.silver);
+    box([nx,tipY+.125,nz],[.067,.027,.058],colors.silver);
+    draw(cone,[nx,tipY-.028,nz],[.028,.042,.028],colors.brass);
     if(progress>.001&&progress<.999)draw(cyl,[nx,tipY-.004,nz],[.016,.003,.016],[.91,1,.64],[0,0,0],99,0,1);
     // Flexible feed line arches from the spool to the print head.
-    const curve=[];for(let i=0;i<=48;i++){const t=i/48,u=1-t;const a=[1.45,2.40,-.61],b=[.9,3.20,-.4],c=[nx,2.85,nz],d=[nx,tipY+.34,nz];const v=a.map((_,k)=>u*u*u*a[k]+3*u*u*t*b[k]+3*u*t*t*c[k]+t*t*t*d[k]);curve.push(...v,0,1,0);}
+    const curve=[];for(let i=0;i<=48;i++){const t=i/48,u=1-t;const a=[1.45,2.52,-.70],b=[.9,3.10,-.4],c=[nx,2.95,nz],d=[nx,tipY+.45,nz];const v=a.map((_,k)=>u*u*u*a[k]+3*u*u*t*b[k]+3*u*t*t*c[k]+t*t*t*d[k]);curve.push(...v,0,1,0);}
     updateMesh(filament,curve);draw(filament,[0,0,0],[1,1,1],colors.acid,[0,0,0],99,0,.65);
     // Front control panel and two indicator buttons.
-    box([.79,.09,1.027],[.39,.12,.025],colors.dark);box([.76,.105,1.045],[.18,.04,.006],[.26,.4,.10]);
-    draw(cyl,[.91,.1,1.058],[.034,.012,.034],colors.silver,[Math.PI/2,0,0]);
+    box([.72,2.57,1.055],[.34,.43,.10],colors.dark);box([.72,2.57,1.111],[.27,.30,.012],[.12,.16,.12]);
+    box([.72,2.36,1.12],[.25,.022,.012],colors.acid);
     if(!gl)softFlush();
     const pct=Math.round(progress*100);bar.style.width=pct+'%';percent.innerHTML=pct+'<span>%</span>';layer.textContent='KATMAN '+String(Math.round(progress*120)).padStart(3,'0')+' / 120';
     status.textContent=progress===0?'ÜRETİME HAZIR':progress>=1?'BASKI TAMAMLANDI':'KATMANLAR ŞEKİL ALIYOR';setCopy(p);
