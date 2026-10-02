@@ -116,7 +116,7 @@
     const a=i/ringSegments*TAU,aa=(i+1)/ringSegments*TAU,b=j/tubeSegments*TAU,bb=(j+1)/tubeSegments*TAU;
     quad(rimData,rimPoint(a,b),rimPoint(aa,b),rimPoint(aa,bb),rimPoint(a,bb));
   }
-  helmetParts.push({mesh:mesh(rimData),color:[.32,.37,.37]});
+  helmetParts.push({mesh:mesh(rimData),color:[.14,.18,.19]});
   const liningData=[],liningSections=sections.slice(1,-1).map(([y,x,z])=>[y,Math.max(.035,x-.075),Math.max(.035,z-.075)]);
   for(let j=0;j<liningSections.length-1;j++)for(let i=0;i<ringSegments;i++){
     const [y0,x0,z0]=liningSections[j],[y1,x1,z1]=liningSections[j+1],a=i/ringSegments*TAU,b=(i+1)/ringSegments*TAU;
@@ -124,6 +124,16 @@
     quad(liningData,v(x0,y0,z0,a),v(x0,y0,z0,b),v(x1,y1,z1,b),v(x1,y1,z1,a));
   }
   helmetParts.push({mesh:mesh(liningData),color:[.22,.27,.28]});
+  // Rear neck strap and molded ventilation ribs break up the skull shell.
+  function backBand(y0,y1,start,end,offset,color){
+    const d=[],steps=32;
+    const profile=y=>{for(let i=0;i<sections.length-1;i++){const a=sections[i],b=sections[i+1];if(y>=a[0]&&y<=b[0]){const t=(y-a[0])/(b[0]-a[0]);return [a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t];}}return [sections.at(-2)[1],sections.at(-2)[2]];};
+    const point=(y,t)=>{const angle=start+(end-start)*t,[rx,rz]=profile(y),out=offset;return [(rx+out)*Math.sin(angle),y,(rz+out)*Math.cos(angle)-.045];};
+    for(let i=0;i<steps;i++){const t=i/steps,u=(i+1)/steps;quad(d,point(y0,t),point(y0,u),point(y1,u),point(y1,t));}
+    helmetParts.push({mesh:mesh(d),color});
+  }
+  backBand(.16,.27,Math.PI*.54,Math.PI*1.46,.022,[.16,.20,.21]);
+  for(const y of [.43,.57,.71,.85])backBand(y,y+.028,Math.PI*.62,Math.PI*1.38,.028,[.36,.40,.40]);
   // Deep continuous V visor, wrapped around the cheeks rather than a flat slit.
   mirrored([[0,.32,.435],[.24,.47,.455],[.44,.78,.385],[.49,1.09,.27],[.27,1.10,.455],[0,.92,.515]],black,.065);
   mirrored([[.08,.48,.444],[.20,.58,.465],[.39,.87,.395],[.27,.72,.455]],[.085,.10,.12],.006);
