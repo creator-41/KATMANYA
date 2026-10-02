@@ -96,13 +96,28 @@
     armor(points.map(v=>[-v[0],v[1],v[2]]).reverse(),color,depth);
   }
   const porcelain=[.94,.95,.94],recess=[.57,.62,.63],blue=[.16,.22,.85],blueEdge=[.28,.36,.98],green=[.08,.63,.26],black=[.025,.033,.045];
-  const shellData=[],sections=[[0,.14,.12],[.10,.25,.24],[.32,.40,.34],[.62,.49,.40],[.96,.53,.40],[1.22,.48,.36],[1.43,.36,.28],[1.58,.21,.17],[1.65,.02,.02]],steps=32;
+  const shellData=[],sections=[[0,.43,.34],[.10,.52,.43],[.32,.61,.52],[.62,.64,.55],[.96,.62,.52],[1.22,.56,.46],[1.43,.43,.35],[1.58,.24,.21],[1.65,.02,.02]],steps=40;
   for(let j=0;j<sections.length-1;j++)for(let i=0;i<steps;i++){
     const [y0,x0,z0]=sections[j],[y1,x1,z1]=sections[j+1],a=i/steps*TAU,b=(i+1)/steps*TAU;
     const v=(x,y,z,t)=>[x*Math.sin(t),y,z*Math.cos(t)-.045];
     quad(shellData,v(x0,y0,z0,a),v(x0,y0,z0,b),v(x1,y1,z1,b),v(x1,y1,z1,a));
   }
-  helmetParts.push({mesh:mesh(shellData),color:[.81,.85,.85]});
+  helmetParts.push({mesh:mesh(shellData),color:[.86,.89,.89]});
+  // A padded inner rim makes the open lower edge read as a wearable helmet.
+  const rimData=[],ringSegments=48,tubeSegments=10,ringY=.09,ringX=.49,ringZ=.40,tube=.038;
+  const rimPoint=(a,b,inner=0)=>{const c=Math.cos(b),sn=Math.sin(b),r=tube-inner;return [(ringX+r*c)*Math.sin(a),ringY+r*sn,(ringZ+r*c)*Math.cos(a)-.045];};
+  for(let i=0;i<ringSegments;i++)for(let j=0;j<tubeSegments;j++){
+    const a=i/ringSegments*TAU,aa=(i+1)/ringSegments*TAU,b=j/tubeSegments*TAU,bb=(j+1)/tubeSegments*TAU;
+    quad(rimData,rimPoint(a,b),rimPoint(aa,b),rimPoint(aa,bb),rimPoint(a,bb));
+  }
+  helmetParts.push({mesh:mesh(rimData),color:[.32,.37,.37]});
+  const liningData=[],liningSections=sections.slice(1,-1).map(([y,x,z])=>[y,Math.max(.035,x-.075),Math.max(.035,z-.075)]);
+  for(let j=0;j<liningSections.length-1;j++)for(let i=0;i<ringSegments;i++){
+    const [y0,x0,z0]=liningSections[j],[y1,x1,z1]=liningSections[j+1],a=i/ringSegments*TAU,b=(i+1)/ringSegments*TAU;
+    const v=(x,y,z,t)=>[x*Math.sin(t),y,z*Math.cos(t)-.045];
+    quad(liningData,v(x0,y0,z0,a),v(x0,y0,z0,b),v(x1,y1,z1,b),v(x1,y1,z1,a));
+  }
+  helmetParts.push({mesh:mesh(liningData),color:[.22,.27,.28]});
   // Deep continuous V visor, wrapped around the cheeks rather than a flat slit.
   mirrored([[0,.32,.435],[.24,.47,.455],[.44,.78,.385],[.49,1.09,.27],[.27,1.10,.455],[0,.92,.515]],black,.065);
   mirrored([[.08,.48,.444],[.20,.58,.465],[.39,.87,.395],[.27,.72,.455]],[.085,.10,.12],.006);
@@ -286,7 +301,7 @@
     box([nx,2.35,nz+.13],[.18,.18,.018],colors.dark);
     // All detailed armor surfaces grow continuously through the same horizontal layer.
     if(height>.001)for(const part of helmetParts)
-      draw(part.mesh,[0,bedY+.027,0],[1,1,1],part.color,[0,TAU*finale,0],height,1);
+      draw(part.mesh,[0,bedY+.027,0],[1,.82,1],part.color,[0,TAU*finale,0],height,1);
     // Hot end, heatsink, fan housing and brass nozzle follow the deposition path.
     box([nx,tipY+.22,nz],[.22,.25,.2],colors.dark);
     box([nx,tipY+.22,nz+.106],[.18,.18,.013],colors.frame);
