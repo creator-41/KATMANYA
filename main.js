@@ -216,7 +216,8 @@
   function render(p){
     if(gl)gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);else{ctx.clearRect(0,0,canvas.width,canvas.height);faces=[];}
     const progress=reduced.matches?1:clamp((p-.10)/.77),finished=smooth(.88,1,p);
-    const yaw=.36+Math.sin(p*Math.PI)*.12+finished*.06;
+    const finale=smooth(.82,.99,p);
+    const yaw=.36+Math.sin(p*Math.PI)*.12+finished*.06+finale*.82;
     const mobile=window.innerWidth<=800;
     const dist=mobile?7.5:7.1;
     const eye=[Math.sin(yaw)*dist,3.3+finished*.15,Math.cos(yaw)*dist];
@@ -285,7 +286,7 @@
     box([nx,2.35,nz+.13],[.18,.18,.018],colors.dark);
     // All detailed armor surfaces grow continuously through the same horizontal layer.
     if(height>.001)for(const part of helmetParts)
-      draw(part.mesh,[0,bedY+.027,0],[1,1,1],part.color,[0,0,0],height,1);
+      draw(part.mesh,[0,bedY+.027,0],[1,1,1],part.color,[0,TAU*finale,0],height,1);
     // Hot end, heatsink, fan housing and brass nozzle follow the deposition path.
     box([nx,tipY+.22,nz],[.22,.25,.2],colors.dark);
     box([nx,tipY+.22,nz+.106],[.18,.18,.013],colors.frame);
