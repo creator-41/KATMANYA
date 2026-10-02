@@ -103,6 +103,12 @@
     quad(shellData,v(x0,y0,z0,a),v(x0,y0,z0,b),v(x1,y1,z1,b),v(x1,y1,z1,a));
   }
   helmetParts.push({mesh:mesh(shellData),color:[.86,.89,.89]});
+  const crownCap=[],capCenter=[0,1.65,-.045];
+  for(let i=0;i<steps;i++){
+    const a=i/steps*TAU,b=(i+1)/steps*TAU;
+    tri(crownCap,capCenter,[.02*Math.sin(a),1.65,.02*Math.cos(a)-.045],[.02*Math.sin(b),1.65,.02*Math.cos(b)-.045],[0,1,0],[0,1,0],[0,1,0]);
+  }
+  helmetParts.push({mesh:mesh(crownCap),color:[.86,.89,.89]});
   // A padded inner rim makes the open lower edge read as a wearable helmet.
   const rimData=[],ringSegments=48,tubeSegments=10,ringY=.09,ringX=.49,ringZ=.40,tube=.038;
   const rimPoint=(a,b,inner=0)=>{const c=Math.cos(b),sn=Math.sin(b),r=tube-inner;return [(ringX+r*c)*Math.sin(a),ringY+r*sn,(ringZ+r*c)*Math.cos(a)-.045];};
