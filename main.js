@@ -328,4 +328,24 @@
   measure();render(0);
   const briefCopy=document.querySelector("#brief-copy");
   briefCopy?.addEventListener("click",async()=>{const text="FAV BASKI teklif talebi\n\nÜrün/fikir: \nÖlçüler: \nAdet: \nKullanım amacı: \nRenk tercihi: \nFotoğraf veya 3B dosya: ";const status=document.querySelector("#copy-status");try{await navigator.clipboard.writeText(text);status.textContent="Mesaj taslağı kopyalandı; bilgilerini doldurup bize gönderebilirsin.";}catch{status.textContent="Kopyalama desteklenmiyor. Bilgi listesini kullanarak mesajını hazırlayabilirsin.";} });
+  document.querySelectorAll(".product-slide").forEach(slide=>{
+    const button=slide.querySelector(".product-cta");
+    const color=slide.querySelector(".quote-color");
+    const quantity=slide.querySelector(".quote-quantity");
+    if(!button||!color||!quantity)return;
+    const product=button.dataset.quoteProduct||"Ürün";
+    const updateQuote=()=>{
+      const entered=Number.parseInt(quantity.value,10);
+      const amount=Number.isFinite(entered)?Math.min(999,Math.max(1,entered)):1;
+      quantity.value=String(amount);
+      const shade=color.value||"Henüz karar vermedim";
+      const message=`Merhaba FAV BASKI, ${product} için fiyat almak istiyorum.\\nRenk tercihi: ${shade}\\nAdet: ${amount}`;
+      button.href="https://wa.me/905304815341?text="+encodeURIComponent(message);
+    };
+    color.addEventListener("change",updateQuote);
+    quantity.addEventListener("input",updateQuote);
+    button.addEventListener("click",updateQuote);
+    updateQuote();
+  });
+
 })();
