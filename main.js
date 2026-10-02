@@ -161,9 +161,37 @@
       faces.push({points,z:points.reduce((a,p)=>a+p[2],0)/points.length,color:'rgb('+color.map(x=>Math.round(Math.min(1,x*light)*255)).join(',')+')'});
     }
   }
+  let softImage,depthBuffer;
   function softFlush(){
-    faces.sort((a,b)=>b.z-a.z);ctx.lineJoin='round';
-    for(const face of faces){ctx.beginPath();face.points.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.strokeStyle=face.color;ctx.lineWidth=face.line?1:.45;if(face.line){ctx.stroke();}else{ctx.closePath();ctx.fillStyle=face.color;ctx.fill();ctx.stroke();}}
+    const W=canvas.width,H=canvas.height;
+    if(!softImage||softImage.width!==W||softImage.height!==H){softImage=ctx.createImageData(W,H);depthBuffer=new Float32Array(W*H);}
+    const pixels=softImage.data;pixels.fill(0);depthBuffer.fill(Infinity);
+    for(const face of faces){
+      const rgb=face.color.match(/\d+/g).map(Number),pts=face.points;
+      if(face.line){
+        const [a,b]=pts,n=Math.ceil(Math.max(Math.abs(b[0]-a[0]),Math.abs(b[1]-a[1])));
+        for(let i=0;i<=n;i++){const t=n?i/n:0,x=Math.round(a[0]+(b[0]-a[0])*t),y=Math.round(a[1]+(b[1]-a[1])*t),z=a[2]+(b[2]-a[2])*t;
+          if(x<0||x>=W||y<0||y>=H)continue;const k=y*W+x;
+          if(z>depthBuffer[k]+.000018)continue;depthBuffer[k]=z;pixels[k*4]=rgb[0];pixels[k*4+1]=rgb[1];pixels[k*4+2]=rgb[2];pixels[k*4+3]=255;
+        }continue;
+      }
+      for(let j=1;j<pts.length-1;j++){
+        const a=pts[0],b=pts[j],c=pts[j+1];
+        const den=(b[1]-c[1])*(a[0]-c[0])+(c[0]-b[0])*(a[1]-c[1]);if(Math.abs(den)<.00001)continue;
+        const x0=Math.max(0,Math.floor(Math.min(a[0],b[0],c[0]))),x1=Math.min(W-1,Math.ceil(Math.max(a[0],b[0],c[0])));
+        const y0=Math.max(0,Math.floor(Math.min(a[1],b[1],c[1]))),y1=Math.min(H-1,Math.ceil(Math.max(a[1],b[1],c[1])));
+        const ux=(b[1]-c[1])/den,uy=(c[0]-b[0])/den,vx=(c[1]-a[1])/den,vy=(a[0]-c[0])/den;
+        for(let y=y0;y<=y1;y++){
+          let u=ux*(x0+.5-c[0])+uy*(y+.5-c[1]),v=vx*(x0+.5-c[0])+vy*(y+.5-c[1]);
+          for(let x=x0;x<=x1;x++,u+=ux,v+=vx){
+            if(u<-.00001||v<-.00001||u+v>1.00001)continue;
+            const z=c[2]+u*(a[2]-c[2])+v*(b[2]-c[2]),k=y*W+x;if(z>=depthBuffer[k])continue;
+            depthBuffer[k]=z;pixels[k*4]=rgb[0];pixels[k*4+1]=rgb[1];pixels[k*4+2]=rgb[2];pixels[k*4+3]=255;
+          }
+        }
+      }
+    }
+    ctx.putImageData(softImage,0,0);
   }
   const badge=document.querySelector('.printer-badge');
   function placeBadge(){
@@ -179,7 +207,7 @@
   }
   let w=0,h=0,target=0,current=0,raf=0,last=0,visible=true,dirty=true;
   const chaptersAt=[0,.22,.52,.9];
-  function measure(){const rect=canvas.getBoundingClientRect();w=rect.width;h=rect.height;const dpr=Math.min(devicePixelRatio||1,1.65);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);if(gl)gl.viewport(0,0,canvas.width,canvas.height);dirty=true;scroll();}
+  function measure(){const rect=canvas.getBoundingClientRect();w=rect.width;h=rect.height;const dpr=gl?Math.min(devicePixelRatio||1,1.65):Math.min(devicePixelRatio||1,800/Math.max(w,h));canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);if(gl)gl.viewport(0,0,canvas.width,canvas.height);dirty=true;scroll();}
   function scroll(){const rect=story.getBoundingClientRect();target=clamp(-rect.top/Math.max(1,story.offsetHeight-window.innerHeight));dirty=true;start();}
   function setCopy(p){
     chapters.forEach((el,i)=>{let opacity=1;if(i>0)opacity*=smooth(chaptersAt[i]-.025,chaptersAt[i]+.020,p);if(i<3)opacity*=1-smooth(chaptersAt[i+1]-.07,chaptersAt[i+1]-.025,p);if(reduced.matches)opacity=i===0?1:0;
