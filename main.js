@@ -76,17 +76,6 @@
   const cubeData=[];
   [ [[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]], [[1,-1,-1],[-1,-1,-1],[-1,1,-1],[1,1,-1]], [[1,-1,1],[1,-1,-1],[1,1,-1],[1,1,1]], [[-1,-1,-1],[-1,-1,1],[-1,1,1],[-1,1,-1]], [[-1,1,1],[1,1,1],[1,1,-1],[-1,1,-1]], [[-1,-1,-1],[1,-1,-1],[1,-1,1],[-1,-1,1]] ].forEach(q=>quad(cubeData,...q.map(v=>v.map(x=>x*.5))));
   const cube=mesh(cubeData);
-  function pixelLogo(){
-    const glyphs={V:['10001','10001','10001','01010','01010','00100','00100'],E:['11111','10000','10000','11110','10000','10000','11111'],Y:['10001','10001','01010','00100','00100','00100','00100'],S:['11111','10000','10000','11111','00001','00001','11111'],L:['10000','10000','10000','10000','10000','10000','11111']};
-    const word='VEYSEL',cell=.047,gap=.012,letterGap=.055,total=word.length*(5*(cell+gap)-gap)+(word.length-1)*letterGap,verts=[];
-    let left=-total/2-.42;
-    for(const ch of word){const rows=glyphs[ch];for(let r=0;r<7;r++)for(let c=0;c<5;c++)if(rows[r][c]==='1'){
-      const cx=left+c*(cell+gap)+cell/2,cy=2.77+(3-r)*(cell+gap);
-      for(let i=0;i<cubeData.length;i+=6)verts.push(cx+cubeData[i]*cell,cy+cubeData[i+1]*cell,1.071+cubeData[i+2]*.016,cubeData[i+3],cubeData[i+4],cubeData[i+5]);
-    }left+=5*(cell+gap)-gap+letterGap;}
-    return mesh(verts);
-  }
-  const logoMesh=pixelLogo();
   function cylinder(rt=1,rb=1,segments=gl?40:16){const d=[];for(let i=0;i<segments;i++){let a=i/segments*TAU,b=(i+1)/segments*TAU;const p=[Math.cos(a)*rb,-.5,Math.sin(a)*rb],q=[Math.cos(b)*rb,-.5,Math.sin(b)*rb],r=[Math.cos(b)*rt,.5,Math.sin(b)*rt],s=[Math.cos(a)*rt,.5,Math.sin(a)*rt];quad(d,p,s,r,q);tri(d,[0,.5,0],r,s,[0,1,0],[0,1,0],[0,1,0]);tri(d,[0,-.5,0],p,q,[0,-1,0],[0,-1,0],[0,-1,0]);}return mesh(d);}
   const cyl=cylinder(),cone=cylinder(1,.22,24);
   const H=1.3;
@@ -175,7 +164,6 @@
     for(const x of [-1.12,1.12])box([x,2.91,0],[.18,.18,1.9],colors.frame);
     box([0,2.77,1.035],[2.40,.36,.16],colors.frame);
     box([-.40,2.77,1.121],[1.98,.27,.014],colors.dark);
-    draw(logoMesh,[0,0,0],[1,1,1],colors.acid,[0,0,0]);
     // Twin Z lead screws and guide rods under the bed.
     for(const x of [-.91,.91])for(const z of [-.73,.73]){
       draw(cyl,[x,1.02,z],[.024,1.68,.024],colors.silver);
