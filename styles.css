@@ -19,3 +19,20 @@
 .product-option input{font-variant-numeric:tabular-nums}
 @media(max-width:800px){.product-options{grid-template-columns:minmax(0,1fr) 84px;gap:8px;max-width:300px;margin-top:11px}.product-option{gap:5px}.product-option>span{font-size:10px}.product-option select,.product-option input{height:35px;padding:0 8px;font-size:13px}}
 @media(max-height:700px) and (max-width:800px){.product-options{margin-top:8px}.product-option select,.product-option input{height:32px}}
+
+.install-app{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 13px;border:0;background:var(--acid);color:var(--ink);font:700 10px var(--sans);white-space:nowrap;cursor:pointer}
+.install-app[hidden]{display:none}
+.install-short{display:none}
+.install-app:focus-visible,.install-close:focus-visible,.install-confirm:focus-visible{outline:2px solid var(--acid);outline-offset:3px}
+.install-dialog{width:min(430px,calc(100% - 32px));max-width:100%;padding:0;border:1px solid #c7fa5f65;background:#141817;color:var(--paper)}
+.install-dialog::backdrop{background:#050606dc;backdrop-filter:blur(6px)}
+.install-help{position:relative;padding:30px}
+.install-help>.eyebrow{margin:0 32px 13px 0;color:var(--acid)}
+.install-help h2{font-size:clamp(30px,7vw,42px);font-weight:500;letter-spacing:-.055em;margin:0 0 24px}
+.install-instructions{display:grid;gap:14px}
+.install-instructions p{display:grid;gap:5px;margin:0;padding-top:12px;border-top:1px solid #ffffff20}
+.install-instructions strong{font-size:14px}
+.install-instructions span{font-size:14px;line-height:1.6;color:#b8c0b3}
+.install-close{position:absolute;top:17px;right:20px;border:0;background:transparent;color:var(--paper);font-size:28px;cursor:pointer}
+.install-confirm{border:0;cursor:pointer}
+@media(max-width:800px){.install-app{padding:9px 11px;font-size:9px}.install-long{display:none}.install-short{display:inline}.install-help{padding:25px}.install-instructions span{font-size:13px}}

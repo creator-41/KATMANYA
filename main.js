@@ -348,4 +348,39 @@
     updateQuote();
   });
 
+  const installButton=document.querySelector("#install-app");
+  const installDialog=document.querySelector("#install-dialog");
+  let installPromptEvent=null;
+  const alreadyInstalled=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+  installButton.hidden=alreadyInstalled;
+
+  window.addEventListener("beforeinstallprompt",event=>{
+    event.preventDefault();
+    installPromptEvent=event;
+  });
+  window.addEventListener("appinstalled",()=>{
+    installPromptEvent=null;
+    installButton.hidden=true;
+  });
+  installButton.addEventListener("click",async()=>{
+    if(installPromptEvent){
+      const promptEvent=installPromptEvent;
+      installPromptEvent=null;
+      await promptEvent.prompt();
+      const choice=await promptEvent.userChoice;
+      if(choice.outcome==="accepted")installButton.hidden=true;
+      return;
+    }
+    if(typeof installDialog.showModal==="function")installDialog.showModal();
+    else alert("iPhone/iPad: Safari’de Paylaş → Ana Ekrana Ekle. Android: Tarayıcı menüsü → Uygulamayı yükle.");
+  });
+
+  if("serviceWorker"in navigator){
+    window.addEventListener("load",()=>{
+      const workerUrl=new URL("sw.js",document.baseURI);
+      const scopeUrl=new URL("./",document.baseURI).pathname;
+      navigator.serviceWorker.register(workerUrl,{scope:scopeUrl}).catch(()=>{});
+    });
+  }
+
 })();

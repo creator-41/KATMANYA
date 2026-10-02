@@ -13,10 +13,29 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=19">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="FAV BASKI">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="./assets/pwa-192.png">
+  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="styles.css?v=20">
 </head>
 <body>
-  <header class="topbar"><a class="brand" href="#top" aria-label="FAV BASKI ana sayfa"><span class="brand-mark"><i></i><i></i><i></i></span><span class="brand-lockup">FAV<span class="brand-light">BASKI</span></span></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a></header>
+  <header class="topbar"><a class="brand" href="#top" aria-label="FAV BASKI ana sayfa"><span class="brand-mark"><i></i><i></i><i></i></span><span class="brand-lockup">FAV<span class="brand-light">BASKI</span></span></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="FAV BASKI uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
+  <dialog class="install-dialog" id="install-dialog" aria-labelledby="install-title">
+    <form method="dialog" class="install-help">
+      <button class="install-close" value="close" aria-label="Pencereyi kapat">×</button>
+      <p class="eyebrow">FAV BASKI / WEB UYGULAMASI</p>
+      <h2 id="install-title">Ana ekranına ekle.</h2>
+      <div class="install-instructions">
+        <p><strong>iPhone veya iPad</strong><span>Safari’de Paylaş simgesine dokun → Ana Ekrana Ekle → Ekle.</span></p>
+        <p><strong>Android</strong><span>Chrome menüsünü aç → Uygulamayı yükle veya Ana ekrana ekle.</span></p>
+        <p><strong>Bilgisayar</strong><span>Adres çubuğundaki yükle simgesini veya tarayıcı menüsünü kullan.</span></p>
+      </div>
+      <button class="button install-confirm" type="submit">TAMAM</button>
+    </form>
+  </dialog>
   <main id="top">
     <section class="print-story" id="deneyim" aria-label="Kaydırmayla ilerleyen üç boyutlu baskı deneyimi">
       <div class="print-sticky">
@@ -38,5 +57,5 @@
       <span class="story-anchor" id="baski-baslangici"></span><span class="story-marker marker-services" id="atolye"></span><span class="story-marker marker-process" id="surec"></span><span class="story-marker marker-contact" id="fikir"></span>
     </section>
   </main>
-  <script src="main.js?v=19" defer></script>
+  <script src="main.js?v=20" defer></script>
 </body></html>
