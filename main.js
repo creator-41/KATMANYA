@@ -78,18 +78,56 @@
   const cube=mesh(cubeData);
   function cylinder(rt=1,rb=1,segments=gl?40:16){const d=[];for(let i=0;i<segments;i++){let a=i/segments*TAU,b=(i+1)/segments*TAU;const p=[Math.cos(a)*rb,-.5,Math.sin(a)*rb],q=[Math.cos(b)*rb,-.5,Math.sin(b)*rb],r=[Math.cos(b)*rt,.5,Math.sin(b)*rt],s=[Math.cos(a)*rt,.5,Math.sin(a)*rt];quad(d,p,s,r,q);tri(d,[0,.5,0],r,s,[0,1,0],[0,1,0],[0,1,0]);tri(d,[0,-.5,0],p,q,[0,-1,0],[0,-1,0],[0,-1,0]);}return mesh(d);}
   const cyl=cylinder(),cone=cylinder(1,.22,24);
-  const H=1.3;
-  function helmetMesh(){
-    const d=[],sections=[[0,.32,.23],[.10,.43,.30],[.33,.50,.34],[.64,.53,.31],[.88,.45,.27],[1.08,.30,.20],[1.25,.12,.10],[1.30,.025,.025]],steps=12;
-    for(let j=0;j<sections.length-1;j++)for(let i=0;i<steps;i++){
-      const [y0,x0,z0]=sections[j],[y1,x1,z1]=sections[j+1],a=i/steps*TAU,b=(i+1)/steps*TAU;
-      const p=[x0*Math.sin(a),y0,z0*Math.cos(a)],q=[x0*Math.sin(b),y0,z0*Math.cos(b)],r=[x1*Math.sin(b),y1,z1*Math.cos(b)],t=[x1*Math.sin(a),y1,z1*Math.cos(a)];quad(d,p,q,r,t);
+  const H=1.65;
+  // Each armor piece has actual depth and shares the same build-plane clipping.
+  const helmetParts=[];
+  function armor(points,color,depth=.045){
+    const d=[],back=points.map(v=>[v[0],v[1],v[2]-depth]);
+    const center=points.reduce((a,v)=>a.map((x,k)=>x+v[k]/points.length),[0,0,0]);
+    for(let i=0;i<points.length;i++){
+      const j=(i+1)%points.length;
+      tri(d,center,points[i],points[j]);
+      quad(d,points[i],back[i],back[j],points[j]);
     }
-    const top=sections.at(-1);for(let i=0;i<steps;i++){const a=i/steps*TAU,b=(i+1)/steps*TAU;tri(d,[0,1.3,0],[top[1]*Math.sin(a),top[0],top[2]*Math.cos(a)],[top[1]*Math.sin(b),top[0],top[2]*Math.cos(b)]);}
-    return mesh(d);
+    helmetParts.push({mesh:mesh(d),color});
   }
-  function visorMesh(){const d=[],p=[[-.34,.43,.298],[-.49,.56,.303],[-.43,.72,.300],[.43,.72,.300],[.49,.56,.303],[.34,.43,.298]];for(let i=1;i<p.length-1;i++)tri(d,p[0],p[i],p[i+1],[0,0,1],[0,0,1],[0,0,1]);return mesh(d);}
-  const helmet=helmetMesh(),visor=visorMesh(),filament=mesh([],LINE_STRIP,true);
+  function mirrored(points,color,depth){
+    armor(points,color,depth);
+    armor(points.map(v=>[-v[0],v[1],v[2]]).reverse(),color,depth);
+  }
+  const porcelain=[.94,.95,.94],recess=[.57,.62,.63],blue=[.16,.22,.85],blueEdge=[.28,.36,.98],green=[.08,.63,.26],black=[.025,.033,.045];
+  const shellData=[],sections=[[0,.14,.12],[.10,.25,.24],[.32,.40,.34],[.62,.49,.40],[.96,.53,.40],[1.22,.48,.36],[1.43,.36,.28],[1.58,.21,.17],[1.65,.02,.02]],steps=32;
+  for(let j=0;j<sections.length-1;j++)for(let i=0;i<steps;i++){
+    const [y0,x0,z0]=sections[j],[y1,x1,z1]=sections[j+1],a=i/steps*TAU,b=(i+1)/steps*TAU;
+    const v=(x,y,z,t)=>[x*Math.sin(t),y,z*Math.cos(t)-.045];
+    quad(shellData,v(x0,y0,z0,a),v(x0,y0,z0,b),v(x1,y1,z1,b),v(x1,y1,z1,a));
+  }
+  helmetParts.push({mesh:mesh(shellData),color:recess});
+  // Deep continuous V visor, wrapped around the cheeks rather than a flat slit.
+  mirrored([[0,.32,.435],[.24,.47,.455],[.44,.78,.385],[.49,1.09,.27],[.27,1.10,.455],[0,.92,.515]],black,.065);
+  mirrored([[.08,.48,.444],[.20,.58,.465],[.39,.87,.395],[.27,.72,.455]],[.085,.10,.12],.006);
+  // White brow and tapered central face shield.
+  mirrored([[0,.72,.555],[.16,.80,.55],[.28,1.04,.49],[.26,1.34,.365],[.12,1.49,.29],[0,1.51,.33]],porcelain,.075);
+  mirrored([[.16,.80,.55],[.33,.93,.43],[.40,1.18,.33],[.26,1.34,.365],[.28,1.04,.49]],[.83,.87,.87],.055);
+  // Pointed chin ring follows the visor, leaving its full black V exposed.
+  mirrored([[0,.025,.30],[.17,.09,.355],[.34,.29,.40],[.47,.55,.335],[.43,.68,.37],[.24,.38,.47],[0,.22,.485]],porcelain,.075);
+  mirrored([[0,.025,.30],[.17,.09,.355],[.24,.22,.425],[0,.16,.45]],[.80,.84,.84],.03);
+  // Layered temple armor and swept-back fins.
+  mirrored([[.32,.51,.40],[.52,.65,.21],[.61,1.04,.02],[.49,1.23,.18],[.43,.99,.34]],porcelain,.10);
+  mirrored([[.46,.66,.23],[.62,.85,-.08],[.61,1.14,-.17],[.52,1.26,.02]],[.78,.82,.82],.09);
+  mirrored([[.49,1.17,.12],[.61,1.29,-.07],[.69,1.22,-.27],[.56,1.08,-.14]],porcelain,.055);
+  mirrored([[.51,.86,-.06],[.67,.94,-.26],[.66,.77,-.39],[.50,.67,-.20]],[.64,.69,.70],.06);
+  // Blue crown is a raised, tapered plate, with an inset top panel.
+  armor([[-.19,1.25,.40],[.19,1.25,.40],[.22,1.46,.30],[.15,1.62,.16],[-.15,1.62,.16],[-.22,1.46,.30]],blue,.065);
+  armor([[-.14,1.31,.421],[.14,1.31,.421],[.155,1.46,.329],[.10,1.54,.246],[-.10,1.54,.246],[-.155,1.46,.329]],blueEdge,.012);
+  // Cobalt jaw modules and green temple clasps from the reference.
+  mirrored([[.32,.27,.402],[.46,.34,.358],[.52,.58,.31],[.41,.63,.371],[.30,.48,.439]],blue,.09);
+  mirrored([[.36,.32,.421],[.425,.37,.399],[.45,.52,.362],[.39,.55,.390],[.34,.46,.444]],blueEdge,.014);
+  mirrored([[.48,.48,.29],[.66,.62,.10],[.65,.70,.07],[.49,.60,.29]],blue,.045);
+  mirrored([[.46,1.08,.27],[.59,1.12,.15],[.61,1.29,.08],[.51,1.36,.16],[.44,1.25,.28]],green,.08);
+  mirrored([[.49,1.12,.29],[.535,1.15,.25],[.55,1.27,.20],[.51,1.29,.23]],[.045,.25,.10],.012);
+  mirrored([[.38,1.06,.36],[.43,1.10,.30],[.45,1.18,.28],[.40,1.16,.34]],black,.015);
+  const filament=mesh([],LINE_STRIP,true);
   const gridData=[];for(let i=-8;i<=8;i++){const n=i*.12;gridData.push(-.96,0,n,0,1,0,.96,0,n,0,1,0,n,0,-.96,0,1,0,n,0,.96,0,1,0);}const grid=mesh(gridData,LINES);
   function updateMesh(m,data){if(!gl){m.data=data;m.count=data.length/6;return;}gl.bindBuffer(gl.ARRAY_BUFFER,m.buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(data),gl.DYNAMIC_DRAW);m.count=data.length/6;}
   const colors={frame:[.14,.17,.15],dark:[.055,.068,.06],edge:[.29,.33,.28],silver:[.51,.57,.49],acid:[.69,.94,.29],brass:[.66,.42,.15],helmet:[.78,.82,.84],visor:[.018,.035,.052],blue:[.10,.20,.92],green:[.08,.65,.26]};
@@ -124,6 +162,13 @@
     faces.sort((a,b)=>b.z-a.z);ctx.lineJoin='round';
     for(const face of faces){ctx.beginPath();face.points.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.strokeStyle=face.color;ctx.lineWidth=face.line?1:.45;if(face.line){ctx.stroke();}else{ctx.closePath();ctx.fillStyle=face.color;ctx.fill();ctx.stroke();}}
   }
+  const badge=document.querySelector('.printer-badge');
+  function placeBadge(){
+    const project=v=>{const q=[0,0,0,0],a=[...v,1];for(let r=0;r<4;r++)for(let c=0;c<4;c++)q[r]+=softVP[c*4+r]*a[c];return [(q[0]/q[3]+1)*w/2,(1-q[1]/q[3])*h/2];};
+    const a=project([-.85,2.85,1.143]),b=project([.24,2.85,1.143]),d=project([-.85,2.66,1.143]);
+    badge.style.transform='matrix('+[(b[0]-a[0])/200,(b[1]-a[1])/200,(d[0]-a[0])/40,(d[1]-a[1])/40,a[0],a[1]].join(',')+')';
+    badge.style.visibility='visible';
+  }
   const box=(p,s,c=colors.frame)=>draw(cube,p,s,c);
   function rod(a,b,r,c){const d=sub(b,a),length=Math.hypot(...d),direction=norm(d);let u=norm(cross(Math.abs(direction[1])>.99?[1,0,0]:[0,1,0],direction)),v=cross(u,direction);
     const m=new Float32Array([u[0]*r,u[1]*r,u[2]*r,0,direction[0]*length,direction[1]*length,direction[2]*length,0,v[0]*r,v[1]*r,v[2]*r,0,(a[0]+b[0])/2,(a[1]+b[1])/2,(a[2]+b[2])/2,1]);
@@ -140,14 +185,14 @@
   function render(p){
     if(gl)gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);else{ctx.clearRect(0,0,canvas.width,canvas.height);faces=[];}
     const progress=reduced.matches?1:clamp((p-.10)/.77),finished=smooth(.88,1,p);
-    const yaw=.48+Math.sin(p*Math.PI)*.16+finished*.15;
+    const yaw=.36+Math.sin(p*Math.PI)*.12+finished*.06;
     const mobile=window.innerWidth<=800;
-    const dist=mobile?7.1:6.8;
+    const dist=mobile?7.5:7.1;
     const eye=[Math.sin(yaw)*dist,3.3+finished*.15,Math.cos(yaw)*dist];
-    softVP=camera(eye,[.12,1.35+finished*.08,0],w/h);
+    softVP=camera(eye,[.25,1.43+finished*.08,0],w/h);
     if(gl){gl.uniform3fv(loc.uEye,eye);gl.uniformMatrix4fv(loc.uVP,false,softVP);}
     // Ender-5 Max inspired square frame, front badge, moving Z bed and top CoreXY gantry.
-    const homeY=1.62,bedY=homeY-progress*H;
+    const homeY=1.98,bedY=homeY-progress*H;
     box([0,.05,0],[2.64,.17,2.28],colors.dark);
     for(const x of [-1.08,1.08])for(const z of [-.91,.91])box([x,-.07,z],[.25,.12,.24],colors.dark);
     box([0,.17,0],[2.48,.12,2.12],colors.frame);
@@ -163,7 +208,9 @@
     box([0,2.91,.94],[2.4,.18,.18],colors.frame);
     for(const x of [-1.12,1.12])box([x,2.91,0],[.18,.18,1.9],colors.frame);
     box([0,2.77,1.035],[2.40,.36,.16],colors.frame);
-    box([-.40,2.77,1.121],[1.98,.27,.014],colors.dark);
+    box([-.25,2.77,1.121],[1.62,.27,.014],colors.dark);
+    box([-.99,2.77,1.135],[.045,.12,.013],colors.acid);
+    placeBadge();
     // Twin Z lead screws and guide rods under the bed.
     for(const x of [-.91,.91])for(const z of [-.73,.73]){
       draw(cyl,[x,1.02,z],[.024,1.68,.024],colors.silver);
@@ -175,15 +222,26 @@
     box([0,bedY+.012,0],[1.99,.014,1.74],[.12,.15,.12]);
     draw(grid,[0,bedY+.02,0],[.96,1,.86],[.22,.28,.16],[0,0,0],99,0,.25);
     box([0,bedY-.09,.969],[1.92,.012,.014],colors.acid);
-    // Right-side spool and filament guide loop visible in the supplied reference.
-    const spool=[1.45,2.22,-.70],spin=progress*TAU*2.5;
-    rod([1.16,2.22,-.70],[1.73,2.22,-.70],.038,colors.silver);
-    draw(cyl,spool,[.29,.21,.29],colors.acid,[0,0,Math.PI/2],99,1);
-    for(const x of [1.30,1.60]){
-      draw(cyl,[x,2.22,-.70],[.36,.04,.36],colors.dark,[0,0,Math.PI/2]);
-      draw(cyl,[x+.026,2.22,-.70],[.084,.009,.084],colors.edge,[0,0,Math.PI/2]);
-      for(let i=0;i<6;i++){const a=spin+i*TAU/6;rod([x+.025,2.22+Math.cos(a)*.12,-.70+Math.sin(a)*.12],[x+.025,2.22+Math.cos(a)*.28,-.70+Math.sin(a)*.28],.011,colors.edge);}
+    // Four individual reels in an external two-level material rack.
+    const reelColors=[porcelain,black,blue,green],spin=progress*TAU*2.5;
+    const reels=[[1.57,2.24,.48],[1.57,2.24,-.46],[1.57,1.32,.48],[1.57,1.32,-.46]];
+    box([1.38,1.79,-.02],[.06,1.86,1.68],colors.dark);
+    for(let ri=0;ri<reels.length;ri++){
+      const [rx,ry,rz]=reels[ri],rc=reelColors[ri];
+      rod([1.30,ry,rz],[1.86,ry,rz],.035,colors.silver);
+      draw(cyl,[rx,ry,rz],[.305,.26,.305],rc,[0,0,Math.PI/2],99,1);
+      // Fine exposed rings leave the filament colors visible between the rims.
+      for(const x of [rx-.15,rx+.15]){
+        draw(cyl,[x,ry,rz],[.34,.027,.34],[.30,.32,.32],[0,0,Math.PI/2]);
+        draw(cyl,[x+.018,ry,rz],[.285,.012,.285],rc,[0,0,Math.PI/2]);
+        draw(cyl,[x+.028,ry,rz],[.082,.032,.082],colors.dark,[0,0,Math.PI/2]);
+        for(let i=0;i<5;i++){const a=spin+i*TAU/5;rod([x+.03,ry+Math.cos(a)*.09,rz+Math.sin(a)*.09],[x+.03,ry+Math.cos(a)*.31,rz+Math.sin(a)*.31],.013,colors.edge);}
+      }
+      const feed=[];
+      for(let i=0;i<=24;i++){const t=i/24,u=1-t;feed.push(rx*u+1.18*t,ry+.30+(3.10-ry-.30)*Math.sin(t*Math.PI/2),rz*u+(-.67+ri*.10)*t,0,1,0);}
+      updateMesh(filament,feed);draw(filament,[0,0,0],[1,1,1],rc,[0,0,0],99,0,.4);
     }
+    box([1.16,3.12,-.51],[.15,.12,.51],colors.dark);
     const height=progress*H,angle=progress*TAU*28;
     const intro=1-smooth(0,.10,p),park=finished;
     const nx=(.58*Math.cos(angle))*(1-intro)*(1-park)-.81*(intro+park);
@@ -194,17 +252,9 @@
     box([0,2.59,nz],[2.08,.024,.024],colors.dark);
     box([nx,2.45,nz],[.23,.23,.22],colors.frame);
     box([nx,2.35,nz+.13],[.18,.18,.018],colors.dark);
-    // The print is an original low-poly robot helmet, revealed layer by layer.
-    if(height>.001){
-      draw(helmet,[0,bedY+.027,0],[1,1,1],colors.helmet,[0,0,0],height);
-      draw(visor,[0,bedY+.027,0],[1,1,1],colors.visor,[0,0,0],height);
-      if(height>.40){
-        box([-.46,bedY+.47,.20],[.17,.18,.15],colors.green);box([.46,bedY+.47,.20],[.17,.18,.15],colors.green);
-        box([-.46,bedY+.47,.282],[.115,.12,.018],colors.dark);box([.46,bedY+.47,.282],[.115,.12,.018],colors.dark);
-      }
-      if(height>.82){box([0,bedY+1.02,.10],[.43,.20,.34],colors.blue);box([0,bedY+1.12,.115],[.28,.08,.32],[.20,.35,1]);}
-      if(height>.65){box([-.32,bedY+.58,.285],[.12,.10,.025],colors.helmet);box([.32,bedY+.58,.285],[.12,.10,.025],colors.helmet);}
-    }
+    // All detailed armor surfaces grow continuously through the same horizontal layer.
+    if(height>.001)for(const part of helmetParts)
+      draw(part.mesh,[0,bedY+.027,0],[1,1,1],part.color,[0,0,0],height,1);
     // Hot end, heatsink, fan housing and brass nozzle follow the deposition path.
     box([nx,tipY+.22,nz],[.22,.25,.2],colors.dark);
     box([nx,tipY+.22,nz+.106],[.18,.18,.013],colors.frame);
@@ -216,7 +266,7 @@
     draw(cone,[nx,tipY+.023,nz],[.028,.042,.028],colors.brass);
     if(progress>.001&&progress<.999)draw(cyl,[nx,tipY+.047,nz],[.016,.003,.016],[.91,1,.64],[0,0,0],99,0,1);
     // Flexible feed line arches from the spool to the print head.
-    const curve=[];for(let i=0;i<=48;i++){const t=i/48,u=1-t;const a=[1.45,2.52,-.70],b=[.9,3.10,-.4],c=[nx,2.95,nz],d=[nx,tipY+.45,nz];const v=a.map((_,k)=>u*u*u*a[k]+3*u*u*t*b[k]+3*u*t*t*c[k]+t*t*t*d[k]);curve.push(...v,0,1,0);}
+    const curve=[];for(let i=0;i<=48;i++){const t=i/48,u=1-t;const a=[1.16,3.18,-.51],b=[.65,3.40,-.4],c=[nx,2.95,nz],d=[nx,tipY+.45,nz];const v=a.map((_,k)=>u*u*u*a[k]+3*u*u*t*b[k]+3*u*t*t*c[k]+t*t*t*d[k]);curve.push(...v,0,1,0);}
     updateMesh(filament,curve);draw(filament,[0,0,0],[1,1,1],colors.acid,[0,0,0],99,0,.65);
     // Front control panel and two indicator buttons.
     box([.72,2.77,1.13],[.34,.32,.07],colors.dark);box([.72,2.77,1.17],[.27,.23,.012],[.12,.16,.12]);
@@ -236,5 +286,7 @@
   document.addEventListener('visibilitychange',()=>{if(!document.hidden){dirty=true;start();}});
   reduced.addEventListener('change',()=>{measure();});
   canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();cancelAnimationFrame(raf);fallback();});
+  window.addEventListener('pageshow',()=>{current=0;target=0;window.scrollTo({top:0,left:0,behavior:'instant'});measure();render(0);});
+  window.scrollTo({top:0,left:0,behavior:'instant'});
   measure();render(0);
 })();
