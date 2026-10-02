@@ -234,7 +234,7 @@
       box([x-.04,1.53,z+.09],[.022,2.66,.014],colors.silver);
       box([x+.04,1.53,z+.09],[.022,2.66,.014],colors.dark);
     }
-    // Upper rectangular frame; the front rail carries FAV/3D's custom badge.
+    // Upper rectangular frame; the front rail carries FAV BASKI's custom badge.
     box([0,2.91,-.94],[2.4,.18,.18],colors.frame);
     box([0,2.91,.94],[2.4,.18,.18],colors.frame);
     for(const x of [-1.12,1.12])box([x,2.91,0],[.18,.18,1.9],colors.frame);
@@ -321,5 +321,5 @@
   window.scrollTo({top:0,left:0,behavior:'instant'});
   measure();render(0);
   const briefCopy=document.querySelector("#brief-copy");
-  briefCopy?.addEventListener("click",async()=>{const text="FAV/3D teklif talebi\n\nÜrün/fikir: \nÖlçüler: \nAdet: \nKullanım amacı: \nRenk tercihi: \nFotoğraf veya 3B dosya: ";const status=document.querySelector("#copy-status");try{await navigator.clipboard.writeText(text);status.textContent="Mesaj taslağı kopyalandı; bilgilerini doldurup bize gönderebilirsin.";}catch{status.textContent="Kopyalama desteklenmiyor. Bilgi listesini kullanarak mesajını hazırlayabilirsin.";} });
+  briefCopy?.addEventListener("click",async()=>{const text="FAV BASKI teklif talebi\n\nÜrün/fikir: \nÖlçüler: \nAdet: \nKullanım amacı: \nRenk tercihi: \nFotoğraf veya 3B dosya: ";const status=document.querySelector("#copy-status");try{await navigator.clipboard.writeText(text);status.textContent="Mesaj taslağı kopyalandı; bilgilerini doldurup bize gönderebilirsin.";}catch{status.textContent="Kopyalama desteklenmiyor. Bilgi listesini kullanarak mesajını hazırlayabilirsin.";} });
 })();
