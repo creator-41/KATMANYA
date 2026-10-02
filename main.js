@@ -320,4 +320,6 @@
   window.addEventListener('pageshow',()=>{current=0;target=0;window.scrollTo({top:0,left:0,behavior:'instant'});measure();render(0);});
   window.scrollTo({top:0,left:0,behavior:'instant'});
   measure();render(0);
+  const briefCopy=document.querySelector("#brief-copy");
+  briefCopy?.addEventListener("click",async()=>{const text="Veysel 3D teklif talebi\n\nÜrün/fikir: \nÖlçüler: \nAdet: \nKullanım amacı: \nRenk tercihi: \nFotoğraf veya 3B dosya: ";const status=document.querySelector("#copy-status");try{await navigator.clipboard.writeText(text);status.textContent="Mesaj taslağı kopyalandı; bilgilerini doldurup bize gönderebilirsin.";}catch{status.textContent="Kopyalama desteklenmiyor. Bilgi listesini kullanarak mesajını hazırlayabilirsin.";} });
 })();
