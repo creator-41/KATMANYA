@@ -61,24 +61,32 @@
     const restart=button('Baştan başla',intro,'chat-restart');controls.append(restart);
   }
   function clearNotification(){notified=false;shell.classList.remove('has-notification');badge.hidden=true;toggle.setAttribute('aria-label','Teklif asistanını aç');}
+  function soundNow(){
+    try{
+      if(!audioContext||audioContext.state!=='running'||soundPlayed)return false;
+      const start=audioContext.currentTime+.03;
+      [[880,start],[1320,start+.16]].forEach(([frequency,time])=>{
+        const oscillator=audioContext.createOscillator();
+        const gain=audioContext.createGain();
+        oscillator.type='triangle';oscillator.frequency.value=frequency;
+        gain.gain.setValueAtTime(.0001,time);
+        gain.gain.exponentialRampToValueAtTime(.22,time+.018);
+        gain.gain.exponentialRampToValueAtTime(.0001,time+.15);
+        oscillator.connect(gain).connect(audioContext.destination);
+        oscillator.start(time);oscillator.stop(time+.16);
+      });
+      soundPlayed=true;
+      return true;
+    }catch{}
+    return false;
+  }
   function playNotification(){
     try{
       const AudioContext=window.AudioContext||window.webkitAudioContext;
       if(!AudioContext||soundPlayed)return;
       audioContext=audioContext||new AudioContext();
-      if(audioContext.state==='suspended')audioContext.resume().catch(()=>{});
-      const start=audioContext.currentTime+.03;
-      [[784,start],[1046.5,start+.14]].forEach(([frequency,time])=>{
-        const oscillator=audioContext.createOscillator();
-        const gain=audioContext.createGain();
-        oscillator.type='sine';oscillator.frequency.value=frequency;
-        gain.gain.setValueAtTime(.0001,time);
-        gain.gain.exponentialRampToValueAtTime(.12,time+.02);
-        gain.gain.exponentialRampToValueAtTime(.0001,time+.13);
-        oscillator.connect(gain).connect(audioContext.destination);
-        oscillator.start(time);oscillator.stop(time+.14);
-      });
-      soundPlayed=true;
+      if(audioContext.state==='running'){soundNow();return;}
+      audioContext.resume().then(()=>{if(notified&&!soundPlayed)soundNow();}).catch(()=>{});
     }catch{}
   }
   function notify(){
@@ -91,13 +99,14 @@
   }
   function primeSound(){
     if(!audioContext){try{const AudioContext=window.AudioContext||window.webkitAudioContext;if(AudioContext)audioContext=new AudioContext();}catch{}}
-    if(audioContext?.state==='suspended')audioContext.resume().catch(()=>{});
-    if(notified&&!soundPlayed)playNotification();
+    if(audioContext?.state==='running'){if(notified&&!soundPlayed)soundNow();return;}
+    audioContext?.resume().then(()=>{if(notified&&!soundPlayed)soundNow();}).catch(()=>{});
   }
   function setOpen(open){panel.hidden=!open;toggle.setAttribute('aria-expanded',String(open));if(open){clearNotification();if(!log.childElementCount)intro();close.focus();}else toggle.focus();}
   toggle.addEventListener('click',()=>setOpen(panel.hidden));close.addEventListener('click',()=>setOpen(false));
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!panel.hidden)setOpen(false);});
   document.addEventListener('pointerdown',primeSound,{once:true,passive:true});
+  document.addEventListener('touchstart',primeSound,{once:true,passive:true});
   document.addEventListener('keydown',primeSound,{once:true});
   setOpen(false);
   window.setTimeout(notify,10000);

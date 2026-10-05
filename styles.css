@@ -107,11 +107,11 @@ body{max-width:100%;touch-action:pan-y}
 
 /* Delayed assistant notification */
 .quote-chat-toggle{position:relative}
-.quote-chat-badge{position:absolute;right:-7px;top:-8px;width:27px;height:27px;display:grid;place-items:center;border:2px solid var(--acid);border-radius:50%;background:#101212;color:var(--acid);box-shadow:0 0 0 4px #101212,0 0 20px #c7fa5f88}
+.quote-chat-badge{position:absolute;right:-7px;top:-8px;width:27px;height:27px;display:grid;place-items:center;border:2px solid #ff514a;border-radius:50%;background:#101212;color:#fff;box-shadow:0 0 0 5px #ff3b30,0 0 24px #ff3b30bb}
 .quote-chat-badge[hidden]{display:none}
 .quote-chat-badge svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .has-notification .quote-chat-toggle{animation:chat-notify 1.1s ease-in-out 2}
 .has-notification .quote-chat-badge{animation:chat-badge-pulse 1.5s ease-in-out infinite}
 @keyframes chat-notify{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}50%{transform:translateX(3px)}75%{transform:translateX(-2px)}}
-@keyframes chat-badge-pulse{50%{box-shadow:0 0 0 8px #c7fa5f00,0 0 24px #c7fa5fcc}}
+@keyframes chat-badge-pulse{0%,100%{box-shadow:0 0 0 5px #ff3b30,0 0 20px #ff3b30aa}50%{box-shadow:0 0 0 12px #ff3b3000,0 0 30px #ff3b30ee}}
 @media(prefers-reduced-motion:reduce){.has-notification .quote-chat-toggle,.has-notification .quote-chat-badge{animation:none}}
