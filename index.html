@@ -58,4 +58,18 @@
     </section>
   </main>
   <script src="main.js?v=23" defer></script>
-</body></html>
+
+  <aside id="quote-chat" aria-label="Noventra teklif asistanı">
+    <section class="quote-chat-panel" role="dialog" aria-modal="false" aria-labelledby="quote-chat-title" hidden>
+      <header class="quote-chat-head"><div><strong id="quote-chat-title">Teklif asistanı</strong><small>Ücretsiz · hızlı teklif hazırlama</small></div><button class="quote-chat-close" type="button" aria-label="Sohbeti kapat">×</button></header>
+      <div class="quote-chat-log" aria-live="polite" aria-relevant="additions text"></div>
+      <div class="quote-chat-controls"></div>
+      <div class="quote-chat-status" role="status"></div>
+      <div class="quote-chat-note">Yanıtların kaydedilmez. WhatsApp’a yalnızca sen devam etmeyi seçince aktarılır.</div>
+    </section>
+    <button class="quote-chat-toggle" type="button" aria-expanded="false" aria-controls="quote-chat-title">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H5l1.7-3.4A7.5 7.5 0 1 1 20 11.5Z"/><path d="M8.5 10h7M8.5 13.5h4"/></svg><span>Teklif al</span>
+    </button>
+  </aside>
+  <script src="chatbot.js?v=1" defer></script>
+  </body></html>
