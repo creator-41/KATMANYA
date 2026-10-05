@@ -1,6 +1,6 @@
-# Veysel 3D
+# Noventra 3D
 
-Veysel 3D baskı atölyesi için etkileşimli, mobil uyumlu web sitesi başlangıç sürümü.
+Noventra 3D baskı atölyesi için etkileşimli, mobil uyumlu web sitesi başlangıç sürümü.
 
 ## İlk taslakta olanlar
 
