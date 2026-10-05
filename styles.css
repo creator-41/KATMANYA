@@ -122,3 +122,7 @@ body{max-width:100%;touch-action:pan-y}
 
 /* Product/process screens begin directly with their main heading. */
 .chapter:not([data-chapter="0"])>.eyebrow{display:none}
+
+
+/* Keep the nameplate quote button beside the selectors, above the printer image. */
+@media(max-width:800px){.chapter[data-chapter="2"] .product-action-row{align-items:flex-start;margin-top:8px}}
