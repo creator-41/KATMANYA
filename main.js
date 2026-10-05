@@ -332,6 +332,7 @@
     const button=slide.querySelector(".product-cta");
     const color=slide.querySelector(".quote-color");
     const quantity=slide.querySelector(".quote-quantity");
+    const detail=slide.querySelector(".quote-detail-input");
     if(!button||!color||!quantity)return;
     const product=button.dataset.quoteProduct||"Ürün";
     const updateQuote=()=>{
@@ -339,14 +340,16 @@
       const amount=Number.isFinite(entered)?Math.min(999,Math.max(1,entered)):1;
       quantity.value=String(amount);
       const shade=color.value||"Henüz karar vermedim";
+      const detailValue=detail?.value.trim()||"Mesajda paylaşacağım";
       let message=`Merhaba FAV BASKI, ${product} için fiyat almak istiyorum.`;
-      if(product==="İsimli plakalık") message+="\nPlakada yer alacak isim: ";
-      if(product==="İhtiyacına özel parça") message+="\nFotoğrafı ve ölçülerini bu sohbete ekleyeceğim.";
+      if(product==="İsimli plakalık") message+=`\nPlakada yer alacak isim: ${detailValue}`;
+      if(product==="İhtiyacına özel parça") message+=`\nÖlçüler: ${detailValue}\nFotoğraf: Bu sohbete ekleyeceğim.`;
       message+=`\nRenk tercihi: ${shade}\nAdet: ${amount}`;
       button.href="https://wa.me/905304815341?text="+encodeURIComponent(message);
     };
     color.addEventListener("change",updateQuote);
     quantity.addEventListener("input",updateQuote);
+    detail?.addEventListener("input",updateQuote);
     button.addEventListener("click",updateQuote);
     updateQuote();
   });
