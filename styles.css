@@ -50,3 +50,12 @@
   .product-slide h2{font-size:37px;line-height:1.04;white-space:nowrap}
   .chapter[data-chapter="3"] h2{font-size:37px}
 }
+
+.product-detail-field{grid-column:1/-1}
+.product-upload-hint{margin:0 0 3px;font:8px/1.4 var(--mono);color:#a7b09f}
+.product-detail-field input::placeholder{color:#7f897a}
+@media(max-width:800px){
+  .product-detail-field>span{font-size:9px}
+  .product-detail-field input{height:32px;padding:0 8px;font-size:11px}
+  .product-upload-hint{font-size:7px;margin:0 0 2px}
+}
