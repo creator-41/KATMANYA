@@ -59,3 +59,29 @@
   .product-detail-field input{height:32px;padding:0 8px;font-size:11px}
   .product-upload-hint{font-size:7px;margin:0 0 2px}
 }
+
+/* Free, guided WhatsApp quote assistant */
+#quote-chat{position:fixed;z-index:30;right:22px;bottom:calc(22px + env(safe-area-inset-bottom));font-family:var(--sans)}
+.quote-chat-toggle{display:flex;align-items:center;gap:10px;border:1px solid #d9ff8a;background:var(--acid);color:var(--ink);border-radius:999px;padding:13px 18px;font:700 13px var(--sans);box-shadow:0 8px 30px #0008;cursor:pointer}
+.quote-chat-toggle svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.quote-chat-panel{position:absolute;right:0;bottom:calc(100% + 12px);width:min(370px,calc(100vw - 28px));height:min(560px,calc(100svh - 120px));min-height:350px;display:flex;flex-direction:column;overflow:hidden;border:1px solid #c7fa5f55;border-radius:18px;background:#171b19;color:var(--paper);box-shadow:0 18px 60px #000b}
+.quote-chat-panel[hidden]{display:none}
+.quote-chat-head{display:flex;align-items:center;justify-content:space-between;padding:15px 17px;border-bottom:1px solid #ffffff18}
+.quote-chat-head strong{font-size:14px}.quote-chat-head small{display:block;margin-top:3px;color:#a5b09b;font:10px var(--mono)}
+.quote-chat-close{width:34px;height:34px;border:0;border-radius:50%;background:#ffffff10;color:var(--paper);font-size:23px;cursor:pointer}
+.quote-chat-log{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:9px;overscroll-behavior:contain}
+.chat-bubble{max-width:88%;padding:10px 12px;border-radius:14px;font-size:13px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.chat-bubble.bot{align-self:flex-start;background:#ffffff0d;color:#edf1e8;border:1px solid #ffffff12;border-bottom-left-radius:4px}
+.chat-bubble.user{align-self:flex-end;background:#c7fa5f;color:#101212;border-bottom-right-radius:4px}
+.quote-chat-controls{padding:12px 14px 10px;border-top:1px solid #ffffff18;display:flex;flex-wrap:wrap;gap:8px;max-height:38%;overflow:auto}
+.chat-choice{border:1px solid #c7fa5f66;border-radius:999px;background:#ffffff08;color:#eaf1df;padding:9px 12px;font:12px var(--sans);cursor:pointer}
+.chat-choice:hover,.chat-choice:focus-visible{background:#c7fa5f;color:#101212}
+.chat-answer-form{width:100%;display:flex;gap:8px}
+.chat-answer-form input{min-width:0;flex:1;border:1px solid #ffffff35;border-radius:10px;background:#101212;color:var(--paper);padding:11px 12px;font:13px var(--sans)}
+.chat-answer-form input:focus{outline:2px solid var(--acid);outline-offset:1px}
+.chat-send,.chat-whatsapp{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:10px;background:var(--acid);color:#101212;padding:10px 14px;font:700 12px var(--sans);cursor:pointer;text-decoration:none}
+.chat-whatsapp{width:100%;min-height:42px}
+.chat-restart{width:100%}
+.quote-chat-status{min-height:20px;padding:0 15px 6px;color:#e4a6a6;font-size:11px}
+.quote-chat-note{padding:0 15px 12px;color:#8e9887;font-size:10px;line-height:1.45}
+@media(max-width:800px){#quote-chat{right:15px;bottom:calc(14px + env(safe-area-inset-bottom))}.quote-chat-panel{height:min(540px,calc(100svh - 100px));min-height:320px}.quote-chat-toggle{padding:12px 15px;font-size:12px}.quote-chat-controls{max-height:40%}}
