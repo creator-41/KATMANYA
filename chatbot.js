@@ -8,8 +8,10 @@
   const controls=shell.querySelector('.quote-chat-controls');
   const status=shell.querySelector('.quote-chat-status');
   const badge=shell.querySelector('.quote-chat-badge');
+  const notificationAudio=new Audio(new URL('assets/chat-notification.wav',document.baseURI).href);
+  notificationAudio.preload='auto';notificationAudio.volume=.72;
   const phone='905304815341';
-  let product=null,questions=[],answers={},step=0,notified=false,soundPlayed=false,audioContext=null;
+  let product=null,questions=[],answers={},step=0,notified=false,soundPlayed=false,audioContext=null,audioPrimed=false;
   const products=[
     {id:'desk',label:'Masaüstü seti'},
     {id:'plate',label:'İsimli plakalık'},
@@ -82,6 +84,13 @@
   }
   function playNotification(){
     try{
+      if(audioPrimed&&!soundPlayed){
+        notificationAudio.currentTime=0;
+        const playback=notificationAudio.play();
+        if(playback)playback.then(()=>{soundPlayed=true;}).catch(()=>{soundNow();});
+        else soundPlayed=true;
+        return;
+      }
       const AudioContext=window.AudioContext||window.webkitAudioContext;
       if(!AudioContext||soundPlayed)return;
       audioContext=audioContext||new AudioContext();
@@ -98,7 +107,16 @@
     if('vibrate'in navigator)navigator.vibrate(80);
   }
   function primeSound(){
+    if(!audioPrimed){
+      const previousVolume=notificationAudio.volume;
+      notificationAudio.volume=.001;
+      const unlock=notificationAudio.play();
+      if(unlock)unlock.then(()=>{notificationAudio.pause();notificationAudio.currentTime=0;notificationAudio.volume=previousVolume;audioPrimed=true;if(notified&&!soundPlayed)playNotification();}).catch(()=>{notificationAudio.volume=previousVolume;});
+    }
     if(!audioContext){try{const AudioContext=window.AudioContext||window.webkitAudioContext;if(AudioContext)audioContext=new AudioContext();}catch{}}
+    if(audioContext){
+      try{const oscillator=audioContext.createOscillator();const gain=audioContext.createGain();gain.gain.value=.0001;oscillator.connect(gain).connect(audioContext.destination);oscillator.start();oscillator.stop(audioContext.currentTime+.01);}catch{}
+    }
     if(audioContext?.state==='running'){if(notified&&!soundPlayed)soundNow();return;}
     audioContext?.resume().then(()=>{if(notified&&!soundPlayed)soundNow();}).catch(()=>{});
   }

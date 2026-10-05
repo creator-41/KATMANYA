@@ -100,11 +100,14 @@ body{max-width:100%;touch-action:pan-y}
 /* Respect iPhone/Dynamic Island safe areas without creating a new scroll container. */
 .topbar{height:calc(78px + env(safe-area-inset-top));padding-top:env(safe-area-inset-top);padding-right:max(5.5vw,env(safe-area-inset-right));padding-left:max(5.5vw,env(safe-area-inset-left))}
 @media(max-width:800px){
-  .topbar{height:calc(54px + env(safe-area-inset-top))}
-  .story-copies{top:calc(70px + env(safe-area-inset-top))}
-  #quote-chat{bottom:max(8px,env(safe-area-inset-bottom))}
+  .topbar{height:calc(50px + max(0px,calc(env(safe-area-inset-top) - 10px)));padding-top:max(0px,calc(env(safe-area-inset-top) - 10px))}
+  .story-copies{top:calc(62px + max(0px,calc(env(safe-area-inset-top) - 10px)))}
+  #quote-chat{bottom:max(4px,calc(env(safe-area-inset-bottom) - 8px))}
+  .print-hud{bottom:49px}
+  .scene-footer{bottom:9px}
+  .scene-label{bottom:130px}
 }
-@media(max-height:700px) and (max-width:800px){.story-copies{top:calc(64px + env(safe-area-inset-top))}}
+@media(max-height:700px) and (max-width:800px){.story-copies{top:calc(56px + max(0px,calc(env(safe-area-inset-top) - 10px)))}}
 
 /* Delayed assistant notification */
 .quote-chat-toggle{position:relative}
@@ -116,3 +119,6 @@ body{max-width:100%;touch-action:pan-y}
 @keyframes chat-notify{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}50%{transform:translateX(3px)}75%{transform:translateX(-2px)}}
 @keyframes chat-badge-pulse{0%,100%{box-shadow:0 0 0 3px #101212,0 0 0 4px #ff3b3000}50%{box-shadow:0 0 0 3px #101212,0 0 0 10px #ff3b30ee,0 0 28px #ff3b30cc}}
 @media(prefers-reduced-motion:reduce){.has-notification .quote-chat-toggle,.has-notification .quote-chat-badge{animation:none}}
+
+/* Product/process screens begin directly with their main heading. */
+.chapter:not([data-chapter="0"])>.eyebrow{display:none}
