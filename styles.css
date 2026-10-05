@@ -100,10 +100,11 @@ body{max-width:100%;touch-action:pan-y}
 /* Respect iPhone/Dynamic Island safe areas without creating a new scroll container. */
 .topbar{height:calc(78px + env(safe-area-inset-top));padding-top:env(safe-area-inset-top);padding-right:max(5.5vw,env(safe-area-inset-right));padding-left:max(5.5vw,env(safe-area-inset-left))}
 @media(max-width:800px){
-  .topbar{height:calc(67px + env(safe-area-inset-top))}
-  .story-copies{top:calc(88px + env(safe-area-inset-top))}
+  .topbar{height:calc(54px + env(safe-area-inset-top))}
+  .story-copies{top:calc(70px + env(safe-area-inset-top))}
+  #quote-chat{bottom:max(8px,env(safe-area-inset-bottom))}
 }
-@media(max-height:700px) and (max-width:800px){.story-copies{top:calc(76px + env(safe-area-inset-top))}}
+@media(max-height:700px) and (max-width:800px){.story-copies{top:calc(64px + env(safe-area-inset-top))}}
 
 /* Delayed assistant notification */
 .quote-chat-toggle{position:relative}
