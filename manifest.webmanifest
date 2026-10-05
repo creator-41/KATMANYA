@@ -1,7 +1,7 @@
 {
-  "name": "FAV BASKI",
-  "short_name": "FAV BASKI",
-  "description": "FAV BASKI 3D baskı atölyesi.",
+  "name": "Noventra",
+  "short_name": "Noventra",
+  "description": "Noventra 3D baskı atölyesi.",
   "lang": "tr-TR",
   "start_url": "./",
   "scope": "./",
