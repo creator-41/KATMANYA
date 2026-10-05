@@ -93,8 +93,17 @@
 @media(max-width:360px){.sarp-brand{width:112px}}
 
 /* Keep the installed app layout stable and prevent iOS input-focus zoom. */
-html,body{max-width:100%;overflow-x:hidden;touch-action:pan-y}
+html{overflow-x:clip;overscroll-behavior-x:none;touch-action:pan-y}
+body{max-width:100%;touch-action:pan-y}
 @media(max-width:800px){.chat-answer-form input,.product-option input,.product-option select{font-size:16px}}
+
+/* Respect iPhone/Dynamic Island safe areas without creating a new scroll container. */
+.topbar{height:calc(78px + env(safe-area-inset-top));padding-top:env(safe-area-inset-top);padding-right:max(5.5vw,env(safe-area-inset-right));padding-left:max(5.5vw,env(safe-area-inset-left))}
+@media(max-width:800px){
+  .topbar{height:calc(67px + env(safe-area-inset-top))}
+  .story-copies{top:calc(88px + env(safe-area-inset-top))}
+}
+@media(max-height:700px) and (max-width:800px){.story-copies{top:calc(76px + env(safe-area-inset-top))}}
 
 /* Delayed assistant notification */
 .quote-chat-toggle{position:relative}
