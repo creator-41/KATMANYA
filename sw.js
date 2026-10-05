@@ -1,11 +1,12 @@
-const CACHE_NAME = "fav-baski-shell-v8";
+const CACHE_NAME = "fav-baski-shell-v9";
 const BASE = self.registration.scope;
 const CORE_ASSETS = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./styles.css?v=34",
+  "./styles.css?v=35",
   "./main.js?v=23",
+  "./chatbot.js?v=1",
   "./assets/desk-set.webp",
   "./assets/desk-nameplate.webp",
   "./assets/dual-controller-stand.webp",
