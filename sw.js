@@ -1,18 +1,19 @@
-const CACHE_NAME = "fav-baski-shell-v6";
+const CACHE_NAME = "fav-baski-shell-v7";
 const BASE = self.registration.scope;
 const CORE_ASSETS = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./styles.css?v=32",
+  "./styles.css?v=33",
   "./main.js?v=23",
   "./assets/desk-set.webp",
   "./assets/desk-nameplate.webp",
   "./assets/dual-controller-stand.webp",
   "./assets/bulk-production.webp",
-  "./assets/pwa-192.png",
-  "./assets/pwa-512.png",
-  "./assets/apple-touch-icon.png"
+  "./assets/noventra-192.png",
+  "./assets/noventra-180.png",
+  "./assets/noventra-512.png",
+  "./assets/noventra-180.png"
 ].map(path => new URL(path, BASE).href);
 
 self.addEventListener("install", event => {
