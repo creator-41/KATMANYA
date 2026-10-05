@@ -1,6 +1,6 @@
-# Noventra 3D
+# SARP 3D
 
-Noventra 3D baskı atölyesi için etkileşimli, mobil uyumlu web sitesi başlangıç sürümü.
+SARP 3D baskı atölyesi için etkileşimli, mobil uyumlu web sitesi başlangıç sürümü.
 
 ## İlk taslakta olanlar
 
@@ -16,3 +16,4 @@ Noventra 3D baskı atölyesi için etkileşimli, mobil uyumlu web sitesi başlan
 3. GitHub Pages yayınını yapılandırmak.
 
 Teklif butonundaki iletişim bağlantısı ve örnek vitrin görselleri, işletme bilgileri netleşince tamamlanacak.
+

@@ -1,20 +1,21 @@
-const CACHE_NAME = "fav-baski-shell-v9";
+const CACHE_NAME = "sarp-shell-v1";
 const BASE = self.registration.scope;
 const CORE_ASSETS = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./styles.css?v=35",
-  "./main.js?v=23",
-  "./chatbot.js?v=1",
+  "./styles.css?v=36",
+  "./main.js?v=24",
+  "./chatbot.js?v=2",
   "./assets/desk-set.webp",
   "./assets/desk-nameplate.webp",
   "./assets/dual-controller-stand.webp",
   "./assets/bulk-production.webp",
-  "./assets/noventra-192.png",
-  "./assets/noventra-180.png",
-  "./assets/noventra-512.png",
-  "./assets/noventra-180.png"
+  "./assets/sarp-logo.svg",
+  "./assets/sarp-mark.svg",
+  "./assets/sarp-192.png",
+  "./assets/sarp-180.png",
+  "./assets/sarp-512.png"
 ].map(path => new URL(path, BASE).href);
 
 self.addEventListener("install", event => {
@@ -28,7 +29,7 @@ self.addEventListener("install", event => {
 self.addEventListener("activate", event => {
   event.waitUntil((async () => {
     const keys = await caches.keys();
-    await Promise.all(keys.filter(key => key.startsWith("fav-baski-shell-") && key !== CACHE_NAME).map(key => caches.delete(key)));
+    await Promise.all(keys.filter(key => (key.startsWith("fav-baski-shell-") || key.startsWith("sarp-shell-")) && key !== CACHE_NAME).map(key => caches.delete(key)));
     await self.clients.claim();
   })());
 });
@@ -65,3 +66,4 @@ self.addEventListener("fetch", event => {
     return response;
   })());
 });
+

@@ -46,7 +46,7 @@
   function answer(value){const q=questions[step];answers[q.key]=value;bubble(value,'user');step++;askNext();}
   function finish(){
     controls.replaceChildren();
-    const lines=['Merhaba Noventra, teklif almak istiyorum.','Ürün: '+product.label];
+    const lines=['Merhaba SARP, teklif almak istiyorum.','Ürün: '+product.label];
     if(answers.name)lines.push('Plakada yazacak isim: '+answers.name);
     if(answers.purpose)lines.push('Kullanım amacı / fikir: '+answers.purpose);
     if(answers.size)lines.push('Yaklaşık ölçü: '+answers.size);

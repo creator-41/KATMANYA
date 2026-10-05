@@ -1,7 +1,7 @@
 {
-  "name": "Noventra",
-  "short_name": "Noventra",
-  "description": "Noventra 3D baskı atölyesi.",
+  "name": "SARP",
+  "short_name": "SARP",
+  "description": "SARP 3D baskı atölyesi.",
   "lang": "tr-TR",
   "start_url": "./",
   "scope": "./",
@@ -11,13 +11,13 @@
   "theme_color": "#101212",
   "icons": [
     {
-      "src": "assets/noventra-192.png",
+      "src": "assets/sarp-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "assets/noventra-512.png",
+      "src": "assets/sarp-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
