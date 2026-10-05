@@ -8,10 +8,8 @@
   const controls=shell.querySelector('.quote-chat-controls');
   const status=shell.querySelector('.quote-chat-status');
   const badge=shell.querySelector('.quote-chat-badge');
-  const notificationAudio=new Audio(new URL('assets/chat-notification.wav',document.baseURI).href);
-  notificationAudio.preload='auto';notificationAudio.volume=.72;
   const phone='905304815341';
-  let product=null,questions=[],answers={},step=0,notified=false,soundPlayed=false,audioContext=null,audioPrimed=false;
+  let product=null,questions=[],answers={},step=0,notified=false,soundPlayed=false,audioContext=null;
   const products=[
     {id:'desk',label:'Masaüstü seti'},
     {id:'plate',label:'İsimli plakalık'},
@@ -72,7 +70,7 @@
         const gain=audioContext.createGain();
         oscillator.type='triangle';oscillator.frequency.value=frequency;
         gain.gain.setValueAtTime(.0001,time);
-        gain.gain.exponentialRampToValueAtTime(.22,time+.018);
+        gain.gain.exponentialRampToValueAtTime(.28,time+.018);
         gain.gain.exponentialRampToValueAtTime(.0001,time+.15);
         oscillator.connect(gain).connect(audioContext.destination);
         oscillator.start(time);oscillator.stop(time+.16);
@@ -83,20 +81,13 @@
     return false;
   }
   function playNotification(){
-    try{
-      if(audioPrimed&&!soundPlayed){
-        notificationAudio.currentTime=0;
-        const playback=notificationAudio.play();
-        if(playback)playback.then(()=>{soundPlayed=true;}).catch(()=>{soundNow();});
-        else soundPlayed=true;
-        return;
-      }
-      const AudioContext=window.AudioContext||window.webkitAudioContext;
-      if(!AudioContext||soundPlayed)return;
-      audioContext=audioContext||new AudioContext();
-      if(audioContext.state==='running'){soundNow();return;}
-      audioContext.resume().then(()=>{if(notified&&!soundPlayed)soundNow();}).catch(()=>{});
-    }catch{}
+    if(soundPlayed)return;
+    const AudioContext=window.AudioContext||window.webkitAudioContext;
+    if(!AudioContext)return;
+    try{audioContext=audioContext||new AudioContext();}catch{return;}
+    const play=()=>{if(notified&&!soundPlayed&&audioContext?.state==='running')soundNow();};
+    if(audioContext.state==='running'){play();return;}
+    audioContext.resume().then(play).catch(()=>{});
   }
   function notify(){
     if(!panel.hidden)return;
@@ -107,24 +98,14 @@
     if('vibrate'in navigator)navigator.vibrate(80);
   }
   function primeSound(){
-    if(!audioPrimed){
-      const previousVolume=notificationAudio.volume;
-      notificationAudio.volume=.001;
-      const unlock=notificationAudio.play();
-      if(unlock)unlock.then(()=>{notificationAudio.pause();notificationAudio.currentTime=0;notificationAudio.volume=previousVolume;audioPrimed=true;if(notified&&!soundPlayed)playNotification();}).catch(()=>{notificationAudio.volume=previousVolume;});
-    }
-    if(!audioContext){try{const AudioContext=window.AudioContext||window.webkitAudioContext;if(AudioContext)audioContext=new AudioContext();}catch{}}
-    if(audioContext){
-      try{const oscillator=audioContext.createOscillator();const gain=audioContext.createGain();gain.gain.value=.0001;oscillator.connect(gain).connect(audioContext.destination);oscillator.start();oscillator.stop(audioContext.currentTime+.01);}catch{}
-    }
-    if(audioContext?.state==='running'){if(notified&&!soundPlayed)soundNow();return;}
-    audioContext?.resume().then(()=>{if(notified&&!soundPlayed)soundNow();}).catch(()=>{});
+    if(!audioContext){const AudioContext=window.AudioContext||window.webkitAudioContext;if(AudioContext){try{audioContext=new AudioContext();}catch{}}}
+    if(audioContext?.state!=='running')audioContext?.resume().then(()=>{if(notified&&!soundPlayed)soundNow();}).catch(()=>{});
+    else if(notified&&!soundPlayed)soundNow();
   }
   function setOpen(open){panel.hidden=!open;toggle.setAttribute('aria-expanded',String(open));if(open){clearNotification();if(!log.childElementCount)intro();close.focus();}else toggle.focus();}
   toggle.addEventListener('click',()=>setOpen(panel.hidden));close.addEventListener('click',()=>setOpen(false));
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!panel.hidden)setOpen(false);});
-  document.addEventListener('pointerdown',primeSound,{once:true,passive:true});
-  document.addEventListener('touchstart',primeSound,{once:true,passive:true});
+  document.addEventListener('pointerdown',primeSound,{once:true,capture:true});
   document.addEventListener('keydown',primeSound,{once:true});
   setOpen(false);
   window.setTimeout(notify,10000);
