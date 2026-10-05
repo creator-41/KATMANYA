@@ -1,4 +1,4 @@
-const CACHE_NAME = "fav-baski-shell-v5";
+const CACHE_NAME = "fav-baski-shell-v6";
 const BASE = self.registration.scope;
 const CORE_ASSETS = [
   "./",
