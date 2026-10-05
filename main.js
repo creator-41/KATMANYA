@@ -339,7 +339,10 @@
       const amount=Number.isFinite(entered)?Math.min(999,Math.max(1,entered)):1;
       quantity.value=String(amount);
       const shade=color.value||"Henüz karar vermedim";
-      const message=`Merhaba FAV BASKI, ${product} için fiyat almak istiyorum.\nRenk tercihi: ${shade}\nAdet: ${amount}`;
+      let message=`Merhaba FAV BASKI, ${product} için fiyat almak istiyorum.`;
+      if(product==="İsimli plakalık") message+="\nPlakada yer alacak isim: ";
+      if(product==="İhtiyacına özel parça") message+="\nFotoğrafı ve ölçülerini bu sohbete ekleyeceğim.";
+      message+=`\nRenk tercihi: ${shade}\nAdet: ${amount}`;
       button.href="https://wa.me/905304815341?text="+encodeURIComponent(message);
     };
     color.addEventListener("change",updateQuote);
