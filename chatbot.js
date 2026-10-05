@@ -7,8 +7,9 @@
   const log=shell.querySelector('.quote-chat-log');
   const controls=shell.querySelector('.quote-chat-controls');
   const status=shell.querySelector('.quote-chat-status');
+  const badge=shell.querySelector('.quote-chat-badge');
   const phone='905304815341';
-  let product=null,questions=[],answers={},step=0;
+  let product=null,questions=[],answers={},step=0,notified=false,soundPlayed=false,audioContext=null;
   const products=[
     {id:'desk',label:'Masaüstü seti'},
     {id:'plate',label:'İsimli plakalık'},
@@ -59,8 +60,45 @@
     const a=document.createElement('a');a.className='chat-whatsapp';a.href='https://wa.me/'+phone+'?text='+encodeURIComponent(message);a.target='_blank';a.rel='noopener noreferrer';a.textContent='WhatsApp’ta devam et';controls.append(a);
     const restart=button('Baştan başla',intro,'chat-restart');controls.append(restart);
   }
-  function setOpen(open){panel.hidden=!open;toggle.setAttribute('aria-expanded',String(open));if(open){if(!log.childElementCount)intro();close.focus();}else toggle.focus();}
+  function clearNotification(){notified=false;shell.classList.remove('has-notification');badge.hidden=true;toggle.setAttribute('aria-label','Teklif asistanını aç');}
+  function playNotification(){
+    try{
+      const AudioContext=window.AudioContext||window.webkitAudioContext;
+      if(!AudioContext||soundPlayed)return;
+      audioContext=audioContext||new AudioContext();
+      if(audioContext.state==='suspended')audioContext.resume().catch(()=>{});
+      const start=audioContext.currentTime+.03;
+      [[784,start],[1046.5,start+.14]].forEach(([frequency,time])=>{
+        const oscillator=audioContext.createOscillator();
+        const gain=audioContext.createGain();
+        oscillator.type='sine';oscillator.frequency.value=frequency;
+        gain.gain.setValueAtTime(.0001,time);
+        gain.gain.exponentialRampToValueAtTime(.12,time+.02);
+        gain.gain.exponentialRampToValueAtTime(.0001,time+.13);
+        oscillator.connect(gain).connect(audioContext.destination);
+        oscillator.start(time);oscillator.stop(time+.14);
+      });
+      soundPlayed=true;
+    }catch{}
+  }
+  function notify(){
+    if(!panel.hidden)return;
+    if(!log.childElementCount)intro();
+    notified=true;shell.classList.add('has-notification');badge.hidden=false;
+    toggle.setAttribute('aria-label','Teklif asistanından yeni mesaj');
+    playNotification();
+    if('vibrate'in navigator)navigator.vibrate(80);
+  }
+  function primeSound(){
+    if(!audioContext){try{const AudioContext=window.AudioContext||window.webkitAudioContext;if(AudioContext)audioContext=new AudioContext();}catch{}}
+    if(audioContext?.state==='suspended')audioContext.resume().catch(()=>{});
+    if(notified&&!soundPlayed)playNotification();
+  }
+  function setOpen(open){panel.hidden=!open;toggle.setAttribute('aria-expanded',String(open));if(open){clearNotification();if(!log.childElementCount)intro();close.focus();}else toggle.focus();}
   toggle.addEventListener('click',()=>setOpen(panel.hidden));close.addEventListener('click',()=>setOpen(false));
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!panel.hidden)setOpen(false);});
+  document.addEventListener('pointerdown',primeSound,{once:true,passive:true});
+  document.addEventListener('keydown',primeSound,{once:true});
   setOpen(false);
+  window.setTimeout(notify,10000);
 })();

@@ -1,12 +1,12 @@
-const CACHE_NAME = "sarp-shell-v1";
+const CACHE_NAME = "sarp-shell-v2";
 const BASE = self.registration.scope;
 const CORE_ASSETS = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./styles.css?v=36",
+  "./styles.css?v=37",
   "./main.js?v=24",
-  "./chatbot.js?v=2",
+  "./chatbot.js?v=3",
   "./assets/desk-set.webp",
   "./assets/desk-nameplate.webp",
   "./assets/dual-controller-stand.webp",
@@ -66,4 +66,3 @@ self.addEventListener("fetch", event => {
     return response;
   })());
 });
-
