@@ -13,8 +13,8 @@
   const products=[
     {id:'desk',label:'Masaüstü seti'},
     {id:'plate',label:'İsimli plakalık'},
-    {id:'custom',label:'İhtiyacıma özel parça'},
-    {id:'bulk',label:'Toptan üretim'}
+    {id:'bulk',label:'Toptan üretim'},
+    {id:'custom',label:'İhtiyacıma özel parça'}
   ];
   const colors=['Siyah','Beyaz','Mavi','Yeşil','Diğer renk','Henüz karar vermedim'];
   function bubble(text,kind){const el=document.createElement('div');el.className='chat-bubble '+kind;el.textContent=text;log.append(el);log.scrollTop=log.scrollHeight;return el;}
