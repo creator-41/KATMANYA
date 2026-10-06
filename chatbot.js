@@ -54,42 +54,15 @@
     if(answers.item)lines.push('Üretilecek ürün: '+answers.item);
     if(answers.color)lines.push('Renk tercihi: '+answers.color);
     if(answers.quantity)lines.push('Adet: '+answers.quantity);
-    let selectedFile=null;
-    const shareMessage=()=>{
-      const messageLines=lines.slice();
-      if(product.id==='custom')messageLines.push(selectedFile?'Dosya adı: '+selectedFile.name+' (WhatsApp sohbetine ayrıca ekleyeceğim)':'Dosya: WhatsApp sohbetine ayrıca ekleyeceğim.');
-      return messageLines.join('\n');
-    };
+    if(product.id==='custom')lines.push('Çizim/fotoğraf/3B dosyamı WhatsApp sohbetine ayrıca ekleyeceğim.');
+    const message=lines.join('\\n');
     bubble(product.id==='custom'
-      ?'Bilgiler tamam! İstersen çizim, fotoğraf veya 3B model dosyanı ekleyip WhatsApp paylaşımına geç.'
+      ?'Bilgiler tamam! Numaramıza WhatsApp sohbeti açılacak; çizim, fotoğraf veya 3B dosyanı sohbet içinde ayrıca ekleyebilirsin.'
       :'Tamamdır! Bilgileri WhatsApp mesajına ekledim. Göndermeden önce kontrol edebilirsin.'
     ,'bot');
-    if(product.id==='custom'){
-      const picker=document.createElement('label');
-      picker.className='chat-file-picker';
-      const input=document.createElement('input');
-      input.type='file';
-      input.accept='.stl,.3mf,.obj,.step,.stp,image/*';
-      input.className='chat-file-input';
-      input.setAttribute('aria-label','Çizim, fotoğraf veya 3B dosyası seç');
-      const label=document.createElement('span');
-      label.className='chat-file-label';
-      label.textContent='Dosya veya fotoğraf ekle (isteğe bağlı)';
-      const fileName=document.createElement('small');
-      fileName.className='chat-file-name';
-      fileName.textContent='STL, 3MF, OBJ, STEP veya görsel seçebilirsin; WhatsApp’ta ayrıca ekleyeceksin.';
-      picker.append(input,label,fileName);
-      controls.append(picker);
-      input.addEventListener('change',()=>{
-        selectedFile=input.files?.[0]||null;
-        fileName.textContent=selectedFile?'Seçildi: '+selectedFile.name+' — WhatsApp sohbetinde ayrıca ekle.':'STL, 3MF, OBJ, STEP veya görsel seçebilirsin.';
-        status.textContent='';
-        a.href='https://wa.me/'+phone+'?text='+encodeURIComponent(shareMessage());
-      });
-    }
     const a=document.createElement('a');
     a.className='chat-whatsapp';
-    a.href='https://wa.me/'+phone+'?text='+encodeURIComponent(shareMessage());
+    a.href='https://wa.me/'+phone+'?text='+encodeURIComponent(message);
     a.target='_blank';
     a.rel='noopener noreferrer';
     a.textContent='WhatsApp’ta sohbet başlat';
