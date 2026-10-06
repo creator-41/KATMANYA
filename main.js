@@ -208,13 +208,15 @@
   let w=0,h=0,target=0,current=0,raf=0,last=0,visible=true,dirty=true;
   const chaptersAt=[0,.16,.30,.44,.58,.74,.89];
   function measure(){const rect=canvas.getBoundingClientRect();w=rect.width;h=rect.height;const dpr=gl?Math.min(devicePixelRatio||1,1.65):Math.min(devicePixelRatio||1,800/Math.max(w,h));canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);if(gl)gl.viewport(0,0,canvas.width,canvas.height);dirty=true;scroll();}
-  const navLinks=[...document.querySelectorAll('.topbar nav a')],mobileNav=document.querySelector('.mobile-nav');
+  const navLinks=[...document.querySelectorAll('.topbar nav a')],mobileNav=document.querySelector('.mobile-nav'),faqSection=document.querySelector('.faq-section');
   function setActiveNav(progress){
-    const active=progress<.16?0:progress<.75?1:progress<.82?2:3;
+    const faqRect=faqSection?.getBoundingClientRect();
+    const onFaq=faqRect&&faqRect.top<=window.innerHeight*.55&&faqRect.bottom>0;
+    const active=onFaq?4:progress<.16?0:progress<.75?1:progress<.82?2:3;
     navLinks.forEach((link,index)=>{if(index===active){link.classList.add('is-active');link.setAttribute('aria-current','location');}else{link.classList.remove('is-active');link.removeAttribute('aria-current');}});
     mobileNav?.classList.toggle('is-active',active===1);
   }
-  function scroll(){const rect=story.getBoundingClientRect();target=clamp(-rect.top/Math.max(1,story.offsetHeight-window.innerHeight));dirty=true;start();}
+  function scroll(){const rect=story.getBoundingClientRect();target=clamp(-rect.top/Math.max(1,story.offsetHeight-window.innerHeight));setActiveNav(target);dirty=true;start();}
   function setCopy(p){
     chapters.forEach((el,i)=>{let opacity=1;if(i>0)opacity*=smooth(chaptersAt[i]-.025,chaptersAt[i]+.020,p);if(i<chapters.length-1)opacity*=1-smooth(chaptersAt[i+1]-.07,chaptersAt[i+1]-.025,p);
       el.style.opacity=opacity;el.style.visibility=opacity>.002?'visible':'hidden';el.style.pointerEvents=opacity>.6?'auto':'none';el.setAttribute('aria-hidden',opacity>.5?'false':'true');el.style.transform=window.innerWidth>800?'translateY(calc(-50% + '+((1-opacity)*18)+'px))':'translateY('+((1-opacity)*12)+'px)';});
