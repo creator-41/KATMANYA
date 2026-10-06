@@ -126,3 +126,7 @@ body{max-width:100%;touch-action:pan-y}
 
 /* Keep the nameplate quote button beside the selectors, above the printer image. */
 @media(max-width:800px){.chapter[data-chapter="2"] .product-action-row{align-items:center;margin-top:8px}}
+
+
+/* Keep the first three quote choices together on compact screens. */
+@media(max-width:800px){.quote-chat-controls{gap:6px}.chat-choice{padding:7px 9px;font-size:11px;white-space:nowrap}}
