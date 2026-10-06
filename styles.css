@@ -130,3 +130,21 @@ body{max-width:100%;touch-action:pan-y}
 
 /* Keep the first three quote choices together on compact screens. */
 @media(max-width:800px){.quote-chat-controls{gap:6px}.chat-choice{padding:7px 9px;font-size:11px;white-space:nowrap}}
+
+
+/* Compact, accessible FAQ section for product and quote questions. */
+.faq-section{background:var(--paper);color:var(--ink);padding:clamp(64px,9vw,120px) 7vw}
+.faq-inner{max-width:1080px;margin:0 auto}
+.faq-heading{display:grid;grid-template-columns:1fr 1fr;align-items:end;gap:8vw;margin-bottom:42px}
+.faq-eyebrow{font:10px var(--mono);letter-spacing:.1em;color:#698f2d;margin:0 0 18px}
+.faq-heading h2{font-size:clamp(42px,5vw,72px);font-weight:500;line-height:1.04;letter-spacing:-.065em;margin:0}
+.faq-heading>p{max-width:340px;color:#687064;font-size:13px;line-height:1.8;margin:0 0 5px}
+.faq-list{border-top:1px solid #1b21172b}
+.faq-list details{border-bottom:1px solid #1b21172b}
+.faq-list summary{position:relative;list-style:none;cursor:pointer;padding:21px 42px 21px 0;font-size:16px;font-weight:600;letter-spacing:-.02em}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list summary::after{content:'+';position:absolute;right:4px;top:50%;transform:translateY(-50%);color:#698f2d;font:24px var(--mono)}
+.faq-list details[open] summary::after{content:'−'}
+.faq-answer{max-width:760px;padding:0 40px 22px 0;color:#687064;font-size:13px;line-height:1.85}
+.faq-list summary:focus-visible{outline:2px solid #698f2d;outline-offset:4px}
+@media(max-width:800px){.faq-section{padding:62px 6vw}.faq-heading{display:block;margin-bottom:30px}.faq-heading h2{font-size:clamp(38px,9vw,54px)}.faq-heading>p{margin-top:15px;font-size:12px}.faq-list summary{padding:18px 36px 18px 0;font-size:14px}.faq-answer{font-size:12px;padding-bottom:18px}}
