@@ -28,7 +28,7 @@
   function selectProduct(item){product=item;bubble(item.label,'user');
     if(item.id==='desk')questions=[{key:'color',label:'Hangi rengi tercih edersin?',type:'choice',options:colors},{key:'quantity',label:'Kaç adet düşünüyorsun?',type:'number'}];
     if(item.id==='plate')questions=[{key:'name',label:'Plakada hangi isim yazsın?',type:'text',placeholder:'İsmi yaz'},{key:'color',label:'Hangi rengi tercih edersin?',type:'choice',options:colors},{key:'quantity',label:'Kaç adet düşünüyorsun?',type:'number'}];
-    if(item.id==='custom')questions=[{key:'purpose',label:'Parça ne işe yarayacak? Kısaca anlat.',type:'text',placeholder:'Kullanım amacı veya ürün fikri'},{key:'size',label:'Yaklaşık ölçülerini biliyor musun?',type:'text',placeholder:'Örn. 10 x 5 x 2 cm veya bilmiyorum'},{key:'quantity',label:'Kaç adet düşünüyorsun?',type:'number'}];
+    if(item.id==='custom')questions=[{key:'purpose',label:'Parça ne işe yarayacak? Kısaca anlat.',type:'text',placeholder:'Kullanım amacı veya ürün fikri'},{key:'size',label:'Yaklaşık ölçülerini biliyor musun?',type:'text',placeholder:'Örn. 10 x 5 x 2 cm veya bilmiyorum'},{key:'color',label:'Hangi rengi tercih edersin?',type:'choice',options:colors},{key:'quantity',label:'Kaç adet düşünüyorsun?',type:'number'}];
     if(item.id==='bulk')questions=[{key:'item',label:'Hangi üründen üretim düşünüyorsun?',type:'text',placeholder:'Ürün veya fikir'},{key:'quantity',label:'Yaklaşık kaç adet?',type:'number'}];
     askNext();
   }
