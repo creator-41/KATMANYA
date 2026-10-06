@@ -55,7 +55,7 @@
     if(answers.color)lines.push('Renk tercihi: '+answers.color);
     if(answers.quantity)lines.push('Adet: '+answers.quantity);
     if(product.id==='custom')lines.push('Çizim/fotoğraf/3B dosyamı WhatsApp sohbetine ayrıca ekleyeceğim.');
-    const message=lines.join('\\n');
+    const message=lines.join('\n');
     bubble(product.id==='custom'
       ?'Bilgiler tamam! Numaramıza WhatsApp sohbeti açılacak; çizim, fotoğraf veya 3B dosyanı sohbet içinde ayrıca ekleyebilirsin.'
       :'Tamamdır! Bilgileri WhatsApp mesajına ekledim. Göndermeden önce kontrol edebilirsin.'
