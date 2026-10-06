@@ -57,8 +57,8 @@
     let selectedFile=null;
     const shareMessage=()=>{
       const messageLines=lines.slice();
-      if(product.id==='custom')messageLines.push(selectedFile?'Eklenecek dosya: '+selectedFile.name:'Dosya: WhatsApp sohbetine ekleyeceğim.');
-      return messageLines.join('\\n');
+      if(product.id==='custom')messageLines.push(selectedFile?'Dosya adı: '+selectedFile.name+' (WhatsApp sohbetine ayrıca ekleyeceğim)':'Dosya: WhatsApp sohbetine ayrıca ekleyeceğim.');
+      return messageLines.join('\n');
     };
     bubble(product.id==='custom'
       ?'Bilgiler tamam! İstersen çizim, fotoğraf veya 3B model dosyanı ekleyip WhatsApp paylaşımına geç.'
@@ -77,7 +77,7 @@
       label.textContent='Dosya veya fotoğraf ekle (isteğe bağlı)';
       const fileName=document.createElement('small');
       fileName.className='chat-file-name';
-      fileName.textContent='STL, 3MF, OBJ, STEP veya görsel seçebilirsin.';
+      fileName.textContent='STL, 3MF, OBJ, STEP veya görsel seçebilirsin; WhatsApp’ta ayrıca ekleyeceksin.';
       picker.append(input,label,fileName);
       controls.append(picker);
       input.addEventListener('change',()=>{
