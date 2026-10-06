@@ -82,7 +82,7 @@
       controls.append(picker);
       input.addEventListener('change',()=>{
         selectedFile=input.files?.[0]||null;
-        fileName.textContent=selectedFile?'Seçildi: '+selectedFile.name:'STL, 3MF, OBJ, STEP veya görsel seçebilirsin.';
+        fileName.textContent=selectedFile?'Seçildi: '+selectedFile.name+' — WhatsApp sohbetinde ayrıca ekle.':'STL, 3MF, OBJ, STEP veya görsel seçebilirsin.';
         status.textContent='';
         a.href='https://wa.me/'+phone+'?text='+encodeURIComponent(shareMessage());
       });
@@ -92,23 +92,7 @@
     a.href='https://wa.me/'+phone+'?text='+encodeURIComponent(shareMessage());
     a.target='_blank';
     a.rel='noopener noreferrer';
-    a.textContent='WhatsApp’ta devam et';
-    a.addEventListener('click',async event=>{
-      if(product.id!=='custom'||!selectedFile)return;
-      let supportsFileShare=false;
-      try{supportsFileShare=typeof navigator.share==='function'&&typeof navigator.canShare==='function'&&navigator.canShare({files:[selectedFile]});}catch{}
-      if(!supportsFileShare){
-        status.textContent='Dosya seçildi; WhatsApp açılınca ataç simgesinden dosyayı ekleyebilirsin.';
-        return;
-      }
-      event.preventDefault();
-      try{
-        await navigator.share({files:[selectedFile],text:shareMessage(),title:'SARP özel parça teklifi'});
-        status.textContent='Paylaşım ekranı açıldı. WhatsApp’ı seçerek dosyayı ve mesajı iletebilirsin.';
-      }catch(error){
-        if(error?.name!=='AbortError')status.textContent='Dosya paylaşımı açılamadı. WhatsApp’a geçip dosyayı sohbetten ekleyebilirsin.';
-      }
-    });
+    a.textContent='WhatsApp’ta sohbet başlat';
     controls.append(a);
     const restart=button('Baştan başla',intro,'chat-restart');
     controls.append(restart);
