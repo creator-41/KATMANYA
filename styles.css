@@ -125,4 +125,4 @@ body{max-width:100%;touch-action:pan-y}
 
 
 /* Keep the nameplate quote button beside the selectors, above the printer image. */
-@media(max-width:800px){.chapter[data-chapter="2"] .product-action-row{align-items:flex-start;margin-top:8px}}
+@media(max-width:800px){.chapter[data-chapter="2"] .product-action-row{align-items:center;margin-top:8px}}
