@@ -163,3 +163,7 @@ body{max-width:100%;touch-action:pan-y}
 .install-prompt-later{border:1px solid #ffffff30;background:transparent;color:var(--paper);padding:0 14px}
 .install-prompt-actions button:focus-visible{outline:2px solid var(--acid);outline-offset:3px}
 @media(max-width:420px){.install-prompt-content{padding:22px}.install-prompt-actions{grid-template-columns:1fr}.install-prompt-later{border:0;min-height:34px}}
+
+
+/* Keep the fixed navigation readable over both dark and light sections. */
+.topbar{background:rgba(16,18,18,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
