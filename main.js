@@ -356,30 +356,71 @@
 
   const installButton=document.querySelector("#install-app");
   const installDialog=document.querySelector("#install-dialog");
+  const installPromptDialog=document.querySelector("#install-prompt");
+  const installPromptAccept=document.querySelector("#install-prompt-accept");
+  const installPromptLater=document.querySelector("#install-prompt-later");
+  const installPromptSnoozeKey="sarp-install-prompt-until";
+  const installPromptSnoozeMs=12*60*60*1000;
   let installPromptEvent=null;
-  const alreadyInstalled=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
-  installButton.hidden=alreadyInstalled;
+  let appIsInstalled=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+  installButton.hidden=appIsInstalled;
+
+  function deferInstallPrompt(){
+    try{localStorage.setItem(installPromptSnoozeKey,String(Date.now()+installPromptSnoozeMs));}catch{}
+  }
+  function installPromptIsDeferred(){
+    try{
+      const until=Number(localStorage.getItem(installPromptSnoozeKey)||0);
+      if(until>Date.now())return true;
+      if(until)localStorage.removeItem(installPromptSnoozeKey);
+    }catch{}
+    return false;
+  }
+  function showInstallInstructions(){
+    if(typeof installDialog.showModal==="function")installDialog.showModal();
+    else alert("iPhone/iPad: Safari’de Paylaş → Ana Ekrana Ekle. Android: Tarayıcı menüsü → Uygulamayı yükle.");
+  }
+  async function requestInstall(){
+    if(installPromptDialog.open)installPromptDialog.close();
+    if(installPromptEvent){
+      const promptEvent=installPromptEvent;
+      installPromptEvent=null;
+      try{
+        await promptEvent.prompt();
+        const choice=await promptEvent.userChoice;
+        if(choice.outcome==="accepted")installButton.hidden=true;
+        else deferInstallPrompt();
+      }catch{
+        showInstallInstructions();
+      }
+      return;
+    }
+    showInstallInstructions();
+  }
 
   window.addEventListener("beforeinstallprompt",event=>{
+    if(appIsInstalled)return;
     event.preventDefault();
     installPromptEvent=event;
   });
   window.addEventListener("appinstalled",()=>{
+    appIsInstalled=true;
     installPromptEvent=null;
     installButton.hidden=true;
+    if(installPromptDialog.open)installPromptDialog.close();
+    try{localStorage.removeItem(installPromptSnoozeKey);}catch{}
   });
-  installButton.addEventListener("click",async()=>{
-    if(installPromptEvent){
-      const promptEvent=installPromptEvent;
-      installPromptEvent=null;
-      await promptEvent.prompt();
-      const choice=await promptEvent.userChoice;
-      if(choice.outcome==="accepted")installButton.hidden=true;
-      return;
-    }
-    if(typeof installDialog.showModal==="function")installDialog.showModal();
-    else alert("iPhone/iPad: Safari’de Paylaş → Ana Ekrana Ekle. Android: Tarayıcı menüsü → Uygulamayı yükle.");
+  installButton.addEventListener("click",requestInstall);
+  installPromptAccept.addEventListener("click",requestInstall);
+  installPromptLater.addEventListener("click",()=>{
+    deferInstallPrompt();
+    installPromptDialog.close();
   });
+  installPromptDialog.addEventListener("cancel",deferInstallPrompt);
+  window.setTimeout(()=>{
+    if(appIsInstalled||installPromptIsDeferred())return;
+    if(typeof installPromptDialog.showModal==="function")installPromptDialog.showModal();
+  },5000);
 
   if("serviceWorker"in navigator){
     window.addEventListener("load",()=>{
