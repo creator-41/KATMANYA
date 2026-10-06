@@ -108,5 +108,5 @@
   document.addEventListener('pointerdown',primeSound,{once:true,capture:true});
   document.addEventListener('keydown',primeSound,{once:true});
   setOpen(false);
-  window.setTimeout(notify,10000);
+  window.setTimeout(notify,15000);
 })();
