@@ -54,11 +54,64 @@
     if(answers.item)lines.push('Üretilecek ürün: '+answers.item);
     if(answers.color)lines.push('Renk tercihi: '+answers.color);
     if(answers.quantity)lines.push('Adet: '+answers.quantity);
-    if(product.id==='custom')lines.push('Varsa ürün fotoğrafını bu WhatsApp sohbetine ekleyeceğim.');
-    const message=lines.join('\n');
-    bubble('Tamamdır! Bilgileri WhatsApp mesajına ekledim. Göndermeden önce kontrol edebilir, özel parça için fotoğraf da ekleyebilirsin.','bot');
-    const a=document.createElement('a');a.className='chat-whatsapp';a.href='https://wa.me/'+phone+'?text='+encodeURIComponent(message);a.target='_blank';a.rel='noopener noreferrer';a.textContent='WhatsApp’ta devam et';controls.append(a);
-    const restart=button('Baştan başla',intro,'chat-restart');controls.append(restart);
+    let selectedFile=null;
+    const shareMessage=()=>{
+      const messageLines=lines.slice();
+      if(product.id==='custom')messageLines.push(selectedFile?'Eklenecek dosya: '+selectedFile.name:'Dosya: WhatsApp sohbetine ekleyeceğim.');
+      return messageLines.join('\\n');
+    };
+    bubble(product.id==='custom'
+      ?'Bilgiler tamam! İstersen çizim, fotoğraf veya 3B model dosyanı ekleyip WhatsApp paylaşımına geç.'
+      :'Tamamdır! Bilgileri WhatsApp mesajına ekledim. Göndermeden önce kontrol edebilirsin.'
+    ,'bot');
+    if(product.id==='custom'){
+      const picker=document.createElement('label');
+      picker.className='chat-file-picker';
+      const input=document.createElement('input');
+      input.type='file';
+      input.accept='.stl,.3mf,.obj,.step,.stp,image/*';
+      input.className='chat-file-input';
+      input.setAttribute('aria-label','Çizim, fotoğraf veya 3B dosyası seç');
+      const label=document.createElement('span');
+      label.className='chat-file-label';
+      label.textContent='Dosya veya fotoğraf ekle (isteğe bağlı)';
+      const fileName=document.createElement('small');
+      fileName.className='chat-file-name';
+      fileName.textContent='STL, 3MF, OBJ, STEP veya görsel seçebilirsin.';
+      picker.append(input,label,fileName);
+      controls.append(picker);
+      input.addEventListener('change',()=>{
+        selectedFile=input.files?.[0]||null;
+        fileName.textContent=selectedFile?'Seçildi: '+selectedFile.name:'STL, 3MF, OBJ, STEP veya görsel seçebilirsin.';
+        status.textContent='';
+        a.href='https://wa.me/'+phone+'?text='+encodeURIComponent(shareMessage());
+      });
+    }
+    const a=document.createElement('a');
+    a.className='chat-whatsapp';
+    a.href='https://wa.me/'+phone+'?text='+encodeURIComponent(shareMessage());
+    a.target='_blank';
+    a.rel='noopener noreferrer';
+    a.textContent='WhatsApp’ta devam et';
+    a.addEventListener('click',async event=>{
+      if(product.id!=='custom'||!selectedFile)return;
+      let supportsFileShare=false;
+      try{supportsFileShare=typeof navigator.share==='function'&&typeof navigator.canShare==='function'&&navigator.canShare({files:[selectedFile]});}catch{}
+      if(!supportsFileShare){
+        status.textContent='Dosya seçildi; WhatsApp açılınca ataç simgesinden dosyayı ekleyebilirsin.';
+        return;
+      }
+      event.preventDefault();
+      try{
+        await navigator.share({files:[selectedFile],text:shareMessage(),title:'SARP özel parça teklifi'});
+        status.textContent='Paylaşım ekranı açıldı. WhatsApp’ı seçerek dosyayı ve mesajı iletebilirsin.';
+      }catch(error){
+        if(error?.name!=='AbortError')status.textContent='Dosya paylaşımı açılamadı. WhatsApp’a geçip dosyayı sohbetten ekleyebilirsin.';
+      }
+    });
+    controls.append(a);
+    const restart=button('Baştan başla',intro,'chat-restart');
+    controls.append(restart);
   }
   function clearNotification(){notified=false;shell.classList.remove('has-notification');badge.hidden=true;toggle.setAttribute('aria-label','Teklif asistanını aç');}
   function soundNow(){
