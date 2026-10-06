@@ -19,7 +19,7 @@
   <link rel="manifest" href="./manifest.webmanifest?v=sarp-1">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/sarp-192.png">
   <link rel="apple-touch-icon" href="./assets/sarp-180.png">
-  <link rel="stylesheet" href="styles.css?v=49">
+  <link rel="stylesheet" href="styles.css?v=50">
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#top" aria-label="SARP ana sayfa"><img class="sarp-brand" src="./assets/sarp-logo.svg" width="452" height="112" alt="SARP"></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a><a href="#sss">Sık sorulanlar</a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="SARP uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
@@ -35,6 +35,17 @@
       </div>
       <button class="button install-confirm" type="submit">TAMAM</button>
     </form>
+  </dialog>
+  <dialog class="install-prompt" id="install-prompt" aria-labelledby="install-prompt-title" aria-describedby="install-prompt-description">
+    <div class="install-prompt-content">
+      <p class="install-prompt-eyebrow">SARP / WEB UYGULAMASI</p>
+      <h2 id="install-prompt-title">Bildirimleri kaçırma.</h2>
+      <p id="install-prompt-description">SARP uygulamasını ana ekranına ekle, teklif asistanı bildirimlerini kaçırma.</p>
+      <div class="install-prompt-actions">
+        <button class="install-prompt-accept" id="install-prompt-accept" type="button">Uygulamayı yükle</button>
+        <button class="install-prompt-later" id="install-prompt-later" type="button">Şimdi değil</button>
+      </div>
+    </div>
   </dialog>
   <main id="top">
     <section class="print-story" id="deneyim" aria-label="Kaydırmayla ilerleyen üç boyutlu baskı deneyimi">
@@ -74,7 +85,7 @@
       </div>
     </section>
   </main>
-  <script src="main.js?v=24" defer></script>
+  <script src="main.js?v=25" defer></script>
 
   <aside id="quote-chat" aria-label="SARP teklif asistanı">
     <section id="quote-chat-panel" class="quote-chat-panel" role="dialog" aria-modal="false" aria-labelledby="quote-chat-title" hidden>
@@ -89,5 +100,5 @@
       <span class="quote-chat-badge" role="status" aria-label="Yeni mesaj" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg></span>
     </button>
   </aside>
-  <script src="chatbot.js?v=8" defer></script>
+  <script src="chatbot.js?v=9" defer></script>
   </body></html>
