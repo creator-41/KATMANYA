@@ -16,6 +16,8 @@
     const keyboardOffset=keyboardOpen?Math.max(0,window.innerHeight-viewport.height-viewport.offsetTop):0;
     shell.style.setProperty('--chat-keyboard-offset',keyboardOffset+'px');
     shell.style.setProperty('--chat-visible-height',viewport.height+'px');
+    shell.style.setProperty('--chat-visual-top',viewport.offsetTop+'px');
+    shell.style.setProperty('--chat-visual-center',(viewport.offsetTop+viewport.height/2)+'px');
   }
   window.visualViewport?.addEventListener('resize',syncChatViewport);
   window.visualViewport?.addEventListener('scroll',syncChatViewport);
@@ -128,7 +130,7 @@
     if(audioContext?.state!=='running')audioContext?.resume().then(()=>{if(notified&&!soundPlayed)soundNow();}).catch(()=>{});
     else if(notified&&!soundPlayed)soundNow();
   }
-  function setOpen(open){panel.hidden=!open;toggle.setAttribute('aria-expanded',String(open));if(open){clearNotification();if(!log.childElementCount)intro();close.focus();}else toggle.focus();}
+  function setOpen(open){panel.hidden=!open;shell.classList.toggle('is-open',open);toggle.setAttribute('aria-expanded',String(open));if(open){clearNotification();if(!log.childElementCount)intro();syncChatViewport();close.focus();}else toggle.focus();}
   toggle.addEventListener('click',()=>setOpen(panel.hidden));close.addEventListener('click',()=>setOpen(false));
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!panel.hidden)setOpen(false);});
   document.addEventListener('pointerdown',primeSound,{once:true,capture:true});
