@@ -459,8 +459,8 @@
       const face=()=>{context.beginPath();context.moveTo(w*.13,h*.38);context.lineTo(w*.91,h*.27);context.lineTo(w*.96,h*.57);context.lineTo(w*.19,h*.72);context.closePath();};
       context.save();face();context.clip();context.fillStyle="#0b100b";context.globalAlpha=.52;context.fillRect(0,0,w,h);context.restore();
       const desktopPrint=window.innerWidth>800;
-      const leftFront=desktopPrint?h*(.64-.26*progress):h*(.72-.34*progress);
-      const rightFront=desktopPrint?h*(.50-.23*progress):h*(.57-.30*progress);
+      const leftFront=desktopPrint?h*(.56-.18*progress):h*(.72-.34*progress);
+      const rightFront=desktopPrint?h*(.42-.15*progress):h*(.57-.30*progress);
       context.save();face();context.clip();context.beginPath();
       context.moveTo(w*.19,leftFront);context.lineTo(w*.96,rightFront);context.lineTo(w*.96,h*.57);context.lineTo(w*.19,h*.72);
       context.closePath();context.clip();
@@ -471,8 +471,8 @@
       const layerCount=Math.round(progress*120);
       for(let layer=2;layer<layerCount;layer+=3){
         const t=layer/120;
-        const yL=desktopPrint?h*(.64-.26*t):h*(.72-.34*t);
-        const yR=desktopPrint?h*(.50-.23*t):h*(.57-.30*t);
+        const yL=desktopPrint?h*(.56-.18*t):h*(.72-.34*t);
+        const yR=desktopPrint?h*(.42-.15*t):h*(.57-.30*t);
         context.beginPath();context.moveTo(w*.19,yL);context.lineTo(w*.96,yR);context.stroke();
       }
       if(previewLogo&&!previewLogo.hidden&&previewLogo.complete&&previewLogo.naturalWidth){
