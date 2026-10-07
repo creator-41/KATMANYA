@@ -211,3 +211,8 @@ body{max-width:100%;touch-action:pan-y}
   .nameplate-download{padding:4px 6px;font-size:5px}
 }
 @media(prefers-reduced-motion:reduce){.nameplate-photo,.nameplate-model-name,.nameplate-tint{transition:none}}
+
+
+/* Keep uploaded logos sized to the printed face, overriding the generic product-image rule. */
+.product-visual.nameplate-preview .nameplate-photo>img.nameplate-logo{position:absolute;width:17%;height:26%;object-fit:contain;filter:drop-shadow(0 1px 1px #ffffff70)}
+@media(max-width:800px){.product-visual.nameplate-preview .nameplate-photo>img.nameplate-logo{width:22%;height:32%}}
