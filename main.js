@@ -459,8 +459,8 @@
       const face=()=>{context.beginPath();context.moveTo(w*.13,h*.38);context.lineTo(w*.91,h*.27);context.lineTo(w*.96,h*.57);context.lineTo(w*.19,h*.72);context.closePath();};
       context.save();face();context.clip();context.fillStyle="#0b100b";context.globalAlpha=.52;context.fillRect(0,0,w,h);context.restore();
       const desktopPrint=window.innerWidth>800;
-      const leftFront=h*(.72-.34*progress);
-      const rightFront=h*(.57-.30*progress);
+      const leftFront=h*(.68-.34*progress);
+      const rightFront=h*(.53-.30*progress);
       context.save();face();context.clip();context.beginPath();
       context.moveTo(w*.19,leftFront);context.lineTo(w*.96,rightFront);context.lineTo(w*.96,h*.57);context.lineTo(w*.19,h*.72);
       context.closePath();context.clip();
@@ -471,8 +471,8 @@
       const layerCount=Math.round(progress*120);
       for(let layer=2;layer<layerCount;layer+=3){
         const t=layer/120;
-        const yL=h*(.72-.34*t);
-        const yR=h*(.57-.30*t);
+        const yL=h*(.68-.34*t);
+        const yR=h*(.53-.30*t);
         context.beginPath();context.moveTo(w*.19,yL);context.lineTo(w*.96,yR);context.stroke();
       }
       if(previewLogo&&!previewLogo.hidden&&previewLogo.complete&&previewLogo.naturalWidth){
