@@ -372,7 +372,7 @@
       }
       let message=`Merhaba SARP, ${product} için fiyat almak istiyorum.`;
       if(product==="İsimli plakalık") message+=`\nPlakada yer alacak isim: ${detailValue}`;
-      if(product==="İsimli plakalık"&&logoFile) message+="\\nLogo/arma: WhatsApp sohbetine ayrıca ekleyeceğim.";
+      if(product==="İsimli plakalık"&&logoFile) message+="\nLogo/arma: WhatsApp sohbetine ayrıca ekleyeceğim.";
       if(product==="İhtiyacına özel parça") message+=`\nÖlçüler: ${detailValue}\nFotoğraf: Bu sohbete ekleyeceğim.`;
       message+=`\nRenk tercihi: ${shade}\nAdet: ${amount}`;
       button.href="https://wa.me/905304815341?text="+encodeURIComponent(message);
