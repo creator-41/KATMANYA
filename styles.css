@@ -84,7 +84,7 @@
 .chat-restart{width:100%}
 .quote-chat-status{min-height:20px;padding:0 15px 6px;color:#e4a6a6;font-size:11px}
 .quote-chat-note{padding:0 15px 12px;color:#8e9887;font-size:10px;line-height:1.45}
-@media(max-width:800px){#quote-chat{right:15px;bottom:calc(14px + env(safe-area-inset-bottom) + var(--chat-keyboard-offset,0px))}.quote-chat-panel{height:min(540px,calc(var(--chat-visible-height,100svh) - 110px));max-height:calc(var(--chat-visible-height,100svh) - 110px);min-height:0}.quote-chat-toggle{padding:12px 15px;font-size:12px}.quote-chat-controls{max-height:40%}.chat-answer-form input{font-size:16px}}
+@media(max-width:800px){#quote-chat{right:15px;bottom:calc(14px + env(safe-area-inset-bottom) + var(--chat-keyboard-offset,0px))}#quote-chat.is-open{position:fixed;top:var(--chat-visual-top,0px);right:auto;bottom:auto;left:0;width:100%;height:var(--chat-visible-height,100dvh);pointer-events:none}#quote-chat.is-open .quote-chat-toggle{display:none}.quote-chat-panel{position:fixed;left:50%;right:auto;top:var(--chat-visual-center,50vh);bottom:auto;transform:translate(-50%,-50%);width:min(420px,calc(100vw - 24px));height:min(540px,calc(var(--chat-visible-height,100dvh) - 24px));max-height:calc(var(--chat-visible-height,100dvh) - 24px);min-height:0;pointer-events:auto}.quote-chat-toggle{padding:12px 15px;font-size:12px}.quote-chat-controls{max-height:40%}.chat-answer-form input{font-size:16px}}
 
 
 /* SARP brand artwork: fixed proportions preserve its shape in every viewport. */
