@@ -458,8 +458,16 @@
       context.save();context.translate(ox,oy);context.scale(scale,scale);context.drawImage(baseImage,0,0,w,h);
       const face=()=>{context.beginPath();context.moveTo(w*.13,h*.38);context.lineTo(w*.91,h*.27);context.lineTo(w*.96,h*.57);context.lineTo(w*.19,h*.72);context.closePath();};
       context.save();face();context.clip();context.fillStyle="#0b100b";context.globalAlpha=.52;context.fillRect(0,0,w,h);context.restore();
-      const leftFront=h*(.72-.34*progress),rightFront=h*(.57-.30*progress);
-      context.save();face();context.clip();context.beginPath();context.moveTo(w*.19,leftFront);context.lineTo(w*.96,rightFront);context.lineTo(w*.96,h*.57);context.lineTo(w*.19,h*.72);context.closePath();context.clip();
+      const desktopPrint=window.innerWidth>800;
+      const leftFront=desktopPrint?h*(.38+.34*progress):h*(.72-.34*progress);
+      const rightFront=desktopPrint?h*(.27+.30*progress):h*(.57-.30*progress);
+      context.save();face();context.clip();context.beginPath();
+      if(desktopPrint){
+        context.moveTo(w*.13,h*.38);context.lineTo(w*.91,h*.27);context.lineTo(w*.96,rightFront);context.lineTo(w*.19,leftFront);
+      }else{
+        context.moveTo(w*.19,leftFront);context.lineTo(w*.96,rightFront);context.lineTo(w*.96,h*.57);context.lineTo(w*.19,h*.72);
+      }
+      context.closePath();context.clip();
       context.drawImage(baseImage,0,0,w,h);
       context.globalCompositeOperation="multiply";context.globalAlpha=color.value==="Beyaz"?.24:.58;context.fillStyle=surfaceColor;context.fillRect(0,0,w,h);
       context.globalCompositeOperation="source-over";context.globalAlpha=1;
