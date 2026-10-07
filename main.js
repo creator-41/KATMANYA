@@ -344,7 +344,7 @@
     const logoStatus=slide.querySelector(".nameplate-upload-status");
     const downloadPreview=slide.querySelector(".nameplate-download");
     const baseImage=slide.querySelector(".nameplate-base");
-    let logoUrl="",logoFile=null,logoX=55,logoY=42,surfaceColor="#c7fa5f",textColor="#101212";
+     let logoUrl="",logoFile=null,logoX=36,logoY=49,surfaceColor="#c7fa5f",textColor="#101212";
     if(!button||!color||!quantity)return;
     const product=button.dataset.quoteProduct||"Ürün";
     const updateQuote=()=>{
@@ -367,7 +367,8 @@
         preview.style.backgroundColor=surface;
         preview.style.opacity=color.value==="Beyaz"?"0.24":"0.58";
         if(previewName){previewName.textContent=detailValue==="Mesajda paylaşacağım"?"İSMİN":detailValue.toLocaleUpperCase("tr-TR");previewName.style.color=ink;}
-        if(previewName)previewName.style.top=logoFile?"59%":"49%";
+        previewPhoto?.classList.toggle("has-logo",!!logoFile);
+        if(previewName)previewName.style.top=logoFile?"50%":"49%";
         previewPhoto?.setAttribute("aria-label",(detailValue==="Mesajda paylaşacağım"?"İsmin":detailValue)+" yazılı "+(color.value||"yeşil")+" renk plakalık önizlemesi");
       }
       let message=`Merhaba SARP, ${product} için fiyat almak istiyorum.`;
@@ -391,8 +392,8 @@
           return;
         }
         if(logoUrl)URL.revokeObjectURL(logoUrl);
-        logoUrl=URL.createObjectURL(file);logoFile=file;logoX=55;logoY=42;
-        previewLogo.src=logoUrl;previewLogo.hidden=false;
+        logoUrl=URL.createObjectURL(file);logoFile=file;logoX=36;logoY=49;
+        previewLogo.src=logoUrl;previewLogo.style.left=logoX+"%";previewLogo.style.top=logoY+"%";previewLogo.hidden=false;
         if(logoRemove)logoRemove.hidden=false;
         if(logoStatus)logoStatus.textContent="Logoyu sürükleyip yerleştir";
         updateQuote();
@@ -428,7 +429,8 @@
         ctx.save();ctx.translate(w*logoX/100,h*logoY/100);ctx.rotate(-5*Math.PI/180);ctx.drawImage(previewLogo,-drawW/2,-drawH/2,drawW,drawH);ctx.restore();
       }
       const name=detail?.value.trim()||"İSMİN",fontSize=Math.round(w*.073);
-      ctx.save();ctx.translate(w*.55,h*(logoFile?.58:.49));ctx.rotate(-5*Math.PI/180);ctx.fillStyle=textColor;ctx.textAlign="center";ctx.textBaseline="middle";ctx.font="800 "+fontSize+"px Manrope, Arial, sans-serif";ctx.fillText(name.toLocaleUpperCase("tr-TR"),0,0,w*.69);ctx.restore();
+      const nameCenterX=logoFile?.68:.55,nameCenterY=logoFile?.50:.49,nameWidth=logoFile?.50:.69;
+      ctx.save();ctx.translate(w*nameCenterX,h*nameCenterY);ctx.rotate(-5*Math.PI/180);ctx.fillStyle=textColor;ctx.textAlign="center";ctx.textBaseline="middle";ctx.font="800 "+fontSize+"px Manrope, Arial, sans-serif";ctx.fillText(name.toLocaleUpperCase("tr-TR"),0,0,w*nameWidth);ctx.restore();
       canvas.toBlob(blob=>{
         if(!blob){if(logoStatus)logoStatus.textContent="PNG oluşturulamadı.";return;}
         const link=document.createElement("a"),url=URL.createObjectURL(blob),safeName=(detail?.value.trim()||"plakalik").replace(/[^a-z0-9-_]/gi,"-").slice(0,28)||"plakalik";
