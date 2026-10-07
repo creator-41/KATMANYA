@@ -473,7 +473,12 @@
       context.globalCompositeOperation="source-over";context.globalAlpha=1;
       context.strokeStyle="#ffffff30";context.lineWidth=.65;
       const layerCount=Math.round(progress*120);
-      for(let layer=2;layer<layerCount;layer+=3){const t=layer/120,yL=h*(.72-.34*t),yR=h*(.57-.30*t);context.beginPath();context.moveTo(w*.19,yL);context.lineTo(w*.96,yR);context.stroke();}
+      for(let layer=2;layer<layerCount;layer+=3){
+        const t=layer/120;
+        const yL=desktopPrint?h*(.38+.34*t):h*(.72-.34*t);
+        const yR=desktopPrint?h*(.27+.30*t):h*(.57-.30*t);
+        context.beginPath();context.moveTo(w*.19,yL);context.lineTo(w*.96,yR);context.stroke();
+      }
       if(previewLogo&&!previewLogo.hidden&&previewLogo.complete&&previewLogo.naturalWidth){
         const boxW=w*(window.innerWidth<=800?.22:.17),boxH=h*(window.innerWidth<=800?.32:.26),ratio=Math.min(boxW/previewLogo.naturalWidth,boxH/previewLogo.naturalHeight),drawW=previewLogo.naturalWidth*ratio,drawH=previewLogo.naturalHeight*ratio;
         context.save();context.translate(w*logoX/100,h*logoY/100);context.rotate(-5*Math.PI/180);context.drawImage(previewLogo,-drawW/2,-drawH/2,drawW,drawH);context.restore();
