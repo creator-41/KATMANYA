@@ -17,9 +17,10 @@
     {id:'custom',label:'İhtiyacıma özel parça'}
   ];
   const colors=['Siyah','Beyaz','Mavi','Yeşil','Diğer renk','Henüz karar vermedim'];
-  function bubble(text,kind){const el=document.createElement('div');el.className='chat-bubble '+kind;el.textContent=text;log.append(el);log.scrollTop=log.scrollHeight;return el;}
+  function scrollLogToBottom(){const move=()=>{log.scrollTop=log.scrollHeight;};requestAnimationFrame(()=>{move();requestAnimationFrame(move);});window.setTimeout(move,100);}
+  function bubble(text,kind){const el=document.createElement('div');el.className='chat-bubble '+kind;el.textContent=text;log.append(el);scrollLogToBottom();return el;}
   function button(label,handler,kind){const b=document.createElement('button');b.type='button';b.className='chat-choice'+(kind?' '+kind:'');b.textContent=label;b.addEventListener('click',handler);return b;}
-  function showChoices(items){controls.replaceChildren();items.forEach(item=>controls.append(button(item.label,item.action)));}
+  function showChoices(items){controls.replaceChildren();items.forEach(item=>controls.append(button(item.label,item.action)));scrollLogToBottom();}
   function intro(){
     product=null;questions=[];answers={};step=0;log.replaceChildren();controls.replaceChildren();
     bubble('Selam! Sana doğru teklifi hazırlayabilmem için ne aradığını seç.','bot');
@@ -42,7 +43,7 @@
     if(q.type==='number'){input.min='1';input.max='9999';input.inputMode='numeric';}
     const submit=document.createElement('button');submit.type='submit';submit.className='chat-send';submit.textContent='Devam';
     form.append(input,submit);form.addEventListener('submit',event=>{event.preventDefault();const value=input.value.trim();if(!value)return;if(q.type==='number'&&(+value<1||+value>9999)){status.textContent='Adedi 1 ile 9999 arasında gir.';return;}status.textContent='';answer(value);});
-    controls.append(form);input.focus({preventScroll:true});
+    controls.append(form);input.focus({preventScroll:true});scrollLogToBottom();
   }
   function answer(value){const q=questions[step];answers[q.key]=value;bubble(value,'user');step++;askNext();}
   function finish(){
@@ -69,6 +70,7 @@
     controls.append(a);
     const restart=button('Baştan başla',intro,'chat-restart');
     controls.append(restart);
+    scrollLogToBottom();
   }
   function clearNotification(){notified=false;shell.classList.remove('has-notification');badge.hidden=true;toggle.setAttribute('aria-label','Teklif asistanını aç');}
   function soundNow(){
