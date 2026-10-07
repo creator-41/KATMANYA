@@ -335,6 +335,8 @@
     const color=slide.querySelector(".quote-color");
     const quantity=slide.querySelector(".quote-quantity");
     const detail=slide.querySelector(".quote-detail-input");
+    const preview=slide.querySelector(".nameplate-model");
+    const previewName=slide.querySelector(".nameplate-model-name");
     if(!button||!color||!quantity)return;
     const product=button.dataset.quoteProduct||"Ürün";
     const updateQuote=()=>{
@@ -343,6 +345,21 @@
       quantity.value=String(amount);
       const shade=color.value||"Henüz karar vermedim";
       const detailValue=detail?.value.trim()||"Mesajda paylaşacağım";
+      if(preview){
+        const shades={
+          "Siyah":["#343b38","#f3f1ec"],
+          "Beyaz":["#e9e8e1","#263027"],
+          "Mavi":["#4565ed","#ffffff"],
+          "Yeşil":["#c7fa5f","#101212"],
+          "Diğer renk":["#b58cff","#17121f"],
+          "":["#c7fa5f","#101212"]
+        };
+        const [surface,ink]=shades[color.value]||shades[""];
+        preview.style.setProperty("--plate-color",surface);
+        preview.style.setProperty("--plate-ink",ink);
+        if(previewName)previewName.textContent=detailValue==="Mesajda paylaşacağım"?"İSMİN":detailValue.toLocaleUpperCase("tr-TR");
+        preview.setAttribute("aria-label",(detailValue==="Mesajda paylaşacağım"?"İsmin":detailValue)+" yazılı "+(color.value||"yeşil")+" renk plakalık önizlemesi");
+      }
       let message=`Merhaba SARP, ${product} için fiyat almak istiyorum.`;
       if(product==="İsimli plakalık") message+=`\nPlakada yer alacak isim: ${detailValue}`;
       if(product==="İhtiyacına özel parça") message+=`\nÖlçüler: ${detailValue}\nFotoğraf: Bu sohbete ekleyeceğim.`;
