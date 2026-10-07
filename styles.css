@@ -177,15 +177,37 @@ body{max-width:100%;touch-action:pan-y}
 .chat-file-name{color:#a5b09b;font-size:10px;line-height:1.45;overflow-wrap:anywhere}
 
 
-/* Preserve the real nameplate photo and place the typed name directly on its face. */
+/* Interactive nameplate mockup: local logo overlay, drag placement, and PNG export. */
 .product-visual.nameplate-preview{position:relative;overflow:visible}
 .nameplate-photo{position:relative;width:100%;height:auto;aspect-ratio:420/268;overflow:hidden;filter:drop-shadow(0 12px 18px #0008);transition:transform .4s cubic-bezier(.2,.8,.2,1)}
 .nameplate-preview:hover .nameplate-photo{transform:scale(1.035)}
-.nameplate-photo>img{display:block;width:100%;height:100%;object-fit:contain;filter:none}
+.nameplate-photo>img.nameplate-base{display:block;width:100%;height:100%;object-fit:contain;filter:none}
 .nameplate-tint{position:absolute;inset:0;background:#c7fa5f;opacity:.58;mix-blend-mode:multiply;clip-path:polygon(13% 38%,91% 27%,96% 57%,19% 72%);transition:background-color .35s ease,opacity .35s ease}
-.nameplate-model-name{position:absolute;z-index:2;left:55%;top:49%;width:69%;max-height:2.25em;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere;text-align:center;text-overflow:ellipsis;transform:translate(-50%,-50%) rotate(-5deg);font-size:clamp(7px,1.35vw,14px);line-height:1.05;font-weight:800;letter-spacing:.025em;text-shadow:0 1px 1px #ffffff70;transition:color .3s ease}
+.nameplate-model-name{position:absolute;z-index:2;left:55%;top:49%;width:69%;max-height:2.25em;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere;text-align:center;text-overflow:ellipsis;transform:translate(-50%,-50%) rotate(-5deg);font-size:clamp(7px,1.35vw,14px);line-height:1.05;font-weight:800;letter-spacing:.025em;text-shadow:0 1px 1px #ffffff70;transition:color .3s ease,top .25s ease}
+.nameplate-logo{position:absolute;z-index:2;left:55%;top:42%;width:15%;height:22%;object-fit:contain;transform:translate(-50%,-50%) rotate(-5deg);filter:drop-shadow(0 1px 1px #ffffff70);cursor:grab;touch-action:none;user-select:none}
+.nameplate-logo:active{cursor:grabbing}
+.nameplate-logo[hidden]{display:none}
 .nameplate-preview-tag{position:absolute;z-index:3;top:2px;left:2px;display:flex;align-items:center;gap:5px;padding:5px 7px;border:1px solid #c7fa5f45;border-radius:99px;background:#101212dd;color:#e9f1dd;font:6px var(--mono);letter-spacing:.07em;box-shadow:0 4px 12px #0005}
 .nameplate-preview-tag i{width:5px;height:5px;border-radius:50%;background:#c7fa5f;box-shadow:0 0 8px #c7fa5f}
-.product-visual.nameplate-preview figcaption{color:#c7fa5f}
-@media(max-width:800px){.nameplate-preview-tag{top:1px;left:0;padding:4px 5px;font-size:5px}.nameplate-model-name{font-size:clamp(7px,2vw,10px)}}
+.product-visual.nameplate-preview figcaption{display:grid;justify-items:center;gap:5px;color:#c7fa5f}
+.nameplate-download{border:1px solid #c7fa5f75;border-radius:99px;background:#ffffff08;color:#e8f1dc;padding:4px 7px;font:6px var(--mono);letter-spacing:.035em;cursor:pointer}
+.nameplate-download:hover,.nameplate-download:focus-visible{background:#c7fa5f;color:#101212}
+.nameplate-upload-row{display:flex;align-items:center;gap:6px;min-width:0;margin-top:2px}
+.nameplate-upload-button{position:relative;display:inline-flex;align-items:center;justify-content:center;min-height:28px;padding:0 9px;border:1px solid #c7fa5f66;border-radius:99px;color:#dce7d1;background:#ffffff08;font:8px var(--mono);letter-spacing:.02em;white-space:nowrap;cursor:pointer}
+.nameplate-upload-button:hover,.nameplate-upload-button:focus-within{background:#c7fa5f;color:#101212}
+.nameplate-logo-input{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important}
+.nameplate-logo-remove{width:25px;height:25px;border:1px solid #ffffff30;border-radius:50%;background:transparent;color:#f3f1ec;font-size:16px;line-height:1;cursor:pointer}
+.nameplate-logo-remove[hidden]{display:none}
+.nameplate-upload-status{min-width:0;overflow:hidden;color:#9da796;font:7px/1.25 var(--mono);text-overflow:ellipsis;white-space:nowrap}
+.product-detail-field .nameplate-upload-row{grid-column:1/-1}
+.nameplate-download:focus-visible,.nameplate-logo-remove:focus-visible,.nameplate-upload-button:focus-within{outline:2px solid var(--acid);outline-offset:2px}
+@media(max-width:800px){
+  .product-detail-field .nameplate-upload-row{gap:4px;margin-top:0}
+  .nameplate-upload-button{min-height:25px;padding:0 7px;font-size:7px}
+  .nameplate-upload-status{font-size:6px}
+  .nameplate-logo-remove{width:22px;height:22px}
+  .nameplate-preview-tag{top:1px;left:0;padding:4px 5px;font-size:5px}
+  .nameplate-model-name{font-size:clamp(7px,2vw,10px)}
+  .nameplate-download{padding:4px 6px;font-size:5px}
+}
 @media(prefers-reduced-motion:reduce){.nameplate-photo,.nameplate-model-name,.nameplate-tint{transition:none}}
