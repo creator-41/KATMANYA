@@ -177,24 +177,15 @@ body{max-width:100%;touch-action:pan-y}
 .chat-file-name{color:#a5b09b;font-size:10px;line-height:1.45;overflow-wrap:anywhere}
 
 
-/* Live, dimensional nameplate preview in the nameplate product card. */
-.nameplate-preview-stage{position:relative;width:100%;height:100%;display:grid;place-items:center;perspective:620px;isolation:isolate;overflow:hidden}
-.nameplate-preview-stage::before{content:"";position:absolute;inset:17% 3% 8%;background:radial-gradient(ellipse,#c7fa5f20,transparent 68%);filter:blur(12px);pointer-events:none}
-.nameplate-light{position:absolute;width:75%;height:23%;bottom:19%;border-radius:50%;background:#0009;filter:blur(13px);transform:rotate(-8deg);pointer-events:none}
-.nameplate-model{--plate-color:#c7fa5f;--plate-ink:#101212;position:relative;z-index:1;width:91%;aspect-ratio:1.62;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7%;border:1px solid #ffffff50;border-radius:9px;background:linear-gradient(145deg,#ffffff35 0%,transparent 31%),linear-gradient(160deg,color-mix(in srgb,var(--plate-color),white 9%),var(--plate-color) 56%,color-mix(in srgb,var(--plate-color),black 24%));color:var(--plate-ink);box-shadow:0 5px 0 color-mix(in srgb,var(--plate-color),black 38%),0 11px 0 #171b1980,0 20px 25px #0009,inset 0 1px 0 #ffffff85,inset 0 -2px 5px #0003;transform:rotateX(14deg) rotateY(-18deg) rotateZ(-8deg);transition:background .35s ease,color .35s ease,transform .55s cubic-bezier(.2,.8,.2,1),box-shadow .35s ease;animation:nameplate-float 4.2s ease-in-out infinite}
-.nameplate-model::before{content:"";position:absolute;inset:7px;border:1px solid color-mix(in srgb,var(--plate-ink),transparent 76%);border-radius:5px;pointer-events:none}
-.nameplate-model::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(112deg,transparent 31%,#ffffff39 48%,transparent 64%);transform:translateX(-120%);animation:nameplate-sheen 5s ease-in-out 1s infinite;pointer-events:none}
-.nameplate-model-name{position:relative;z-index:1;max-width:80%;max-height:2.2em;overflow:hidden;text-align:center;text-overflow:ellipsis;font-size:clamp(7px,1.42vw,19px);line-height:1.06;font-weight:800;letter-spacing:.035em;text-shadow:0 1px 0 #ffffff45;overflow-wrap:anywhere}
-.nameplate-model-mark{position:relative;z-index:1;font:clamp(5px,.55vw,7px) var(--mono);letter-spacing:.16em;opacity:.62}
-.nameplate-preview-tag{position:absolute;z-index:2;top:8px;left:4px;display:flex;align-items:center;gap:5px;padding:5px 7px;border:1px solid #c7fa5f35;border-radius:99px;background:#101212dc;color:#e9f1dd;font:6px var(--mono);letter-spacing:.07em;box-shadow:0 4px 12px #0005}
+/* Preserve the real nameplate photo and place the typed name directly on its face. */
+.product-visual.nameplate-preview{position:relative;overflow:visible}
+.nameplate-photo{position:relative;width:100%;height:auto;aspect-ratio:420/268;overflow:hidden;filter:drop-shadow(0 12px 18px #0008);transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.nameplate-preview:hover .nameplate-photo{transform:scale(1.035)}
+.nameplate-photo>img{display:block;width:100%;height:100%;object-fit:contain;filter:none}
+.nameplate-tint{position:absolute;inset:0;background:#c7fa5f;opacity:.58;mix-blend-mode:multiply;clip-path:polygon(13% 38%,91% 27%,96% 57%,19% 72%);transition:background-color .35s ease,opacity .35s ease}
+.nameplate-model-name{position:absolute;z-index:2;left:55%;top:49%;width:69%;max-height:2.25em;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere;text-align:center;text-overflow:ellipsis;transform:translate(-50%,-50%) rotate(-5deg);font-size:clamp(7px,1.35vw,14px);line-height:1.05;font-weight:800;letter-spacing:.025em;text-shadow:0 1px 1px #ffffff70;transition:color .3s ease}
+.nameplate-preview-tag{position:absolute;z-index:3;top:2px;left:2px;display:flex;align-items:center;gap:5px;padding:5px 7px;border:1px solid #c7fa5f45;border-radius:99px;background:#101212dd;color:#e9f1dd;font:6px var(--mono);letter-spacing:.07em;box-shadow:0 4px 12px #0005}
 .nameplate-preview-tag i{width:5px;height:5px;border-radius:50%;background:#c7fa5f;box-shadow:0 0 8px #c7fa5f}
 .product-visual.nameplate-preview figcaption{color:#c7fa5f}
-@keyframes nameplate-float{0%,100%{transform:translateY(0) rotateX(14deg) rotateY(-18deg) rotateZ(-8deg)}50%{transform:translateY(-5px) rotateX(17deg) rotateY(-13deg) rotateZ(-6deg)}}
-@keyframes nameplate-sheen{0%,55%{transform:translateX(-120%)}75%,100%{transform:translateX(120%)}}
-@media(max-width:800px){
-  .nameplate-model{border-radius:6px;box-shadow:0 3px 0 color-mix(in srgb,var(--plate-color),black 38%),0 7px 0 #171b1980,0 13px 18px #0009,inset 0 1px 0 #ffffff85,inset 0 -2px 5px #0003}
-  .nameplate-model::before{inset:5px}
-  .nameplate-preview-tag{top:4px;left:0;padding:4px 5px;font-size:5px}
-  .nameplate-model-mark{font-size:5px}
-}
-@media(prefers-reduced-motion:reduce){.nameplate-model,.nameplate-model::after{animation:none;transition:none}}
+@media(max-width:800px){.nameplate-preview-tag{top:1px;left:0;padding:4px 5px;font-size:5px}.nameplate-model-name{font-size:clamp(7px,2vw,10px)}}
+@media(prefers-reduced-motion:reduce){.nameplate-photo,.nameplate-model-name,.nameplate-tint{transition:none}}
