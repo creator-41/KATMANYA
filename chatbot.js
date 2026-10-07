@@ -59,7 +59,7 @@
     if(q.type==='number'){input.min='1';input.max='9999';input.inputMode='numeric';}
     const submit=document.createElement('button');submit.type='submit';submit.className='chat-send';submit.textContent='Devam';
     form.append(input,submit);form.addEventListener('submit',event=>{event.preventDefault();const value=input.value.trim();if(!value)return;if(q.type==='number'&&(+value<1||+value>9999)){status.textContent='Adedi 1 ile 9999 arasında gir.';return;}status.textContent='';answer(value);});
-    controls.append(form);input.focus({preventScroll:true});scrollLogToBottom();
+    controls.append(form);if(!matchMedia('(max-width:800px)').matches)input.focus({preventScroll:true});scrollLogToBottom();
   }
   function answer(value){const q=questions[step];answers[q.key]=value;bubble(value,'user');step++;askNext();}
   function finish(){
