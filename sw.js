@@ -1,11 +1,11 @@
-const CACHE_NAME = "sarp-shell-v20";
+const CACHE_NAME = "sarp-shell-v21";
 const BASE = self.registration.scope;
 const CORE_ASSETS = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./styles.css?v=57",
-  "./main.js?v=30",
+  "./styles.css?v=58",
+  "./main.js?v=31",
   "./chatbot.js?v=15",
   "./assets/chat-notification.wav",
   "./assets/desk-set.webp",
