@@ -459,8 +459,8 @@
       const face=()=>{context.beginPath();context.moveTo(w*.13,h*.38);context.lineTo(w*.91,h*.27);context.lineTo(w*.96,h*.57);context.lineTo(w*.19,h*.72);context.closePath();};
       context.save();face();context.clip();context.fillStyle="#0b100b";context.globalAlpha=.52;context.fillRect(0,0,w,h);context.restore();
       const desktopPrint=window.innerWidth>800;
-      const leftFront=h*(.72-.34*progress);
-      const rightFront=h*(.57-.30*progress);
+      const leftFront=desktopPrint?h*(.52-.14*progress):h*(.72-.34*progress);
+      const rightFront=desktopPrint?h*(.37-.10*progress):h*(.57-.30*progress);
       context.save();face();context.clip();context.beginPath();
       context.moveTo(w*.19,leftFront);context.lineTo(w*.96,rightFront);context.lineTo(w*.96,h*.57);context.lineTo(w*.19,h*.72);
       context.closePath();context.clip();
@@ -471,8 +471,8 @@
       const layerCount=Math.round(progress*120);
       for(let layer=2;layer<layerCount;layer+=3){
         const t=layer/120;
-        const yL=h*(.72-.34*t);
-        const yR=h*(.57-.30*t);
+        const yL=desktopPrint?h*(.52-.14*t):h*(.72-.34*t);
+        const yR=desktopPrint?h*(.37-.10*t):h*(.57-.30*t);
         context.beginPath();context.moveTo(w*.19,yL);context.lineTo(w*.96,yR);context.stroke();
       }
       if(previewLogo&&!previewLogo.hidden&&previewLogo.complete&&previewLogo.naturalWidth){
@@ -482,7 +482,7 @@
       const name=detail?.value.trim()||"İSMİN",fontSize=Math.round(w*.073),nameX=logoFile?.60:.55,nameY=logoFile?.50:.49,nameWidth=logoFile?.48:.69;
       context.save();context.translate(w*nameX,h*nameY);context.rotate(-5*Math.PI/180);context.fillStyle=textColor;context.textAlign="center";context.textBaseline="middle";context.font="800 "+fontSize+"px Manrope, Arial, sans-serif";context.fillText(name.toLocaleUpperCase("tr-TR"),0,0,w*nameWidth);context.restore();
       context.restore();
-      const sweep=desktopPrint?(Math.sin(elapsed*.004-Math.PI/2)+1)/2:(Math.sin(elapsed*.004)+1)/2,headX=w*(.19+.77*sweep),headT=(headX/w-.19)/.77,headY=leftFront+(rightFront-leftFront)*headT-(desktopPrint?h*.20*(1-progress):0),angle=Math.atan2(rightFront-leftFront,w*.77);
+      const sweep=desktopPrint?(Math.sin(elapsed*.004-Math.PI/2)+1)/2:(Math.sin(elapsed*.004)+1)/2,headX=w*(.19+.77*sweep),headT=(headX/w-.19)/.77,headY=leftFront+(rightFront-leftFront)*headT-(desktopPrint?0:0),angle=Math.atan2(rightFront-leftFront,w*.77);
       context.save();context.translate(ox,oy);context.scale(scale,scale);context.shadowColor="#c7fa5f";context.shadowBlur=18;context.strokeStyle="#d9ff8a";context.lineWidth=2;context.beginPath();context.moveTo(w*.19,leftFront);context.lineTo(w*.96,rightFront);context.stroke();context.shadowBlur=0;context.translate(headX,headY);context.rotate(angle);context.fillStyle="#e9ffc1";if(desktopPrint){context.fillRect(-5,-18,10,13);context.fillStyle="#c7fa5f";context.fillRect(-2,-5,4,6);}else{context.fillRect(-5,-10,10,17);context.fillStyle="#c7fa5f";context.fillRect(-2,5,4,8);}context.restore();
       context.restore();
     }
