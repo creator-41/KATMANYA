@@ -482,8 +482,8 @@
       const name=detail?.value.trim()||"İSMİN",fontSize=Math.round(w*.073),nameX=logoFile?.60:.55,nameY=logoFile?.50:.49,nameWidth=logoFile?.48:.69;
       context.save();context.translate(w*nameX,h*nameY);context.rotate(-5*Math.PI/180);context.fillStyle=textColor;context.textAlign="center";context.textBaseline="middle";context.font="800 "+fontSize+"px Manrope, Arial, sans-serif";context.fillText(name.toLocaleUpperCase("tr-TR"),0,0,w*nameWidth);context.restore();
       context.restore();
-      const sweep=(Math.sin(elapsed*.004-Math.PI/2)+1)/2,headX=w*(.19+.77*sweep),headT=(headX/w-.19)/.77,headY=leftFront+(rightFront-leftFront)*headT,angle=Math.atan2(rightFront-leftFront,w*.77);
-      context.save();context.translate(ox,oy);context.scale(scale,scale);context.shadowColor="#c7fa5f";context.shadowBlur=18;context.strokeStyle="#d9ff8a";context.lineWidth=2;context.beginPath();context.moveTo(w*.19,leftFront);context.lineTo(w*.96,rightFront);context.stroke();context.shadowBlur=0;context.translate(headX,headY);context.rotate(angle);context.fillStyle="#e9ffc1";context.fillRect(-5,-18,10,13);context.fillStyle="#c7fa5f";context.fillRect(-2,-5,4,6);context.restore();
+      const sweep=desktopPrint?(Math.sin(elapsed*.004-Math.PI/2)+1)/2:(Math.sin(elapsed*.004)+1)/2,headX=w*(.19+.77*sweep),headT=(headX/w-.19)/.77,headY=leftFront+(rightFront-leftFront)*headT,angle=Math.atan2(rightFront-leftFront,w*.77);
+      context.save();context.translate(ox,oy);context.scale(scale,scale);context.shadowColor="#c7fa5f";context.shadowBlur=18;context.strokeStyle="#d9ff8a";context.lineWidth=2;context.beginPath();context.moveTo(w*.19,leftFront);context.lineTo(w*.96,rightFront);context.stroke();context.shadowBlur=0;context.translate(headX,headY);context.rotate(angle);context.fillStyle="#e9ffc1";if(desktopPrint){context.fillRect(-5,-18,10,13);context.fillStyle="#c7fa5f";context.fillRect(-2,-5,4,6);}else{context.fillRect(-5,-10,10,17);context.fillStyle="#c7fa5f";context.fillRect(-2,5,4,8);}context.restore();
       context.restore();
     }
     function animatePrint(now){
