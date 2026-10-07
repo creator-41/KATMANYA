@@ -461,8 +461,8 @@
       const desktopPrint=window.innerWidth>800;
       const leftFront=h*(.72-.34*progress);
       const rightFront=h*(.57-.30*progress);
-      const carrierLeft=desktopPrint?h*(.52-.14*progress):leftFront;
-      const carrierRight=desktopPrint?h*(.37-.10*progress):rightFront;
+      const carrierLeft=leftFront;
+      const carrierRight=rightFront;
       context.save();face();context.clip();context.beginPath();
       context.moveTo(w*.19,leftFront);context.lineTo(w*.96,rightFront);context.lineTo(w*.96,h*.57);context.lineTo(w*.19,h*.72);
       context.closePath();context.clip();
@@ -485,7 +485,10 @@
       context.save();context.translate(w*nameX,h*nameY);context.rotate(-5*Math.PI/180);context.fillStyle=textColor;context.textAlign="center";context.textBaseline="middle";context.font="800 "+fontSize+"px Manrope, Arial, sans-serif";context.fillText(name.toLocaleUpperCase("tr-TR"),0,0,w*nameWidth);context.restore();
       context.restore();
       const sweep=desktopPrint?(Math.sin(elapsed*.004-Math.PI/2)+1)/2:(Math.sin(elapsed*.004)+1)/2,headX=w*(.19+.77*sweep),headT=(headX/w-.19)/.77,headY=carrierLeft+(carrierRight-carrierLeft)*headT,angle=Math.atan2(carrierRight-carrierLeft,w*.77);
-      context.save();context.translate(ox,oy);context.scale(scale,scale);context.shadowColor="#c7fa5f";context.shadowBlur=18;context.strokeStyle="#d9ff8a";context.lineWidth=2;context.beginPath();context.moveTo(w*.19,carrierLeft);context.lineTo(w*.96,carrierRight);context.stroke();context.shadowBlur=0;context.translate(headX,headY);context.rotate(angle);context.fillStyle="#e9ffc1";if(desktopPrint){context.fillRect(-5,-18,10,13);context.fillStyle="#c7fa5f";context.fillRect(-2,-5,4,6);}else{context.fillRect(-5,-10,10,17);context.fillStyle="#c7fa5f";context.fillRect(-2,5,4,8);}context.restore();
+      context.save();
+      // Desktop is already in image coordinates; keep the existing mobile motion.
+      if(!desktopPrint){context.translate(ox,oy);context.scale(scale,scale);}
+      context.shadowColor="#c7fa5f";context.shadowBlur=18;context.strokeStyle="#d9ff8a";context.lineWidth=2;context.beginPath();context.moveTo(w*.19,carrierLeft);context.lineTo(w*.96,carrierRight);context.stroke();context.shadowBlur=0;context.translate(headX,headY);context.rotate(angle);context.fillStyle="#e9ffc1";if(desktopPrint){context.fillRect(-5,-18,10,13);context.fillStyle="#c7fa5f";context.fillRect(-2,-5,4,6);}else{context.fillRect(-5,-10,10,17);context.fillStyle="#c7fa5f";context.fillRect(-2,5,4,8);}context.restore();
       context.restore();
     }
     function animatePrint(now){
