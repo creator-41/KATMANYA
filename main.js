@@ -338,6 +338,13 @@
     const preview=slide.querySelector(".nameplate-tint");
     const previewPhoto=slide.querySelector(".nameplate-photo");
     const previewName=slide.querySelector(".nameplate-model-name");
+    const previewLogo=slide.querySelector(".nameplate-logo");
+    const logoInput=slide.querySelector(".nameplate-logo-input");
+    const logoRemove=slide.querySelector(".nameplate-logo-remove");
+    const logoStatus=slide.querySelector(".nameplate-upload-status");
+    const downloadPreview=slide.querySelector(".nameplate-download");
+    const baseImage=slide.querySelector(".nameplate-base");
+    let logoUrl="",logoFile=null,logoX=55,logoY=42,surfaceColor="#c7fa5f",textColor="#101212";
     if(!button||!color||!quantity)return;
     const product=button.dataset.quoteProduct||"Ürün";
     const updateQuote=()=>{
@@ -356,13 +363,16 @@
           "":["#c7fa5f","#101212"]
         };
         const [surface,ink]=shades[color.value]||shades[""];
+        surfaceColor=surface;textColor=ink;
         preview.style.backgroundColor=surface;
         preview.style.opacity=color.value==="Beyaz"?"0.24":"0.58";
         if(previewName){previewName.textContent=detailValue==="Mesajda paylaşacağım"?"İSMİN":detailValue.toLocaleUpperCase("tr-TR");previewName.style.color=ink;}
+        if(previewName)previewName.style.top=logoFile?"59%":"49%";
         previewPhoto?.setAttribute("aria-label",(detailValue==="Mesajda paylaşacağım"?"İsmin":detailValue)+" yazılı "+(color.value||"yeşil")+" renk plakalık önizlemesi");
       }
       let message=`Merhaba SARP, ${product} için fiyat almak istiyorum.`;
       if(product==="İsimli plakalık") message+=`\nPlakada yer alacak isim: ${detailValue}`;
+      if(product==="İsimli plakalık"&&logoFile) message+="\\nLogo/arma: WhatsApp sohbetine ayrıca ekleyeceğim.";
       if(product==="İhtiyacına özel parça") message+=`\nÖlçüler: ${detailValue}\nFotoğraf: Bu sohbete ekleyeceğim.`;
       message+=`\nRenk tercihi: ${shade}\nAdet: ${amount}`;
       button.href="https://wa.me/905304815341?text="+encodeURIComponent(message);
@@ -371,6 +381,61 @@
     quantity.addEventListener("input",updateQuote);
     detail?.addEventListener("input",updateQuote);
     button.addEventListener("click",updateQuote);
+    if(logoInput&&previewLogo){
+      logoInput.addEventListener("change",()=>{
+        const file=logoInput.files?.[0];
+        if(!file)return;
+        if(!file.type.startsWith("image/")||file.size>5*1024*1024){
+          logoInput.value="";
+          if(logoStatus)logoStatus.textContent="PNG/JPG/WebP · en fazla 5 MB";
+          return;
+        }
+        if(logoUrl)URL.revokeObjectURL(logoUrl);
+        logoUrl=URL.createObjectURL(file);logoFile=file;logoX=55;logoY=42;
+        previewLogo.src=logoUrl;previewLogo.hidden=false;
+        if(logoRemove)logoRemove.hidden=false;
+        if(logoStatus)logoStatus.textContent="Logoyu sürükleyip yerleştir";
+        updateQuote();
+      });
+    }
+    logoRemove?.addEventListener("click",()=>{
+      if(logoUrl)URL.revokeObjectURL(logoUrl);
+      logoUrl="";logoFile=null;logoInput.value="";previewLogo.hidden=true;previewLogo.removeAttribute("src");logoRemove.hidden=true;
+      if(logoStatus)logoStatus.textContent="Dosya cihazında kalır";
+      updateQuote();
+    });
+    previewLogo?.addEventListener("pointerdown",event=>{
+      event.preventDefault();previewLogo.setPointerCapture(event.pointerId);
+      const rect=previewPhoto.getBoundingClientRect();
+      const move=pointerEvent=>{
+        logoX=Math.max(19,Math.min(91,(pointerEvent.clientX-rect.left)/rect.width*100));
+        logoY=Math.max(31,Math.min(68,(pointerEvent.clientY-rect.top)/rect.height*100));
+        previewLogo.style.left=logoX+"%";previewLogo.style.top=logoY+"%";
+      };
+      move(event);
+      const finish=()=>{previewLogo.removeEventListener("pointermove",move);previewLogo.removeEventListener("pointerup",finish);};
+      previewLogo.addEventListener("pointermove",move);previewLogo.addEventListener("pointerup",finish);
+    });
+    downloadPreview?.addEventListener("click",()=>{
+      if(!baseImage?.complete||!baseImage.naturalWidth){if(logoStatus)logoStatus.textContent="Görsel yükleniyor; tekrar dene.";return;}
+      const canvas=document.createElement("canvas"),scale=3,w=baseImage.naturalWidth,h=baseImage.naturalHeight,ctx=canvas.getContext("2d");
+      if(!ctx){if(logoStatus)logoStatus.textContent="PNG oluşturulamadı.";return;}
+      canvas.width=w*scale;canvas.height=h*scale;ctx.scale(scale,scale);ctx.drawImage(baseImage,0,0,w,h);
+      ctx.save();ctx.beginPath();ctx.moveTo(w*.13,h*.38);ctx.lineTo(w*.91,h*.27);ctx.lineTo(w*.96,h*.57);ctx.lineTo(w*.19,h*.72);ctx.closePath();ctx.clip();
+      ctx.globalCompositeOperation="multiply";ctx.globalAlpha=color.value==="Beyaz"?.24:.58;ctx.fillStyle=surfaceColor;ctx.fillRect(0,0,w,h);ctx.restore();
+      if(previewLogo&&!previewLogo.hidden&&previewLogo.complete&&previewLogo.naturalWidth){
+        const boxW=w*.15,boxH=h*.22,ratio=Math.min(boxW/previewLogo.naturalWidth,boxH/previewLogo.naturalHeight),drawW=previewLogo.naturalWidth*ratio,drawH=previewLogo.naturalHeight*ratio;
+        ctx.save();ctx.translate(w*logoX/100,h*logoY/100);ctx.rotate(-5*Math.PI/180);ctx.drawImage(previewLogo,-drawW/2,-drawH/2,drawW,drawH);ctx.restore();
+      }
+      const name=detail?.value.trim()||"İSMİN",fontSize=Math.round(w*.073);
+      ctx.save();ctx.translate(w*.55,h*(logoFile?.58:.49));ctx.rotate(-5*Math.PI/180);ctx.fillStyle=textColor;ctx.textAlign="center";ctx.textBaseline="middle";ctx.font="800 "+fontSize+"px Manrope, Arial, sans-serif";ctx.fillText(name.toLocaleUpperCase("tr-TR"),0,0,w*.69);ctx.restore();
+      canvas.toBlob(blob=>{
+        if(!blob){if(logoStatus)logoStatus.textContent="PNG oluşturulamadı.";return;}
+        const link=document.createElement("a"),url=URL.createObjectURL(blob),safeName=(detail?.value.trim()||"plakalik").replace(/[^a-z0-9-_]/gi,"-").slice(0,28)||"plakalik";
+        link.href=url;link.download="sarp-"+safeName+".png";link.click();setTimeout(()=>URL.revokeObjectURL(url),1500);
+        if(logoStatus)logoStatus.textContent="Önizleme PNG olarak indirildi.";
+      },"image/png");
+    });
     updateQuote();
   });
 
