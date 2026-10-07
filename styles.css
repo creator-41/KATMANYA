@@ -220,3 +220,24 @@ body{max-width:100%;touch-action:pan-y}
 /* Keep the plaque name beside an uploaded logo on the printed face. */
 .product-visual.nameplate-preview .nameplate-photo.has-logo .nameplate-model-name{left:60%;top:50%;width:48%;transition:color .3s ease,left .25s ease,top .25s ease,width .25s ease}
 .product-visual.nameplate-preview .nameplate-photo.has-logo>img.nameplate-logo{left:36%;top:49%}
+
+/* Personalized plaque print simulation */
+.nameplate-print-start{display:inline-flex;align-items:center;gap:5px;border:1px solid #c7fa5f99;border-radius:99px;background:#c7fa5f;color:#101212;padding:5px 9px;font:700 6px var(--mono);letter-spacing:.035em;cursor:pointer}
+.nameplate-print-start:hover,.nameplate-print-start:focus-visible{background:#e1ff9b;outline:2px solid #c7fa5f;outline-offset:2px}
+.nameplate-print-start span{font-size:9px}
+.nameplate-print-dialog{position:fixed;inset:0;width:min(680px,calc(100vw - 32px));max-width:none;max-height:calc(100dvh - 28px);margin:auto;padding:0;overflow:auto;border:1px solid #c7fa5f60;border-radius:20px;background:#141816;color:var(--paper);box-shadow:0 28px 90px #000c}
+.nameplate-print-dialog::backdrop{background:#060807df;backdrop-filter:blur(10px)}
+.nameplate-print-shell{position:relative;padding:30px}
+.nameplate-print-close{position:absolute;top:19px;right:19px;width:38px;height:38px;border:1px solid #ffffff24;border-radius:50%;background:#ffffff0c;color:var(--paper);font-size:25px;line-height:1;cursor:pointer}
+.nameplate-print-eyebrow{margin:0 48px 12px 0;color:var(--acid);font:10px var(--mono);letter-spacing:.1em}
+.nameplate-print-shell h2{margin:0;font-size:clamp(24px,5vw,38px);font-weight:600;letter-spacing:-.045em;line-height:1.1}
+.nameplate-print-copy{margin:10px 0 20px;color:#a9b2a2;font-size:13px;line-height:1.6}
+.nameplate-print-canvas{display:block;width:100%;height:auto;aspect-ratio:420/268;border:1px solid #ffffff18;border-radius:12px;background:#0e100f;box-shadow:0 16px 34px #0008}
+.nameplate-print-progress{height:4px;margin-top:19px;overflow:hidden;border-radius:99px;background:#ffffff17}
+.nameplate-print-progress span{display:block;width:var(--print-progress,0%);height:100%;border-radius:inherit;background:var(--acid);box-shadow:0 0 12px #c7fa5f;transition:width .08s linear}
+.nameplate-print-status{display:flex;justify-content:space-between;gap:16px;margin-top:9px;color:#a7b09e;font:10px var(--mono);letter-spacing:.06em}
+.nameplate-print-status strong{color:var(--acid);font:inherit}
+.nameplate-print-whatsapp{margin-top:19px}
+.nameplate-print-whatsapp[hidden]{display:none}
+@media(max-width:800px){.nameplate-print-shell{padding:22px 18px}.nameplate-print-close{top:13px;right:13px;width:34px;height:34px}.nameplate-print-eyebrow{font-size:8px}.nameplate-print-copy{font-size:12px;margin-bottom:14px}.nameplate-print-canvas{max-height:36svh}.nameplate-print-start{font-size:6px}}
+@media(prefers-reduced-motion:reduce){.nameplate-print-progress span{transition:none}}
