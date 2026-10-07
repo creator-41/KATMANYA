@@ -8,6 +8,20 @@
   const controls=shell.querySelector('.quote-chat-controls');
   const status=shell.querySelector('.quote-chat-status');
   const badge=shell.querySelector('.quote-chat-badge');
+  function syncChatViewport(){
+    const viewport=window.visualViewport;
+    if(!viewport)return;
+    const editing=!panel.hidden&&panel.contains(document.activeElement);
+    const keyboardOpen=editing&&window.innerHeight-viewport.height>120;
+    const keyboardOffset=keyboardOpen?Math.max(0,window.innerHeight-viewport.height-viewport.offsetTop):0;
+    shell.style.setProperty('--chat-keyboard-offset',keyboardOffset+'px');
+    shell.style.setProperty('--chat-visible-height',viewport.height+'px');
+  }
+  window.visualViewport?.addEventListener('resize',syncChatViewport);
+  window.visualViewport?.addEventListener('scroll',syncChatViewport);
+  window.addEventListener('resize',syncChatViewport);
+  shell.addEventListener('focusin',()=>requestAnimationFrame(syncChatViewport));
+  shell.addEventListener('focusout',()=>window.setTimeout(syncChatViewport,250));
   const phone='905304815341';
   let product=null,questions=[],answers={},step=0,notified=false,soundPlayed=false,audioContext=null;
   const products=[
