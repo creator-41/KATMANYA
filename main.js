@@ -344,6 +344,14 @@
     const logoStatus=slide.querySelector(".nameplate-upload-status");
     const downloadPreview=slide.querySelector(".nameplate-download");
     const baseImage=slide.querySelector(".nameplate-base");
+    const printStartButton=slide.querySelector(".nameplate-print-start");
+    const printDialog=document.querySelector(".nameplate-print-dialog");
+    const printClose=printDialog?.querySelector(".nameplate-print-close");
+    const printCanvas=printDialog?.querySelector(".nameplate-print-canvas");
+    const printProgress=printDialog?.querySelector(".nameplate-print-progress");
+    const printStatus=printDialog?.querySelector(".nameplate-print-status");
+    const printWhatsApp=printDialog?.querySelector(".nameplate-print-whatsapp");
+    let printFrame=0,printStartedAt=0;
     let logoUrl="",logoFile=null,logoX=36,logoY=49,surfaceColor="#c7fa5f",textColor="#101212";
     if(!button||!color||!quantity)return;
     const product=button.dataset.quoteProduct||"Ürün";
@@ -438,6 +446,55 @@
         if(logoStatus)logoStatus.textContent="Önizleme PNG olarak indirildi.";
       },"image/png");
     });
+    function drawPrintFrame(progress,elapsed){
+      if(!printCanvas||!baseImage?.complete||!baseImage.naturalWidth)return;
+      const rect=printCanvas.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);
+      if(!rect.width||!rect.height)return;
+      const pixelWidth=Math.round(rect.width*dpr),pixelHeight=Math.round(rect.height*dpr);
+      if(printCanvas.width!==pixelWidth||printCanvas.height!==pixelHeight){printCanvas.width=pixelWidth;printCanvas.height=pixelHeight;}
+      const context=printCanvas.getContext("2d");if(!context)return;
+      context.setTransform(dpr,0,0,dpr,0,0);context.clearRect(0,0,rect.width,rect.height);
+      const w=baseImage.naturalWidth,h=baseImage.naturalHeight,scale=Math.min(rect.width/w,rect.height/h),ox=(rect.width-w*scale)/2,oy=(rect.height-h*scale)/2;
+      context.save();context.translate(ox,oy);context.scale(scale,scale);context.drawImage(baseImage,0,0,w,h);
+      const face=()=>{context.beginPath();context.moveTo(w*.13,h*.38);context.lineTo(w*.91,h*.27);context.lineTo(w*.96,h*.57);context.lineTo(w*.19,h*.72);context.closePath();};
+      context.save();face();context.clip();context.fillStyle="#0b100b";context.globalAlpha=.52;context.fillRect(0,0,w,h);context.restore();
+      const leftFront=h*(.72-.34*progress),rightFront=h*(.57-.30*progress);
+      context.save();face();context.clip();context.beginPath();context.moveTo(w*.19,leftFront);context.lineTo(w*.96,rightFront);context.lineTo(w*.96,h*.57);context.lineTo(w*.19,h*.72);context.closePath();context.clip();
+      context.drawImage(baseImage,0,0,w,h);
+      context.globalCompositeOperation="multiply";context.globalAlpha=color.value==="Beyaz"?.24:.58;context.fillStyle=surfaceColor;context.fillRect(0,0,w,h);
+      context.globalCompositeOperation="source-over";context.globalAlpha=1;
+      context.strokeStyle="#ffffff30";context.lineWidth=.65;
+      const layerCount=Math.round(progress*120);
+      for(let layer=2;layer<layerCount;layer+=3){const t=layer/120,yL=h*(.72-.34*t),yR=h*(.57-.30*t);context.beginPath();context.moveTo(w*.19,yL);context.lineTo(w*.96,yR);context.stroke();}
+      if(previewLogo&&!previewLogo.hidden&&previewLogo.complete&&previewLogo.naturalWidth){
+        const boxW=w*(window.innerWidth<=800?.22:.17),boxH=h*(window.innerWidth<=800?.32:.26),ratio=Math.min(boxW/previewLogo.naturalWidth,boxH/previewLogo.naturalHeight),drawW=previewLogo.naturalWidth*ratio,drawH=previewLogo.naturalHeight*ratio;
+        context.save();context.translate(w*logoX/100,h*logoY/100);context.rotate(-5*Math.PI/180);context.drawImage(previewLogo,-drawW/2,-drawH/2,drawW,drawH);context.restore();
+      }
+      const name=detail?.value.trim()||"İSMİN",fontSize=Math.round(w*.073),nameX=logoFile?.60:.55,nameY=logoFile?.50:.49,nameWidth=logoFile?.48:.69;
+      context.save();context.translate(w*nameX,h*nameY);context.rotate(-5*Math.PI/180);context.fillStyle=textColor;context.textAlign="center";context.textBaseline="middle";context.font="800 "+fontSize+"px Manrope, Arial, sans-serif";context.fillText(name.toLocaleUpperCase("tr-TR"),0,0,w*nameWidth);context.restore();
+      context.restore();
+      const sweep=(Math.sin(elapsed*.004)+1)/2,headX=w*(.19+.77*sweep),headT=(headX/w-.19)/.77,headY=leftFront+(rightFront-leftFront)*headT,angle=Math.atan2(rightFront-leftFront,w*.77);
+      context.save();context.translate(ox,oy);context.scale(scale,scale);context.shadowColor="#c7fa5f";context.shadowBlur=18;context.strokeStyle="#d9ff8a";context.lineWidth=2;context.beginPath();context.moveTo(w*.19,leftFront);context.lineTo(w*.96,rightFront);context.stroke();context.shadowBlur=0;context.translate(headX,headY);context.rotate(angle);context.fillStyle="#e9ffc1";context.fillRect(-5,-10,10,17);context.fillStyle="#c7fa5f";context.fillRect(-2,5,4,8);context.restore();
+      context.restore();
+    }
+    function animatePrint(now){
+      const duration=reduced.matches?900:7200,progress=Math.min(1,(now-printStartedAt)/duration);
+      drawPrintFrame(progress,now-printStartedAt);
+      const percent=Math.round(progress*100),layer=Math.min(120,Math.round(progress*120));
+      if(printProgress){printProgress.setAttribute("aria-valuenow",String(percent));printProgress.style.setProperty("--print-progress",percent+"%");}
+      if(printStatus){printStatus.innerHTML="KATMAN "+String(layer).padStart(3,"0")+" / 120 <strong>"+percent+"%</strong>";}
+      if(progress<1)printFrame=requestAnimationFrame(animatePrint);
+      else if(printStatus){printStatus.innerHTML='BASKI TAMAMLANDI <strong>100%</strong>';printWhatsApp.hidden=false;printWhatsApp.href=button.href;}
+    }
+    printStartButton?.addEventListener("click",()=>{
+      if(!baseImage?.complete||!baseImage.naturalWidth){if(logoStatus)logoStatus.textContent="Görsel yükleniyor; tekrar dene.";return;}
+      updateQuote();printWhatsApp.hidden=true;printStartedAt=performance.now();
+      if(typeof printDialog.showModal==="function")printDialog.showModal();
+      else printDialog.setAttribute("open","");
+      cancelAnimationFrame(printFrame);printFrame=requestAnimationFrame(animatePrint);
+    });
+    printClose?.addEventListener("click",()=>printDialog.close());
+    printDialog?.addEventListener("close",()=>{cancelAnimationFrame(printFrame);printFrame=0;});
     updateQuote();
   });
 
