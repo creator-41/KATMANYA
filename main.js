@@ -344,7 +344,7 @@
     const logoStatus=slide.querySelector(".nameplate-upload-status");
     const downloadPreview=slide.querySelector(".nameplate-download");
     const baseImage=slide.querySelector(".nameplate-base");
-     let logoUrl="",logoFile=null,logoX=36,logoY=49,surfaceColor="#c7fa5f",textColor="#101212";
+    let logoUrl="",logoFile=null,logoX=36,logoY=49,surfaceColor="#c7fa5f",textColor="#101212";
     if(!button||!color||!quantity)return;
     const product=button.dataset.quoteProduct||"Ürün";
     const updateQuote=()=>{
@@ -429,7 +429,7 @@
         ctx.save();ctx.translate(w*logoX/100,h*logoY/100);ctx.rotate(-5*Math.PI/180);ctx.drawImage(previewLogo,-drawW/2,-drawH/2,drawW,drawH);ctx.restore();
       }
       const name=detail?.value.trim()||"İSMİN",fontSize=Math.round(w*.073);
-      const nameCenterX=logoFile?.68:.55,nameCenterY=logoFile?.50:.49,nameWidth=logoFile?.50:.69;
+      const nameCenterX=logoFile?.69:.55,nameCenterY=logoFile?.50:.49,nameWidth=logoFile?.48:.69;
       ctx.save();ctx.translate(w*nameCenterX,h*nameCenterY);ctx.rotate(-5*Math.PI/180);ctx.fillStyle=textColor;ctx.textAlign="center";ctx.textBaseline="middle";ctx.font="800 "+fontSize+"px Manrope, Arial, sans-serif";ctx.fillText(name.toLocaleUpperCase("tr-TR"),0,0,w*nameWidth);ctx.restore();
       canvas.toBlob(blob=>{
         if(!blob){if(logoStatus)logoStatus.textContent="PNG oluşturulamadı.";return;}
