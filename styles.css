@@ -218,5 +218,5 @@ body{max-width:100%;touch-action:pan-y}
 @media(max-width:800px){.product-visual.nameplate-preview .nameplate-photo>img.nameplate-logo{width:22%;height:32%}}
 
 /* Keep the plaque name beside an uploaded logo on the printed face. */
-.product-visual.nameplate-preview .nameplate-photo.has-logo .nameplate-model-name{left:69%;top:50%;width:48%;transition:color .3s ease,left .25s ease,top .25s ease,width .25s ease}
+.product-visual.nameplate-preview .nameplate-photo.has-logo .nameplate-model-name{left:60%;top:50%;width:48%;transition:color .3s ease,left .25s ease,top .25s ease,width .25s ease}
 .product-visual.nameplate-preview .nameplate-photo.has-logo>img.nameplate-logo{left:36%;top:49%}
