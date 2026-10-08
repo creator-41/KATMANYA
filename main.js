@@ -607,10 +607,6 @@
   const installPromptAccept=document.querySelector("#install-prompt-accept");
   const installPromptLater=document.querySelector("#install-prompt-later");
   const installPromptSnoozeKey="katmanya-install-prompt-until";
-  try {
-    const legacySnooze=localStorage.getItem("sarp-install-prompt-until");
-    if(legacySnooze&&!localStorage.getItem(installPromptSnoozeKey))localStorage.setItem(installPromptSnoozeKey,legacySnooze);
-  } catch {}
   const installPromptSnoozeMs=12*60*60*1000;
   let installPromptEvent=null;
   let appIsInstalled=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;

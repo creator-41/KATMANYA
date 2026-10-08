@@ -1,11 +1,11 @@
-const CACHE_NAME = "katmanya-shell-v1";
+const CACHE_NAME = "katmanya-shell-v2";
 const BASE = self.registration.scope;
 const CORE_ASSETS = [
   "./",
   "./index.html",
   "./manifest.webmanifest?v=katmanya-1",
   "./styles.css?v=65",
-  "./main.js?v=38",
+  "./main.js?v=39",
   "./chatbot.js?v=19",
   "./assets/chat-notification.wav",
   "./assets/desk-set.webp",
@@ -31,7 +31,7 @@ self.addEventListener("install", event => {
 self.addEventListener("activate", event => {
   event.waitUntil((async () => {
     const keys = await caches.keys();
-    await Promise.all(keys.filter(key => (key.startsWith("fav-baski-shell-") || key.startsWith("sarp-shell-") || key.startsWith("katmanya-shell-")) && key !== CACHE_NAME).map(key => caches.delete(key)));
+    await Promise.all(keys.filter(key => key.startsWith("katmanya-shell-") && key !== CACHE_NAME).map(key => caches.delete(key)));
     await self.clients.claim();
   })());
 });
