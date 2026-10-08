@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101212">
+  <meta name="robots" content="noindex">
+  <title>Katmanlar arasında kayboldun — KATMANYA</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/katmanya-icon.svg">
+  <link rel="apple-touch-icon" href="/assets/katmanya-180.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/lost-page.css?v=1">
+  <script src="/lost-printer.js?v=1" defer></script>
+</head>
+<body>
+  <header class="lost-header">
+    <a class="lost-brand" href="/" aria-label="KATMANYA ana sayfa"><img src="/assets/katmanya-logo.svg" width="631" height="128" alt="KATMANYA"></a>
+    <a class="atelier-link" href="/">Atölyeye dön <span aria-hidden="true">↗</span></a>
+  </header>
+  <main class="lost-main">
+    <section class="lost-copy" aria-labelledby="lost-title">
+      <p class="lost-eyebrow"><span class="status-dot" aria-hidden="true"></span> BU KATMANI BULAMADIK</p>
+      <h1 id="lost-title">Katmanlar<br>arasında<br><em>kayboldun.</em></h1>
+      <p class="lost-description">Aradığın sayfa burada yok. Yazıcı da biraz dağıldı… Seni sağlam bir katmana geri götürelim.</p>
+      <a class="home-button" href="/"><span aria-hidden="true">←</span> Ana sayfaya dön</a>
+    </section>
+    <figure class="lost-scene" aria-label="Arızalanmış atölye yazıcısı">
+      <div class="scene-glow" aria-hidden="true"></div>
+      <img class="printer-fallback" src="/assets/lost-printer.png" width="900" height="900" alt="Kırık bir taşıyıcısı olan, baskısı yarım kalmış KATMANYA yazıcısı">
+      <canvas id="lost-printer" role="img" aria-label="Baskısı yarım kalmış yazıcı: kafa takılıyor ve küçük kıvılcımlar çıkarıyor"></canvas>
+      <span class="printer-badge" aria-hidden="true">KATMANYA</span>
+      <div class="scene-readout" aria-hidden="true">
+        <span class="readout-title"><span class="status-dot"></span> BASKI YARIDA KALDI</span>
+        <div class="stalled-track"><span></span><i></i></div>
+        <span class="readout-note">BİR KATMAN EKSİK.</span>
+      </div>
+      <button class="motion-toggle" type="button" aria-pressed="false" hidden><span class="motion-icon" aria-hidden="true">Ⅱ</span><span class="motion-label">Hareketi durdur</span></button>
+    </figure>
+  </main>
+  <footer class="lost-footer"><span>KATMANYA / 3D BASKI ATÖLYESİ</span><span>YENİ BİR KATMANDA GÖRÜŞELİM.</span></footer>
+</body>
+</html>
