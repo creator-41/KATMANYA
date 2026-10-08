@@ -394,6 +394,18 @@ body{max-width:100%;touch-action:pan-y}
 }
 @media(prefers-reduced-motion:reduce){.desk-piece,.desk-part-button{transition:none}}
 
+/* Keep the desktop preview compact, with its label and actions on either side. */
+@media(min-width:801px){
+  .chapter[data-chapter="2"] .product-action-row{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;align-items:start}
+  .chapter[data-chapter="2"] .product-action-row>.product-cta{grid-row:2;justify-self:start}
+  .chapter[data-chapter="2"] .product-action-row>.nameplate-preview{grid-row:1;display:grid;grid-template-columns:minmax(68px,.8fr) minmax(0,1.3fr) minmax(110px,1fr);grid-template-rows:auto;gap:10px;align-items:center;justify-items:stretch;width:100%;max-width:480px;height:auto;flex:initial}
+  .chapter[data-chapter="2"] .nameplate-preview .nameplate-photo{grid-column:2;grid-row:1;width:100%;max-width:150px;height:auto;justify-self:center}
+  .chapter[data-chapter="2"] .nameplate-preview-tag{position:static;grid-column:1;grid-row:1;justify-self:start;white-space:nowrap;font-size:7px;letter-spacing:.035em}
+  .chapter[data-chapter="2"] .nameplate-preview figcaption{grid-column:3;grid-row:1;display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:5px;width:100%;margin:0;font-size:7px;letter-spacing:.04em}
+  .chapter[data-chapter="2"] .nameplate-preview figcaption>span:first-child{text-align:center;white-space:nowrap;font:7px var(--mono);letter-spacing:.015em}
+  .chapter[data-chapter="2"] .nameplate-preview .nameplate-logo-edit,.chapter[data-chapter="2"] .nameplate-preview .nameplate-print-start,.chapter[data-chapter="2"] .nameplate-preview .nameplate-download{width:100%;min-width:0;min-height:26px;padding:5px 7px;font-size:7px;letter-spacing:0;justify-content:center;white-space:nowrap}
+}
+
 /* On phones, keep the nameplate caption and actions beside its live preview. */
 @media(max-width:800px){
   .chapter[data-chapter="2"] .product-action-row{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;align-items:start}
