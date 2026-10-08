@@ -87,10 +87,15 @@
 @media(max-width:800px){#quote-chat{right:15px;bottom:calc(14px + env(safe-area-inset-bottom) + var(--chat-keyboard-offset,0px))}#quote-chat.is-open{position:fixed;top:var(--chat-visual-top,0px);right:auto;bottom:auto;left:0;width:100%;height:var(--chat-visible-height,100dvh);pointer-events:none}#quote-chat.is-open .quote-chat-toggle{display:none}.quote-chat-panel{position:fixed;left:50%;right:auto;top:var(--chat-visual-center,50vh);bottom:auto;transform:translate(-50%,-50%);width:min(420px,calc(100vw - 24px));height:min(540px,calc(var(--chat-visible-height,100dvh) - 24px));max-height:calc(var(--chat-visible-height,100dvh) - 24px);min-height:0;pointer-events:auto}.quote-chat-toggle{padding:12px 15px;font-size:12px}.quote-chat-controls{max-height:40%}.chat-answer-form input{font-size:16px}}
 
 
-/* SARP brand artwork: fixed proportions preserve its shape in every viewport. */
-.sarp-brand{display:block;width:145px;height:auto;flex-shrink:0}
-@media(max-width:800px){.sarp-brand{width:126px}}
-@media(max-width:360px){.sarp-brand{width:112px}}
+/* KATMANYA brand artwork: fixed proportions preserve its shape in every viewport. */
+.katmanya-brand{display:block;width:225px;height:auto;flex-shrink:0}
+@media(max-width:800px){.katmanya-brand{width:clamp(144px,43vw,180px)}}
+@media(max-width:360px){.katmanya-brand{width:144px}}
+@media(min-width:801px) and (max-width:1100px){
+  .katmanya-brand{width:clamp(158px,19vw,210px)}
+  .topbar nav{gap:clamp(10px,2vw,24px);font-size:10px}
+  .topbar .install-app{padding:9px 10px;font-size:9px}
+}
 
 /* Keep the installed app layout stable and prevent iOS input-focus zoom. */
 html{overflow-x:clip;overscroll-behavior-x:none;touch-action:pan-y}

@@ -242,7 +242,7 @@
       box([x-.04,1.53,z+.09],[.022,2.66,.014],colors.silver);
       box([x+.04,1.53,z+.09],[.022,2.66,.014],colors.dark);
     }
-    // Upper rectangular frame; the front rail carries SARP's custom badge.
+    // Upper rectangular frame; the front rail carries KATMANYA's custom badge.
     box([0,2.91,-.94],[2.4,.18,.18],colors.frame);
     box([0,2.91,.94],[2.4,.18,.18],colors.frame);
     for(const x of [-1.12,1.12])box([x,2.91,0],[.18,.18,1.9],colors.frame);
@@ -329,7 +329,7 @@
   window.scrollTo({top:0,left:0,behavior:'instant'});
   measure();render(0);
   const briefCopy=document.querySelector("#brief-copy");
-  briefCopy?.addEventListener("click",async()=>{const text="SARP teklif talebi\n\nÜrün/fikir: \nÖlçüler: \nAdet: \nKullanım amacı: \nRenk tercihi: \nFotoğraf veya 3B dosya: ";const status=document.querySelector("#copy-status");try{await navigator.clipboard.writeText(text);status.textContent="Mesaj taslağı kopyalandı; bilgilerini doldurup bize gönderebilirsin.";}catch{status.textContent="Kopyalama desteklenmiyor. Bilgi listesini kullanarak mesajını hazırlayabilirsin.";} });
+  briefCopy?.addEventListener("click",async()=>{const text="KATMANYA teklif talebi\n\nÜrün/fikir: \nÖlçüler: \nAdet: \nKullanım amacı: \nRenk tercihi: \nFotoğraf veya 3B dosya: ";const status=document.querySelector("#copy-status");try{await navigator.clipboard.writeText(text);status.textContent="Mesaj taslağı kopyalandı; bilgilerini doldurup bize gönderebilirsin.";}catch{status.textContent="Kopyalama desteklenmiyor. Bilgi listesini kullanarak mesajını hazırlayabilirsin.";} });
   document.querySelectorAll(".product-slide").forEach(slide=>{
     const button=slide.querySelector(".product-cta");
     const color=slide.querySelector(".quote-color");
@@ -389,7 +389,7 @@
         if(previewName)previewName.style.top=logoFile?"50%":"49%";
         previewPhoto?.setAttribute("aria-label",(detailValue==="Mesajda paylaşacağım"?"İsmin":detailValue)+" yazılı "+(color.value||"yeşil")+" renk plakalık önizlemesi");
       }
-      let message=`Merhaba SARP, ${product} için fiyat almak istiyorum.`;
+      let message=`Merhaba KATMANYA, ${product} için fiyat almak istiyorum.`;
       if(product==="İsimli plakalık") message+=`\nPlakada yer alacak isim: ${detailValue}`;
       if(product==="İsimli plakalık"&&logoFile) message+="\nLogo/arma: WhatsApp sohbetine ayrıca ekleyeceğim.";
       if(product==="İhtiyacına özel parça") message+=`\nÖlçüler: ${detailValue}\nFotoğraf: Bu sohbete ekleyeceğim.`;
@@ -534,7 +534,7 @@
       canvas.toBlob(blob=>{
         if(!blob){if(logoStatus)logoStatus.textContent="PNG oluşturulamadı.";return;}
         const link=document.createElement("a"),url=URL.createObjectURL(blob),safeName=(detail?.value.trim()||"plakalik").replace(/[^a-z0-9-_]/gi,"-").slice(0,28)||"plakalik";
-        link.href=url;link.download="sarp-"+safeName+".png";link.click();setTimeout(()=>URL.revokeObjectURL(url),1500);
+        link.href=url;link.download="katmanya-"+safeName+".png";link.click();setTimeout(()=>URL.revokeObjectURL(url),1500);
         if(logoStatus)logoStatus.textContent="Önizleme PNG olarak indirildi.";
       },"image/png");
     });
@@ -606,7 +606,11 @@
   const installPromptDialog=document.querySelector("#install-prompt");
   const installPromptAccept=document.querySelector("#install-prompt-accept");
   const installPromptLater=document.querySelector("#install-prompt-later");
-  const installPromptSnoozeKey="sarp-install-prompt-until";
+  const installPromptSnoozeKey="katmanya-install-prompt-until";
+  try {
+    const legacySnooze=localStorage.getItem("sarp-install-prompt-until");
+    if(legacySnooze&&!localStorage.getItem(installPromptSnoozeKey))localStorage.setItem(installPromptSnoozeKey,legacySnooze);
+  } catch {}
   const installPromptSnoozeMs=12*60*60*1000;
   let installPromptEvent=null;
   let appIsInstalled=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;

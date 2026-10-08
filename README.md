@@ -1,19 +1,23 @@
-# SARP 3D
+# KATMANYA
 
-SARP 3D baskı atölyesi için etkileşimli, mobil uyumlu web sitesi başlangıç sürümü.
+KATMANYA 3D baskı atölyesinin mobil uyumlu web sitesi.
 
-## İlk taslakta olanlar
+Yayın: https://katmanya.com/
 
-- Kaydırdıkça açılan bölümler ve aşama anlatımı
-- Hafif CSS tabanlı 3D görseller ve ürün vitrin kartları
-- Mobil uyumlu tasarım ve hareket azaltma tercihi desteği
-- Supabase ile teklif formu, dosya yükleme ve yönetim ekranına hazır başlangıç
+Statik HTML, CSS ve JavaScript ile çalışır; GitHub Pages üzerinden yayımlanır.
+İsimli plakalıkta isim, renk ve logo önizlemesi; büyük logo yerleştirme ekranı;
+baskı simülasyonu ve PNG indirme bulunur. Teklif asistanı bilgileri hazırlayıp
+işletmenin WhatsApp sohbetine yönlendirir. Seçilen dosyalar cihazda kalır.
 
-## Sıradaki adımlar
+## Marka
 
-1. Marka adı, iletişim bilgisi ve gerçek baskı örneklerini eklemek.
-2. Supabase projesini açıp teklif formu, dosya yükleme ve yönetim ekranını bağlamak.
-3. GitHub Pages yayınını yapılandırmak.
+Katmanlı küp amblemi `assets/katmanya-mark.svg`, yatay logo
+`assets/katmanya-logo.svg` dosyasındadır. SVG logosundaki yazı konturlara
+dönüştürülmüştür; ayrı bir yazı tipi dosyası yüklemez. PWA simgeleri ve
+sosyal bağlantı görseli aynı amblemden hazırlanmıştır.
 
-Teklif butonundaki iletişim bağlantısı ve örnek vitrin görselleri, işletme bilgileri netleşince tamamlanacak.
+## Alan adı
 
+`CNAME` dosyası `katmanya.com` alan adını tanımlar. Kök alan adı için A
+kayıtları GitHub Pages IP adreslerine; `www` CNAME kaydı
+`creator-41.github.io` adresine yönelir. Site içi dosya yolları görecelidir.
