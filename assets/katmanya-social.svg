@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">KATMANYA</title>
+  <desc id="desc">Yeşil katmanlı küp logosu ve altında KATMANYA yazısı.</desc>
+  <rect width="1200" height="630" fill="#101212"/>
+  <g transform="translate(479.6 101.4) scale(2.15)"><g xmlns="http://www.w3.org/2000/svg">
+<path fill="#c7fa5f" d="M56 4 104 28 56 52 8 28Z" />
+<path fill="#c7fa5f" d="M8 34 56 58V76L8 52Z M8 58 56 82V100L8 76Z M8 82 56 106V124L8 100Z" />
+<path fill="#526f1d" d="M56 58 104 34V52L56 76Z M56 82 104 58V76L56 100Z M56 106 104 82V100L56 124Z" />
+</g></g>
+  <g transform="translate(147.030733 399.807758) scale(1.193508)"><g xmlns="http://www.w3.org/2000/svg" fill="#f3f1ec"><path transform="translate(132.000 96) scale(0.044444 -0.044444)" d="M140 0V1440H412V776L960 1440H1292L690 730L1330 0H986L412 656V0Z" /><path transform="translate(190.811 96) scale(0.044444 -0.044444)" d="M40 0 480 1440H886L1326 0H1046L654 1270H706L320 0ZM304 300V554H1064V300Z" /><path transform="translate(251.222 96) scale(0.044444 -0.044444)" d="M474 0V1186H20V1440H1200V1186H746V0Z" /><path transform="translate(305.144 96) scale(0.044444 -0.044444)" d="M140 0V1440H384L860 484L1336 1440H1580V0H1326V860L908 0H812L394 860V0Z" /><path transform="translate(381.289 96) scale(0.044444 -0.044444)" d="M40 0 480 1440H886L1326 0H1046L654 1270H706L320 0ZM304 300V554H1064V300Z" /><path transform="translate(441.700 96) scale(0.044444 -0.044444)" d="M140 0V1440H416L1042 480V1440H1318V0H1042L416 960V0Z" /><path transform="translate(506.200 96) scale(0.044444 -0.044444)" d="M492 0V586L0 1440H318L630 898L942 1440H1260L768 586V0Z" /><path transform="translate(561.900 96) scale(0.044444 -0.044444)" d="M40 0 480 1440H886L1326 0H1046L654 1270H706L320 0ZM304 300V554H1064V300Z" /></g></g>
+</svg>
