@@ -456,15 +456,14 @@
       context.setTransform(dpr,0,0,dpr,0,0);context.clearRect(0,0,rect.width,rect.height);
       const w=baseImage.naturalWidth,h=baseImage.naturalHeight,scale=Math.min(rect.width/w,rect.height/h),ox=(rect.width-w*scale)/2,oy=(rect.height-h*scale)/2;
       context.save();context.translate(ox,oy);context.scale(scale,scale);context.drawImage(baseImage,0,0,w,h);
-      const face=()=>{context.beginPath();context.moveTo(w*.13,h*.38);context.lineTo(w*.91,h*.27);context.lineTo(w*.96,h*.57);context.lineTo(w*.19,h*.72);context.closePath();};
+      const buildLine=t=>({left:[w*(.19-.06*t),h*(.72-.34*t)],right:[w*(.96-.05*t),h*(.57-.30*t)]});
+      const bottom=buildLine(0),top=buildLine(1);
+      const face=()=>{context.beginPath();context.moveTo(...top.left);context.lineTo(...top.right);context.lineTo(...bottom.right);context.lineTo(...bottom.left);context.closePath();};
       context.save();face();context.clip();context.fillStyle="#0b100b";context.globalAlpha=.52;context.fillRect(0,0,w,h);context.restore();
       const desktopPrint=window.innerWidth>800;
-      const leftFront=h*(.72-.34*progress);
-      const rightFront=h*(.57-.30*progress);
-      const carrierLeft=leftFront;
-      const carrierRight=rightFront;
+      const front=buildLine(progress);
       context.save();face();context.clip();context.beginPath();
-      context.moveTo(w*.19,leftFront);context.lineTo(w*.96,rightFront);context.lineTo(w*.96,h*.57);context.lineTo(w*.19,h*.72);
+      context.moveTo(...front.left);context.lineTo(...front.right);context.lineTo(...bottom.right);context.lineTo(...bottom.left);
       context.closePath();context.clip();
       context.drawImage(baseImage,0,0,w,h);
       context.globalCompositeOperation="multiply";context.globalAlpha=color.value==="Beyaz"?.24:.58;context.fillStyle=surfaceColor;context.fillRect(0,0,w,h);
@@ -473,9 +472,8 @@
       const layerCount=Math.round(progress*120);
       for(let layer=2;layer<layerCount;layer+=3){
         const t=layer/120;
-        const yL=h*(.72-.34*t);
-        const yR=h*(.57-.30*t);
-        context.beginPath();context.moveTo(w*.19,yL);context.lineTo(w*.96,yR);context.stroke();
+        const layerLine=buildLine(t);
+        context.beginPath();context.moveTo(...layerLine.left);context.lineTo(...layerLine.right);context.stroke();
       }
       if(previewLogo&&!previewLogo.hidden&&previewLogo.complete&&previewLogo.naturalWidth){
         const boxW=w*(window.innerWidth<=800?.22:.17),boxH=h*(window.innerWidth<=800?.32:.26),ratio=Math.min(boxW/previewLogo.naturalWidth,boxH/previewLogo.naturalHeight),drawW=previewLogo.naturalWidth*ratio,drawH=previewLogo.naturalHeight*ratio;
@@ -484,10 +482,10 @@
       const name=detail?.value.trim()||"İSMİN",fontSize=Math.round(w*.073),nameX=logoFile?.60:.55,nameY=logoFile?.50:.49,nameWidth=logoFile?.48:.69;
       context.save();context.translate(w*nameX,h*nameY);context.rotate(-5*Math.PI/180);context.fillStyle=textColor;context.textAlign="center";context.textBaseline="middle";context.font="800 "+fontSize+"px Manrope, Arial, sans-serif";context.fillText(name.toLocaleUpperCase("tr-TR"),0,0,w*nameWidth);context.restore();
       context.restore();
-      const sweep=desktopPrint?(Math.sin(elapsed*.004-Math.PI/2)+1)/2:(Math.sin(elapsed*.004)+1)/2,headX=w*(.19+.77*sweep),headT=(headX/w-.19)/.77,headY=carrierLeft+(carrierRight-carrierLeft)*headT,angle=Math.atan2(carrierRight-carrierLeft,w*.77);
+      const sweep=desktopPrint?(Math.sin(elapsed*.004-Math.PI/2)+1)/2:(Math.sin(elapsed*.004)+1)/2,headX=front.left[0]+(front.right[0]-front.left[0])*sweep,headY=front.left[1]+(front.right[1]-front.left[1])*sweep,angle=Math.atan2(front.right[1]-front.left[1],front.right[0]-front.left[0]);
       // The image transform is already active for the carrier and nozzle.
       context.save();
-      context.shadowColor="#c7fa5f";context.shadowBlur=18;context.strokeStyle="#d9ff8a";context.lineWidth=2;context.beginPath();context.moveTo(w*.19,carrierLeft);context.lineTo(w*.96,carrierRight);context.stroke();context.shadowBlur=0;context.translate(headX,headY);context.rotate(angle);context.fillStyle="#e9ffc1";context.fillRect(-5,-18,10,13);context.fillStyle="#c7fa5f";context.fillRect(-2,-5,4,6);context.restore();
+      context.shadowColor="#c7fa5f";context.shadowBlur=18;context.strokeStyle="#d9ff8a";context.lineWidth=2;context.beginPath();context.moveTo(...front.left);context.lineTo(...front.right);context.stroke();context.shadowBlur=0;context.translate(headX,headY);context.rotate(angle);context.fillStyle="#e9ffc1";context.fillRect(-5,-18,10,13);context.fillStyle="#c7fa5f";context.fillRect(-2,-5,4,6);context.restore();
       context.restore();
     }
     function animatePrint(now){
