@@ -341,6 +341,7 @@
     const previewLogo=slide.querySelector(".nameplate-logo");
     const logoInput=slide.querySelector(".nameplate-logo-input");
     const logoRemove=slide.querySelector(".nameplate-logo-remove");
+    const logoEdit=slide.querySelector(".nameplate-logo-edit");
     const logoStatus=slide.querySelector(".nameplate-upload-status");
     const downloadPreview=slide.querySelector(".nameplate-download");
     const baseImage=slide.querySelector(".nameplate-base");
@@ -351,8 +352,17 @@
     const printProgress=printDialog?.querySelector(".nameplate-print-progress");
     const printStatus=printDialog?.querySelector(".nameplate-print-status");
     const printWhatsApp=printDialog?.querySelector(".nameplate-print-whatsapp");
+    const logoDialog=document.querySelector(".nameplate-logo-dialog");
+    const editorPhoto=logoDialog?.querySelector(".nameplate-editor-photo");
+    const editorLogo=logoDialog?.querySelector(".nameplate-editor-logo");
+    const editorImage=editorLogo?.querySelector("img");
+    const editorName=editorPhoto?.querySelector(".nameplate-model-name");
+    const editorTint=editorPhoto?.querySelector(".nameplate-tint");
+    const editorSize=logoDialog?.querySelector(".nameplate-editor-size input");
+    const editorSizeOutput=logoDialog?.querySelector(".nameplate-editor-size output");
     let printFrame=0,printStartedAt=0;
-    let logoUrl="",logoFile=null,logoX=36,logoY=49,surfaceColor="#c7fa5f",textColor="#101212";
+    let logoUrl="",logoFile=null,logoX=36,logoY=49,logoScale=1,surfaceColor="#c7fa5f",textColor="#101212";
+    let editorDraft=null,editorScrollY=null,editorBodyStyle=null,pendingLogoEdit=false;
     if(!button||!color||!quantity)return;
     const product=button.dataset.quoteProduct||"Ürün";
     const updateQuote=()=>{
@@ -390,7 +400,77 @@
     quantity.addEventListener("input",updateQuote);
     detail?.addEventListener("input",updateQuote);
     button.addEventListener("click",updateQuote);
+    function logoBox(scale=logoScale){
+      const mobile=window.innerWidth<=800;
+      return {width:(mobile?22:17)*scale,height:(mobile?32:26)*scale};
+    }
+    function positionLogo(element,placement){
+      const box=logoBox(placement.scale);
+      element.style.left=placement.x+"%";element.style.top=placement.y+"%";
+      element.style.width=box.width+"%";element.style.height=box.height+"%";
+    }
+    function syncLogoPreview(){
+      if(previewLogo&&logoFile)positionLogo(previewLogo,{x:logoX,y:logoY,scale:logoScale});
+    }
+    function logoDrawSize(w,h){
+      const box=logoBox(),ratio=Math.min(w*box.width/100/previewLogo.naturalWidth,h*box.height/100/previewLogo.naturalHeight);
+      return {drawW:previewLogo.naturalWidth*ratio,drawH:previewLogo.naturalHeight*ratio};
+    }
+    function renderLogoEditor(){
+      if(!editorDraft)return;
+      positionLogo(editorLogo,editorDraft);
+      editorSize.value=String(Math.round(editorDraft.scale*100));editorSizeOutput.value=editorSize.value+"%";
+      editorName.textContent=previewName.textContent;editorName.style.color=textColor;
+      editorName.style.fontSize=editorPhoto.getBoundingClientRect().width*.073+"px";
+      editorTint.style.backgroundColor=surfaceColor;editorTint.style.opacity=preview.style.opacity;
+    }
+    function openLogoEditor(){
+      if(!logoFile||!previewLogo.complete||!previewLogo.naturalWidth||!logoDialog||logoDialog.open)return;
+      editorDraft={x:logoX,y:logoY,scale:logoScale};
+      editorImage.src=logoUrl;
+      editorScrollY=window.scrollY;
+      editorBodyStyle={position:document.body.style.position,top:document.body.style.top,width:document.body.style.width};
+      document.body.style.position="fixed";document.body.style.top=-editorScrollY+"px";document.body.style.width="100%";
+      logoDialog.showModal();renderLogoEditor();editorLogo.focus({preventScroll:true});
+    }
+    function finishLogoEditor(){
+      editorDraft=null;
+      if(editorBodyStyle){
+        Object.assign(document.body.style,editorBodyStyle);editorBodyStyle=null;
+        const scrollY=editorScrollY;editorScrollY=null;
+        window.scrollTo({top:scrollY,left:0,behavior:"instant"});
+        requestAnimationFrame(()=>{if(!logoDialog.open&&!logoEdit.hidden)logoEdit.focus({preventScroll:true});});
+      }
+    }
+    function moveEditorLogo(dx,dy){
+      if(!editorDraft)return;
+      editorDraft.x=Math.max(19,Math.min(91,editorDraft.x+dx));
+      editorDraft.y=Math.max(31,Math.min(68,editorDraft.y+dy));renderLogoEditor();
+    }
+    function bindLogoDrag(target,photo,read,write){
+      let drag=null;
+      target.addEventListener("pointerdown",event=>{
+        const placement=read();
+        if(!placement||!event.isPrimary||event.button!==0)return;
+        const rect=photo.getBoundingClientRect();if(!rect.width||!rect.height)return;
+        event.preventDefault();target.setPointerCapture(event.pointerId);
+        drag={id:event.pointerId,clientX:event.clientX,clientY:event.clientY,x:placement.x,y:placement.y,rect};
+      });
+      target.addEventListener("pointermove",event=>{
+        if(!drag||event.pointerId!==drag.id)return;
+        const x=Math.max(19,Math.min(91,drag.x+(event.clientX-drag.clientX)/drag.rect.width*100));
+        const y=Math.max(31,Math.min(68,drag.y+(event.clientY-drag.clientY)/drag.rect.height*100));
+        write(x,y);
+      });
+      const finish=event=>{
+        if(!drag||event.pointerId!==drag.id)return;
+        drag=null;if(target.hasPointerCapture(event.pointerId))target.releasePointerCapture(event.pointerId);
+      };
+      target.addEventListener("pointerup",finish);target.addEventListener("pointercancel",finish);target.addEventListener("lostpointercapture",finish);
+    }
     if(logoInput&&previewLogo){
+      previewLogo.addEventListener("load",()=>{if(pendingLogoEdit){pendingLogoEdit=false;openLogoEditor();}});
+      previewLogo.addEventListener("error",()=>{pendingLogoEdit=false;logoRemove.click();logoStatus.textContent="Görsel açılamadı; başka bir PNG/JPG/WebP seç.";});
       logoInput.addEventListener("change",()=>{
         const file=logoInput.files?.[0];
         if(!file)return;
@@ -400,30 +480,42 @@
           return;
         }
         if(logoUrl)URL.revokeObjectURL(logoUrl);
-        logoUrl=URL.createObjectURL(file);logoFile=file;logoX=36;logoY=49;
-        previewLogo.src=logoUrl;previewLogo.style.left=logoX+"%";previewLogo.style.top=logoY+"%";previewLogo.hidden=false;
+        logoUrl=URL.createObjectURL(file);logoFile=file;logoX=36;logoY=49;logoScale=1;pendingLogoEdit=true;
+        previewLogo.src=logoUrl;previewLogo.hidden=false;syncLogoPreview();
         if(logoRemove)logoRemove.hidden=false;
-        if(logoStatus)logoStatus.textContent="Logoyu sürükleyip yerleştir";
+        if(logoEdit)logoEdit.hidden=false;
+        if(logoStatus)logoStatus.textContent="Konumunu büyük ekranda ayarla";
         updateQuote();
       });
+      logoEdit.addEventListener("click",openLogoEditor);
+      logoDialog.querySelector(".nameplate-editor-close").addEventListener("click",()=>logoDialog.close());
+      logoDialog.querySelector(".nameplate-editor-cancel").addEventListener("click",()=>logoDialog.close());
+      logoDialog.addEventListener("close",finishLogoEditor);
+      logoDialog.querySelector(".nameplate-editor-done").addEventListener("click",()=>{
+        if(!editorDraft)return;
+        logoX=editorDraft.x;logoY=editorDraft.y;logoScale=editorDraft.scale;syncLogoPreview();
+        logoStatus.textContent="Logo yerleştirildi";logoDialog.close();
+      });
+      logoDialog.querySelector(".nameplate-editor-reset").addEventListener("click",()=>{editorDraft={x:36,y:49,scale:1};renderLogoEditor();});
+      editorSize.addEventListener("input",()=>{if(editorDraft){editorDraft.scale=Math.max(.5,Math.min(1.25,Number(editorSize.value)/100));renderLogoEditor();}});
+      const directions={left:[-1,0],right:[1,0],up:[0,-1],down:[0,1]};
+      logoDialog.querySelectorAll("[data-move]").forEach(control=>control.addEventListener("click",()=>moveEditorLogo(...directions[control.dataset.move])));
+      editorLogo.addEventListener("keydown",event=>{
+        const direction={ArrowLeft:"left",ArrowRight:"right",ArrowUp:"up",ArrowDown:"down"}[event.key];
+        if(!direction)return;event.preventDefault();
+        const step=event.shiftKey?5:1;moveEditorLogo(...directions[direction].map(value=>value*step));
+      });
+      bindLogoDrag(editorLogo,editorPhoto,()=>editorDraft,(x,y)=>{if(editorDraft){editorDraft.x=x;editorDraft.y=y;renderLogoEditor();}});
+      bindLogoDrag(previewLogo,previewPhoto,()=>logoFile?{x:logoX,y:logoY}:null,(x,y)=>{logoX=x;logoY=y;syncLogoPreview();});
+      window.addEventListener("resize",()=>{syncLogoPreview();if(logoDialog.open)renderLogoEditor();},{passive:true});
+      if("ResizeObserver" in window)new ResizeObserver(()=>{if(logoDialog.open)renderLogoEditor();}).observe(editorPhoto);
     }
     logoRemove?.addEventListener("click",()=>{
+      if(logoDialog.open)logoDialog.close();pendingLogoEdit=false;
       if(logoUrl)URL.revokeObjectURL(logoUrl);
-      logoUrl="";logoFile=null;logoInput.value="";previewLogo.hidden=true;previewLogo.removeAttribute("src");logoRemove.hidden=true;
+      logoUrl="";logoFile=null;logoScale=1;logoInput.value="";previewLogo.hidden=true;previewLogo.removeAttribute("src");logoRemove.hidden=true;logoEdit.hidden=true;editorImage.removeAttribute("src");
       if(logoStatus)logoStatus.textContent="Dosya cihazında kalır";
       updateQuote();
-    });
-    previewLogo?.addEventListener("pointerdown",event=>{
-      event.preventDefault();previewLogo.setPointerCapture(event.pointerId);
-      const rect=previewPhoto.getBoundingClientRect();
-      const move=pointerEvent=>{
-        logoX=Math.max(19,Math.min(91,(pointerEvent.clientX-rect.left)/rect.width*100));
-        logoY=Math.max(31,Math.min(68,(pointerEvent.clientY-rect.top)/rect.height*100));
-        previewLogo.style.left=logoX+"%";previewLogo.style.top=logoY+"%";
-      };
-      move(event);
-      const finish=()=>{previewLogo.removeEventListener("pointermove",move);previewLogo.removeEventListener("pointerup",finish);};
-      previewLogo.addEventListener("pointermove",move);previewLogo.addEventListener("pointerup",finish);
     });
     downloadPreview?.addEventListener("click",()=>{
       if(!baseImage?.complete||!baseImage.naturalWidth){if(logoStatus)logoStatus.textContent="Görsel yükleniyor; tekrar dene.";return;}
@@ -433,7 +525,7 @@
       ctx.save();ctx.beginPath();ctx.moveTo(w*.13,h*.38);ctx.lineTo(w*.91,h*.27);ctx.lineTo(w*.96,h*.57);ctx.lineTo(w*.19,h*.72);ctx.closePath();ctx.clip();
       ctx.globalCompositeOperation="multiply";ctx.globalAlpha=color.value==="Beyaz"?.24:.58;ctx.fillStyle=surfaceColor;ctx.fillRect(0,0,w,h);ctx.restore();
       if(previewLogo&&!previewLogo.hidden&&previewLogo.complete&&previewLogo.naturalWidth){
-        const boxW=w*.15,boxH=h*.22,ratio=Math.min(boxW/previewLogo.naturalWidth,boxH/previewLogo.naturalHeight),drawW=previewLogo.naturalWidth*ratio,drawH=previewLogo.naturalHeight*ratio;
+        const {drawW,drawH}=logoDrawSize(w,h);
         ctx.save();ctx.translate(w*logoX/100,h*logoY/100);ctx.rotate(-5*Math.PI/180);ctx.drawImage(previewLogo,-drawW/2,-drawH/2,drawW,drawH);ctx.restore();
       }
       const name=detail?.value.trim()||"İSMİN",fontSize=Math.round(w*.073);
@@ -476,7 +568,7 @@
         context.beginPath();context.moveTo(...layerLine.left);context.lineTo(...layerLine.right);context.stroke();
       }
       if(previewLogo&&!previewLogo.hidden&&previewLogo.complete&&previewLogo.naturalWidth){
-        const boxW=w*(window.innerWidth<=800?.22:.17),boxH=h*(window.innerWidth<=800?.32:.26),ratio=Math.min(boxW/previewLogo.naturalWidth,boxH/previewLogo.naturalHeight),drawW=previewLogo.naturalWidth*ratio,drawH=previewLogo.naturalHeight*ratio;
+        const {drawW,drawH}=logoDrawSize(w,h);
         context.save();context.translate(w*logoX/100,h*logoY/100);context.rotate(-5*Math.PI/180);context.drawImage(previewLogo,-drawW/2,-drawH/2,drawW,drawH);context.restore();
       }
       const name=detail?.value.trim()||"İSMİN",fontSize=Math.round(w*.073),nameX=logoFile?.60:.55,nameY=logoFile?.50:.49,nameWidth=logoFile?.48:.69;
@@ -586,4 +678,5 @@
   }
 
 })();
+
 

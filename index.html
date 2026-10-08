@@ -19,7 +19,7 @@
   <link rel="manifest" href="./manifest.webmanifest?v=sarp-1">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/sarp-192.png">
   <link rel="apple-touch-icon" href="./assets/sarp-180.png">
-  <link rel="stylesheet" href="styles.css?v=62">
+  <link rel="stylesheet" href="styles.css?v=63">
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#top" aria-label="SARP ana sayfa"><img class="sarp-brand" src="./assets/sarp-logo.svg" width="452" height="112" alt="SARP"></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a><a href="#sss">Sık sorulanlar</a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="SARP uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
@@ -63,7 +63,7 @@
     <span class="nameplate-model-name" aria-live="polite">İSMİN</span>
   </div>
   <span class="nameplate-preview-tag"><i></i> CANLI ÖNİZLEME</span>
-  <figcaption><span>İSMİNİ YAZ · RENGİ SEÇ</span><button class="nameplate-print-start" type="button">BASKIYI İZLE <span aria-hidden="true">↗</span></button><button class="nameplate-download" type="button">ÖNİZLEMEYİ İNDİR ↓</button></figcaption>
+  <figcaption><span>İSMİNİ YAZ · RENGİ SEÇ</span><button class="nameplate-logo-edit" type="button" hidden>LOGOYU YERLEŞTİR <span aria-hidden="true">↗</span></button><button class="nameplate-print-start" type="button">BASKIYI İZLE <span aria-hidden="true">↗</span></button><button class="nameplate-download" type="button">ÖNİZLEMEYİ İNDİR ↓</button></figcaption>
 </figure></div></article>
           <article class="chapter product-slide" data-chapter="3" aria-hidden="true"><h2>İhtiyacına <br><em>özel parça</em></h2><p class="chapter-desc product-desc">Fotoğrafı ve ölçüyü gönder; üretilebilirliğini birlikte değerlendirelim.</p><div class="product-options" aria-label="Teklif tercihleri"><label class="product-option product-detail-field"><span>ÖLÇÜLER</span><input class="quote-detail-input" type="text" maxlength="60" placeholder="Örn. 10 x 5 x 2 cm" aria-label="Özel parçanın ölçüleri"></label><label class="product-option"><span>RENK TERCİHİ</span><select class="quote-color" aria-label="Renk tercihi"><option value="">Henüz seçmedim</option><option value="Siyah">Siyah</option><option value="Beyaz">Beyaz</option><option value="Mavi">Mavi</option><option value="Yeşil">Yeşil</option><option value="Diğer renk">Diğer renk</option></select></label><label class="product-option product-quantity-field"><span>ADET</span><input class="quote-quantity" type="number" min="1" max="999" step="1" value="1" inputmode="numeric" aria-label="Ürün adedi"></label></div><p class="product-upload-hint">Fotoğrafı WhatsApp sohbetine ekleyebilirsin.</p><div class="product-action-row"><a class="button product-cta" data-quote-product="İhtiyacına özel parça" href="https://wa.me/905304815341?text=Merhaba%20SARP%2C%20%C3%B6l%C3%A7%C3%BCye%20g%C3%B6re%20%C3%B6zel%20par%C3%A7a%20i%C3%A7in%20fiyat%20almak%20istiyorum." target="_blank" rel="noopener noreferrer">WhatsApp'tan fiyat iste</a><figure class="product-visual"><img src="assets/dual-controller-stand.webp" alt="İki oyun kolunu taşıyan masaüstü tutucu tasarım örneği" loading="lazy"><figcaption>TASARIM ÖRNEĞİ</figcaption></figure></div></article>
                     <article class="chapter product-slide" data-chapter="4" aria-hidden="true"><h2>Toptan <br><em>üretimler</em></h2><p class="chapter-desc product-desc">Aynı üründen adetli baskı için ürün ve miktarı ilet; birlikte planlayalım.</p><div class="product-action-row"><a class="button product-cta" href="https://wa.me/905304815341?text=Merhaba%20SARP%2C%20toptan%20%C3%BCretim%20i%C3%A7in%20fiyat%20almak%20istiyorum." target="_blank" rel="noopener noreferrer">Toptan üretim teklifi al</a><figure class="product-visual"><img src="assets/bulk-production.webp" alt="Seri halinde üretilen masaüstü aksesuarları tasarım örneği" loading="lazy"><figcaption>TASARIM ÖRNEĞİ</figcaption></figure></div></article>
@@ -93,6 +93,32 @@
         </div>
       </div>
     </section>
+  <dialog class="nameplate-logo-dialog" aria-labelledby="nameplate-logo-title" aria-describedby="nameplate-logo-help">
+    <section class="nameplate-logo-shell">
+      <header class="nameplate-logo-head">
+        <div><p class="nameplate-logo-eyebrow">SARP / LOGO YERLEŞTİRME</p><h2 id="nameplate-logo-title">Logonu yerleştir.</h2><p id="nameplate-logo-help">Logoyu sürükle; ince ayar için okları kullan.</p></div>
+        <button class="nameplate-editor-close" type="button" aria-label="Yerleştirmeyi kaydetmeden kapat">×</button>
+      </header>
+      <div class="nameplate-editor-workspace">
+        <div class="nameplate-editor-viewport">
+          <div class="nameplate-photo nameplate-editor-photo">
+            <img class="nameplate-base" src="assets/desk-nameplate.webp" alt="" draggable="false">
+            <span class="nameplate-tint" aria-hidden="true"></span>
+            <span class="nameplate-model-name" aria-hidden="true">İSMİN</span>
+            <button class="nameplate-editor-logo" type="button" aria-label="Logoyu taşı; klavyede ok tuşlarını kullan"><img alt="" draggable="false"></button>
+          </div>
+        </div>
+      </div>
+      <div class="nameplate-editor-controls">
+        <label class="nameplate-editor-size"><span>LOGO BOYUTU <output>100%</output></span><input type="range" min="50" max="125" step="5" value="100" aria-label="Logo boyutu"></label>
+        <div class="nameplate-editor-nudge" role="group" aria-label="Logonun konumunu ince ayarla">
+          <span>KONUMU AYARLA</span>
+          <div><button type="button" data-move="left" aria-label="Logoyu sola taşı">←</button><button type="button" data-move="up" aria-label="Logoyu yukarı taşı">↑</button><button type="button" data-move="down" aria-label="Logoyu aşağı taşı">↓</button><button type="button" data-move="right" aria-label="Logoyu sağa taşı">→</button></div>
+        </div>
+      </div>
+      <footer class="nameplate-editor-actions"><button class="nameplate-editor-reset" type="button">Başa al</button><button class="nameplate-editor-cancel" type="button">Vazgeç</button><button class="nameplate-editor-done" type="button">Tamam <span aria-hidden="true">✓</span></button></footer>
+    </section>
+  </dialog>
   <dialog class="nameplate-print-dialog" aria-labelledby="nameplate-print-title">
     <section class="nameplate-print-shell">
       <button class="nameplate-print-close" type="button" aria-label="Baskı simülasyonunu kapat">×</button>
@@ -106,7 +132,7 @@
     </section>
   </dialog>
   </main>
-  <script src="main.js?v=36" defer></script>
+  <script src="main.js?v=37" defer></script>
 
   <aside id="quote-chat" aria-label="SARP teklif asistanı">
     <section id="quote-chat-panel" class="quote-chat-panel" role="dialog" aria-modal="false" aria-labelledby="quote-chat-title" hidden>
@@ -123,3 +149,4 @@
   </aside>
   <script src="chatbot.js?v=18" defer></script>
   </body></html>
+
