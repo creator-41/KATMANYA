@@ -300,6 +300,100 @@ body{max-width:100%;touch-action:pan-y}
 }
 @media(max-width:360px){.nameplate-editor-nudge{display:grid;justify-content:start}}
 
+/* Build a modular set from the original product photograph. */
+.desk-configure{display:grid;grid-template-rows:minmax(0,1fr) auto;justify-items:center;align-items:center;gap:7px;width:100%;height:100%;padding:0;border:0;background:transparent;color:var(--acid);cursor:pointer}
+.desk-configure>img[hidden]{display:none}
+.desk-configure>span:last-child{display:inline-flex;align-items:center;gap:14px;min-height:30px;padding:6px 12px;border:1px solid #c7fa5f75;border-radius:99px;background:#141816ed;font:9px var(--mono);letter-spacing:.04em;white-space:nowrap}
+.desk-configure>span:last-child b{font-size:14px}
+.desk-configure:hover>span:last-child{background:var(--acid);color:var(--ink)}
+.desk-configure:disabled{cursor:default;opacity:.65}
+.desk-mini-model{display:block;width:100%;min-height:0}
+.desk-mini-model svg,.desk-model svg{display:block;width:100%;height:auto;overflow:visible}
+.desk-teaser .desk-selection-summary{margin-top:7px;color:#a2b190}
+.desk-model-base{opacity:.27;filter:grayscale(1)}
+.desk-piece{opacity:0;pointer-events:none;transition:opacity .2s ease;filter:drop-shadow(0 0 1px #c7fa5f) drop-shadow(0 0 4px #c7fa5f70)}
+.desk-piece.is-selected{opacity:1}
+.desk-mini-model .desk-piece{filter:drop-shadow(0 0 1px #c7fa5f) drop-shadow(0 0 3px #c7fa5f60)}
+.desk-hit{fill:transparent;stroke:none;cursor:pointer;pointer-events:all;touch-action:manipulation}
+.desk-hit:hover{fill:#c7fa5f0c}
+.desk-dialog{position:fixed;inset:0;width:min(1000px,calc(100vw - 32px));max-width:none;max-height:calc(100dvh - 32px);margin:auto;padding:0;overflow:auto;overscroll-behavior:contain;border:1px solid #c7fa5f50;border-radius:22px;background:#141816;color:var(--paper);box-shadow:0 28px 90px #000c;color-scheme:dark}
+.desk-dialog::backdrop{background:#060807df;backdrop-filter:blur(10px)}
+.desk-shell{display:flex;flex-direction:column;min-height:0}
+.desk-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding:27px 28px 22px}
+.desk-eyebrow{margin:0 0 12px;color:var(--acid);font:9px var(--mono);letter-spacing:.08em}
+.desk-head h2{margin:0;font-size:clamp(29px,4vw,42px);font-weight:500;letter-spacing:-.05em;line-height:1.1}
+.desk-head p:last-child{margin:10px 0 0;color:#a9b2a2;font-size:13px;line-height:1.5}
+.desk-close{flex:0 0 44px;width:44px;height:44px;padding:0;border:1px solid #ffffff24;border-radius:50%;background:#ffffff0c;color:var(--paper);font:28px var(--sans);cursor:pointer}
+.desk-content{display:grid;grid-template-columns:minmax(0,1fr) 260px;border-top:1px solid #ffffff12;border-bottom:1px solid #ffffff12}
+.desk-workspace{display:flex;flex-direction:column;justify-content:center;gap:24px;min-width:0;padding:24px 28px;background:radial-gradient(ellipse at 50% 48%,#26352688,transparent 72%),#0e1210}
+.desk-workspace-top{display:flex;justify-content:space-between;gap:12px;align-items:center;color:#a7b897;font:8px var(--mono);letter-spacing:.04em}
+.desk-workspace-top>span:first-child{display:flex;align-items:center;gap:7px;color:var(--acid)}
+.desk-workspace-top i{width:6px;height:6px;border-radius:50%;background:var(--acid);box-shadow:0 0 12px #c7fa5f80}
+.desk-workspace-top>span:last-child{color:#788771;font-size:7px}
+.desk-model{width:100%;max-width:530px;margin:auto;isolation:isolate}
+.desk-piece-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.desk-part-button{display:grid;grid-template-columns:1fr auto;align-items:center;gap:5px;min-height:68px;padding:11px 10px;border:1px solid #ffffff25;border-radius:12px;background:#ffffff04;color:#8c9887;text-align:left;font:11px/1.3 var(--sans);cursor:pointer;transition:background .2s,border-color .2s,color .2s}
+.desk-part-number{grid-column:1;font:9px var(--mono);color:#788771}
+.desk-part-button>span:nth-child(2){grid-column:1;grid-row:2}
+.desk-part-check{grid-column:2;grid-row:1/3;display:grid;place-items:center;width:20px;height:20px;border:1px solid #ffffff2b;border-radius:50%;color:transparent;font:12px var(--mono)}
+.desk-part-button[aria-pressed="true"]{border-color:#c7fa5f75;background:#c7fa5f0c;color:var(--paper)}
+.desk-part-button[aria-pressed="true"] .desk-part-number{color:var(--acid)}
+.desk-part-button[aria-pressed="true"] .desk-part-check{border-color:var(--acid);background:var(--acid);color:var(--ink)}
+.desk-part-button:hover{border-color:var(--acid)}
+.desk-preferences{min-width:0;padding:28px 24px;border-left:1px solid #ffffff12}
+.desk-preferences>.desk-eyebrow{color:#9fae95}
+.desk-count{min-height:48px;margin:0 0 12px;color:#c9d2c2;font:12px var(--sans);line-height:1.5}
+.desk-count strong{margin-right:6px;color:var(--acid);font:500 38px var(--sans);letter-spacing:-.06em}
+.desk-chosen{display:grid;gap:9px;min-height:73px;margin:0 0 24px;padding:0;list-style:none;font:11px/1.4 var(--sans);color:#c3ccb9}
+.desk-chosen li::before{content:'↳';margin-right:7px;color:var(--acid)}
+.desk-options{display:grid;gap:16px}
+.desk-options .product-option select,.desk-options .product-option input{height:44px;border-radius:8px;background:#0e1210;font-size:13px}
+.desk-quote-note{margin:18px 0 0;color:#8f9c85;font:11px/1.65 var(--sans)}
+.desk-actions{position:sticky;bottom:0;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 28px;background:#141816;z-index:2}
+.desk-done{min-height:44px;padding:10px 16px;border:1px solid #ffffff30;border-radius:99px;background:#ffffff05;color:#d5decd;font:12px var(--sans);cursor:pointer}
+.desk-done span{margin-left:12px;color:var(--acid)}
+.desk-whatsapp{display:inline-flex;align-items:center;justify-content:center;gap:16px;min-height:44px;margin:0;border-radius:99px;padding:13px 19px;font-size:12px}
+.desk-whatsapp[aria-disabled="true"],[data-desk-set] .product-cta[aria-disabled="true"]{opacity:.4;cursor:default}
+.desk-dialog button:focus-visible,.desk-dialog a:focus-visible,.desk-configure:focus-visible{outline:2px solid var(--acid);outline-offset:3px}
+@media(max-width:800px){
+  .desk-configure>span:last-child{min-height:27px;padding:5px 9px;gap:8px;font-size:7px}
+  .desk-configure{gap:3px}
+  .desk-teaser .desk-selection-summary{font-size:6px;margin-top:4px}
+  .desk-dialog{width:100%;height:100dvh;max-height:100dvh;margin:0;border:0;border-radius:0}
+  .desk-shell{min-height:100%;padding-top:env(safe-area-inset-top)}
+  .desk-head{padding:20px 18px 18px;gap:12px}
+  .desk-head .desk-eyebrow{font-size:7px;letter-spacing:.04em;margin-bottom:10px}
+  .desk-head p:last-child{font-size:12px}
+  .desk-content{flex:1;grid-template-columns:minmax(0,1fr)}
+  .desk-workspace{padding:18px 16px;gap:18px}
+  .desk-workspace-top{font-size:7px}
+  .desk-workspace-top>span:last-child{font-size:6px}
+  .desk-model{max-width:440px}
+  .desk-piece-controls{gap:6px}
+  .desk-part-button{min-height:68px;padding:9px 8px;font-size:10px}
+  .desk-part-check{width:17px;height:17px;font-size:10px}
+  .desk-preferences{padding:18px 20px;border-left:0;border-top:1px solid #ffffff12}
+  .desk-preferences>.desk-eyebrow{display:none}
+  .desk-count{min-height:0;margin:0 0 14px;font-size:12px}
+  .desk-count strong{font-size:24px}
+  .desk-chosen{display:none}
+  .desk-options{grid-template-columns:minmax(0,1fr) 90px;gap:12px}
+  .desk-quote-note{margin:12px 0 0;font-size:10px}
+  .desk-actions{flex-wrap:wrap;gap:10px;padding:14px 18px max(16px,env(safe-area-inset-bottom));border-top:1px solid #ffffff12}
+  .desk-done{padding:10px 12px;font-size:11px}
+  .desk-done span{margin-left:6px}
+  .desk-whatsapp{flex:1;gap:9px;padding:13px 14px;font-size:11px}
+}
+@media(max-width:360px){
+  .desk-actions{display:grid;grid-template-columns:minmax(0,1fr)}
+  .desk-done{grid-row:2}
+  .desk-whatsapp{grid-row:1}
+  .desk-head h2{font-size:28px}
+  .desk-piece-controls{gap:5px}
+  .desk-part-button{padding:8px 6px;font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){.desk-piece,.desk-part-button{transition:none}}
+
 /* On phones, keep the nameplate caption and actions beside its live preview. */
 @media(max-width:800px){
   .chapter[data-chapter="2"] .product-action-row{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;align-items:start}

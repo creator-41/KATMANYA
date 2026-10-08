@@ -35,7 +35,7 @@
   <link rel="icon" type="image/svg+xml" href="./assets/katmanya-icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/katmanya-192.png">
   <link rel="apple-touch-icon" href="./assets/katmanya-180.png">
-  <link rel="stylesheet" href="styles.css?v=65">
+  <link rel="stylesheet" href="styles.css?v=66">
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#top" aria-label="KATMANYA ana sayfa"><img class="katmanya-brand" src="./assets/katmanya-logo.svg" width="631" height="128" alt="KATMANYA"></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a><a href="#sss">Sık sorulanlar</a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="KATMANYA uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
@@ -70,7 +70,21 @@
         <div class="scene-wrap"><canvas id="printer" aria-label="Kaydırdıkça hareket eden KATMANYA yazıcısı ve katman katman basılan robot kaskı"></canvas><div class="printer-badge" aria-hidden="true">KATMANYA</div><div class="scene-fallback" hidden><p>Aklındaki fikri üretelim.</p><small>Bu cihazda 3D görünüm açılamadı. Ürünleri kaydırarak inceleyebilirsin.</small></div></div>
         <div class="story-copies">
           <article class="chapter active" data-chapter="0"><p class="eyebrow"><span class="live-dot"></span> KATMANYA · İLK ÜRETİMLER İÇİN TEKLİF ALIYORUZ</p><h1>Fikrini anlat, <br><em>üretelim.</em></h1><p class="chapter-desc">İlk ürünler için teklif topluyoruz. Fikrini ve ölçünü gönder; fiyatı ve teslim süresini birlikte netleştirelim.</p><a class="scroll-invite" href="#baski-baslangici"><span class="scroll-line"></span> KEŞFETMEK İÇİN KAYDIR <b>↓</b></a></article>
-          <article class="chapter product-slide" data-chapter="1" aria-hidden="true"><h2>Modüler <br><em>masaüstü seti</em></h2><p class="chapter-desc product-desc">Telefon, kulaklık ve kablolar için. Renk ve masa ölçüne göre hazırlanır.</p><div class="product-options" aria-label="Teklif tercihleri"><label class="product-option"><span>RENK TERCİHİ</span><select class="quote-color" aria-label="Renk tercihi"><option value="">Henüz seçmedim</option><option value="Siyah">Siyah</option><option value="Beyaz">Beyaz</option><option value="Mavi">Mavi</option><option value="Yeşil">Yeşil</option><option value="Diğer renk">Diğer renk</option></select></label><label class="product-option product-quantity-field"><span>ADET</span><input class="quote-quantity" type="number" min="1" max="999" step="1" value="1" inputmode="numeric" aria-label="Ürün adedi"></label></div><div class="product-action-row"><a class="button product-cta" data-quote-product="Modüler masaüstü seti" href="https://wa.me/905304815341?text=Merhaba%20KATMANYA%2C%20mod%C3%BCler%20masa%C3%BCst%C3%BC%20seti%20i%C3%A7in%20fiyat%20almak%20istiyorum." target="_blank" rel="noopener noreferrer">WhatsApp'tan fiyat iste</a><figure class="product-visual"><img src="assets/desk-set.webp" alt="Masaüstü için telefon, kulaklık ve kablo düzenleyici tasarım örneği" loading="lazy"><figcaption>TASARIM ÖRNEĞİ</figcaption></figure></div></article>
+          <article class="chapter product-slide" data-chapter="1" data-desk-set aria-hidden="true">
+            <h2>Modüler <br><em>masaüstü seti</em></h2>
+            <p class="chapter-desc product-desc">Telefon standı, kulaklık askısı, oyun kolu standı. Setini ihtiyacına göre kur.</p>
+            <div class="product-options" aria-label="Masaüstü seti teklif tercihleri">
+              <label class="product-option"><span>RENK TERCİHİ</span><select class="quote-color" aria-label="Masaüstü seti renk tercihi"><option value="">Henüz seçmedim</option><option value="Siyah">Siyah</option><option value="Beyaz">Beyaz</option><option value="Mavi">Mavi</option><option value="Yeşil">Yeşil</option><option value="Diğer renk">Diğer renk</option></select></label>
+              <label class="product-option product-quantity-field"><span>SET ADEDİ</span><input class="quote-quantity" type="number" min="1" max="999" step="1" value="1" inputmode="numeric" aria-label="Masaüstü seti adedi"></label>
+            </div>
+            <div class="product-action-row">
+              <a class="button product-cta" data-quote-product="Modüler masaüstü seti" href="https://wa.me/905304815341?text=Merhaba%20KATMANYA%2C%20mod%C3%BCler%20masa%C3%BCst%C3%BC%20seti%20i%C3%A7in%20fiyat%20almak%20istiyorum." target="_blank" rel="noopener noreferrer">WhatsApp'tan fiyat iste</a>
+              <figure class="product-visual desk-teaser">
+                <button class="desk-configure" type="button" aria-haspopup="dialog" aria-controls="desk-builder" disabled><img src="assets/desk-set.webp" alt="Telefon, kulaklık ve oyun kolu için modüler masaüstü seti" loading="lazy"><span>SETİNİ KUR <b aria-hidden="true">↗</b></span></button>
+                <figcaption class="desk-selection-summary">TASARIM ÖRNEĞİ</figcaption>
+              </figure>
+            </div>
+          </article>
           <article class="chapter product-slide" data-chapter="2" aria-hidden="true"><h2>İsimli <br><em>plakalık</em></h2><p class="chapter-desc product-desc">İsim ve renk tercihinle çalışma alanına özel.</p><div class="product-options" aria-label="Teklif tercihleri"><div class="product-option product-detail-field"><span>YAZILACAK İSİM</span><input class="quote-detail-input" type="text" maxlength="36" placeholder="Örn. Veysel" aria-label="Plakada yer alacak isim"><div class="nameplate-upload-row"><label class="nameplate-upload-button">LOGO / ARMA EKLE<input class="nameplate-logo-input" type="file" accept="image/png,image/jpeg,image/webp" aria-label="Plakalığa eklenecek PNG, JPG veya WebP logo seç"></label><button class="nameplate-logo-remove" type="button" aria-label="Eklenen logoyu kaldır" hidden>×</button><span class="nameplate-upload-status" aria-live="polite">Dosya cihazında kalır</span></div></div><label class="product-option"><span>RENK TERCİHİ</span><select class="quote-color" aria-label="Renk tercihi"><option value="">Henüz seçmedim</option><option value="Siyah">Siyah</option><option value="Beyaz">Beyaz</option><option value="Mavi">Mavi</option><option value="Yeşil">Yeşil</option><option value="Diğer renk">Diğer renk</option></select></label><label class="product-option product-quantity-field"><span>ADET</span><input class="quote-quantity" type="number" min="1" max="999" step="1" value="1" inputmode="numeric" aria-label="Ürün adedi"></label></div><div class="product-action-row"><a class="button product-cta" data-quote-product="İsimli plakalık" href="https://wa.me/905304815341?text=Merhaba%20KATMANYA%2C%20isimli%20plakal%C4%B1k%20i%C3%A7in%20fiyat%20almak%20istiyorum." target="_blank" rel="noopener noreferrer">WhatsApp'tan fiyat iste</a><figure class="product-visual nameplate-preview" aria-label="İsmi ve rengi değiştikçe güncellenen plakalık önizlemesi">
   <div class="nameplate-photo" role="img" aria-label="İsim eklenecek plakalık tasarım örneği">
     <img class="nameplate-base" src="assets/desk-nameplate.webp" alt="İsim eklenebilen masaüstü plakalık tasarım örneği" loading="lazy">
@@ -147,8 +161,39 @@
       <a class="button nameplate-print-whatsapp" target="_blank" rel="noopener noreferrer" hidden>WhatsApp'tan fiyat al <span aria-hidden="true">↗</span></a>
     </section>
   </dialog>
+  <dialog class="desk-dialog" id="desk-builder" aria-labelledby="desk-builder-title" aria-describedby="desk-builder-help">
+    <section class="desk-shell">
+      <header class="desk-head">
+        <div><p class="desk-eyebrow">KATMANYA / SENİN MASAN, SENİN SETİN</p><h2 id="desk-builder-title">Masanda ne olsun?</h2><p id="desk-builder-help">Parçalara dokun, ihtiyacın olanları seç.</p></div>
+        <button class="desk-close" type="button" aria-label="Set seçimini kapat" autofocus>×</button>
+      </header>
+      <div class="desk-content">
+        <div class="desk-workspace">
+          <div class="desk-workspace-top"><span><i aria-hidden="true"></i> SEÇTİKLERİN PARLIYOR</span><span>TASARIM ÖRNEĞİ</span></div>
+          <div class="desk-model" aria-hidden="true"></div>
+          <div class="desk-piece-controls" role="group" aria-label="Sete eklenecek parçalar">
+            <button class="desk-part-button" type="button" data-desk-part="phone" aria-pressed="true"><span class="desk-part-number" aria-hidden="true">01</span><span>Telefon standı</span><span class="desk-part-check" aria-hidden="true">✓</span></button>
+            <button class="desk-part-button" type="button" data-desk-part="headphones" aria-pressed="true"><span class="desk-part-number" aria-hidden="true">02</span><span>Kulaklık askısı</span><span class="desk-part-check" aria-hidden="true">✓</span></button>
+            <button class="desk-part-button" type="button" data-desk-part="controller" aria-pressed="true"><span class="desk-part-number" aria-hidden="true">03</span><span>Oyun kolu standı</span><span class="desk-part-check" aria-hidden="true">✓</span></button>
+          </div>
+        </div>
+        <aside class="desk-preferences" aria-label="Setin teklif bilgileri">
+          <p class="desk-eyebrow">SENİN SEÇİMİN</p>
+          <p class="desk-count" role="status"><strong>3</strong> parça seçili</p>
+          <ul class="desk-chosen"><li>Telefon standı</li><li>Kulaklık askısı</li><li>Oyun kolu standı</li></ul>
+          <div class="desk-options">
+            <label class="product-option"><span>RENK TERCİHİ</span><select class="desk-color" aria-label="Setin rengi"><option value="">Henüz seçmedim</option><option value="Siyah">Siyah</option><option value="Beyaz">Beyaz</option><option value="Mavi">Mavi</option><option value="Yeşil">Yeşil</option><option value="Diğer renk">Diğer renk</option></select></label>
+            <label class="product-option"><span>SET ADEDİ</span><input class="desk-quantity" type="number" min="1" max="999" step="1" value="1" inputmode="numeric" aria-label="Kaç set istiyorsun"></label>
+          </div>
+          <p class="desk-quote-note">Parçalar, renk ve adet WhatsApp mesajına hazır eklenir.</p>
+        </aside>
+      </div>
+      <footer class="desk-actions"><button class="desk-done" type="button">Seçimi tamamla <span aria-hidden="true">✓</span></button><a class="button desk-whatsapp" target="_blank" rel="noopener noreferrer" tabindex="0">WhatsApp'tan fiyat iste <span aria-hidden="true">↗</span></a></footer>
+    </section>
+  </dialog>
   </main>
-  <script src="main.js?v=39" defer></script>
+  <script src="desk-set.js?v=1" defer></script>
+  <script src="main.js?v=40" defer></script>
 
   <aside id="quote-chat" aria-label="KATMANYA teklif asistanı">
     <section id="quote-chat-panel" class="quote-chat-panel" role="dialog" aria-modal="false" aria-labelledby="quote-chat-title" hidden>

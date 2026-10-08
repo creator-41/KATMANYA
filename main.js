@@ -331,6 +331,7 @@
   const briefCopy=document.querySelector("#brief-copy");
   briefCopy?.addEventListener("click",async()=>{const text="KATMANYA teklif talebi\n\nÜrün/fikir: \nÖlçüler: \nAdet: \nKullanım amacı: \nRenk tercihi: \nFotoğraf veya 3B dosya: ";const status=document.querySelector("#copy-status");try{await navigator.clipboard.writeText(text);status.textContent="Mesaj taslağı kopyalandı; bilgilerini doldurup bize gönderebilirsin.";}catch{status.textContent="Kopyalama desteklenmiyor. Bilgi listesini kullanarak mesajını hazırlayabilirsin.";} });
   document.querySelectorAll(".product-slide").forEach(slide=>{
+    if(slide.hasAttribute("data-desk-set"))return;
     const button=slide.querySelector(".product-cta");
     const color=slide.querySelector(".quote-color");
     const quantity=slide.querySelector(".quote-quantity");
