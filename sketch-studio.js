@@ -92,7 +92,7 @@
       bridge(p,[to%cols+.5,Math.floor(to/cols)+.5]);root.push(...group);
     }
     const p=[hole[0]*cols,hole[1]*rows],occupied=[];for(let i=0;i<bits.length;i++)if(bits[i])occupied.push(i);
-    const to=nearest(occupied,p);bridge(p,[to%cols+.5,Math.floor(to/cols)+.5]);disk(p[0],p[1],8);disk(p[0],p[1],3.5,0);
+    const to=nearest(occupied,p);bridge(p,[to%cols+.5,Math.floor(to/cols)+.5]);disk(p[0],p[1],9);disk(p[0],p[1],5,0);
     return bits;
   }
   function drawingRaster(){
@@ -152,8 +152,8 @@
     paintPaths(strokeCtx,strokeBuffer.width,strokeBuffer.height);
     inkCtx.drawImage(strokeBuffer,0,0,w,h);
     if(keychain.enabled){
-      inkCtx.save();inkCtx.fillStyle='#0d130f';inkCtx.beginPath();inkCtx.arc(keychain.hole[0]*w,keychain.hole[1]*h,3.5/COLS*w,0,Math.PI*2);inkCtx.fill();
-      inkCtx.strokeStyle=tool==='hole'?'#f3f1ec':'#c7fa5f';inkCtx.lineWidth=1.5;inkCtx.setLineDash([3,3]);inkCtx.beginPath();inkCtx.arc(keychain.hole[0]*w,keychain.hole[1]*h,8/COLS*w,0,Math.PI*2);inkCtx.stroke();inkCtx.restore();
+      inkCtx.save();inkCtx.fillStyle='#0d130f';inkCtx.beginPath();inkCtx.arc(keychain.hole[0]*w,keychain.hole[1]*h,5/COLS*w,0,Math.PI*2);inkCtx.fill();
+      inkCtx.strokeStyle=tool==='hole'?'#f3f1ec':'#c7fa5f';inkCtx.lineWidth=1.5;inkCtx.setLineDash([3,3]);inkCtx.beginPath();inkCtx.arc(keychain.hole[0]*w,keychain.hole[1]*h,9/COLS*w,0,Math.PI*2);inkCtx.stroke();inkCtx.restore();
     }
     if(selected&&tool==='move'){
       const b=bounds(selected);inkCtx.save();inkCtx.strokeStyle='#efffd7';inkCtx.lineWidth=1;inkCtx.setLineDash([5,4]);
@@ -409,7 +409,7 @@
     const flat=document.createElement('canvas');flat.width=640;flat.height=400;const flatCtx=flat.getContext('2d');drawGrid(flatCtx,640,400);
     if(mesh.backing){const {bits}=drawingRaster();paintBacking(flatCtx,640,400,keychainBacking(bits,COLS,ROWS,keychain.hole));}
     const lines=document.createElement('canvas');lines.width=640;lines.height=400;paintPaths(lines.getContext('2d'),640,400);flatCtx.drawImage(lines,0,0);
-    if(mesh.backing){flatCtx.fillStyle='#0d130f';flatCtx.beginPath();flatCtx.arc(keychain.hole[0]*640,keychain.hole[1]*400,14,0,Math.PI*2);flatCtx.fill();}
+    if(mesh.backing){flatCtx.fillStyle='#0d130f';flatCtx.beginPath();flatCtx.arc(keychain.hole[0]*640,keychain.hole[1]*400,20,0,Math.PI*2);flatCtx.fill();}
     c.drawImage(flat,64,240);c.strokeStyle='#c7fa5f35';c.strokeRect(64,240,640,400);
     c.save();c.translate(780,220);renderModel(c,756,560,1,false);c.restore();
     c.fillStyle='#a9b69e';c.font='17px Manrope, sans-serif';c.fillText('Renk tercihi: '+usedColors(),64,716);
