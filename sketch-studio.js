@@ -12,6 +12,7 @@
   const download=dialog.querySelector('.sketch-download'),quote=dialog.querySelector('.sketch-quote');
   const brush=dialog.querySelector('.sketch-brush input'),empty=dialog.querySelector('.sketch-empty'),status=dialog.querySelector('.sketch-build-status');
   const shapeSelect=dialog.querySelector('.sketch-shape-select'),shapeSize=dialog.querySelector('.sketch-shape-size'),shapePercent=dialog.querySelector('.sketch-shape-percent');
+  const shapeAngle=dialog.querySelector('.sketch-shape-angle'),angleValue=dialog.querySelector('.sketch-angle-value');
   const motion=matchMedia('(prefers-reduced-motion: reduce)'),COLS=160,ROWS=100,DURATION=2400;
   const colors={Yeşil:'#c7fa5f',Beyaz:'#f3f1ec',Mavi:'#5795ef',Siyah:'#454e48'};
   const limit=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -179,6 +180,8 @@
     }
     if(shapeSize){shapeSize.disabled=!selected;shapeSize.value=selected?Math.round(selected.scale*100):100;}
     if(shapePercent)shapePercent.textContent=selected?Math.round(selected.scale*100)+'%':'—';
+    if(shapeAngle){shapeAngle.disabled=!selected;shapeAngle.value=selected?(selected.angle||0):0;}
+    if(angleValue)angleValue.textContent=selected?(selected.angle||0)+'°':'—';
   }
   function chooseTool(value){
     tool=value;ink.classList.toggle('is-eraser',tool==='eraser');ink.classList.toggle('is-moving',tool==='move');
@@ -186,11 +189,13 @@
     inkDirty=true;requestPaint();
   }
   function fitShape(path,scale=path.scale){
-    const xs=path.base.map(p=>p[0]),ys=path.base.map(p=>p[1]),bw=Math.max(...xs)-Math.min(...xs),bh=Math.max(...ys)-Math.min(...ys);
+    const radians=(path.angle||0)*Math.PI/180,c=Math.cos(radians),s=Math.sin(radians);
+    const base=path.base.map(p=>[p[0]*c-p[1]*s/1.6,p[0]*s*1.6+p[1]*c]);
+    const xs=base.map(p=>p[0]),ys=base.map(p=>p[1]),bw=Math.max(...xs)-Math.min(...xs),bh=Math.max(...ys)-Math.min(...ys);
     path.scale=limit(scale,.25,Math.min(1.5,.96/(bw+.024),.96/(bh+.0384)));
     const rx=(bw+.024)*path.scale/2,ry=(bh+.0384)*path.scale/2;
     path.center=[limit(path.center[0],.02+rx,.98-rx),limit(path.center[1],.02+ry,.98-ry)];
-    path.points=path.base.map(p=>[path.center[0]+p[0]*path.scale,path.center[1]+p[1]*path.scale]);path.width=.024*path.scale;
+    path.points=base.map(p=>[path.center[0]+p[0]*path.scale,path.center[1]+p[1]*path.scale]);path.width=.024*path.scale;
   }
   function beginStroke(event){
     if(activeStroke||transform||event.button!==0)return;
@@ -309,6 +314,8 @@
   shapeSelect?.addEventListener('change',()=>{selected=paths[Number(shapeSelect.value)]||null;if(!selected?.shape||shapeSelect.value==='')selected=null;chooseTool('move');syncSelection();});
   shapeSize?.addEventListener('input',()=>{if(!selected||activeStroke||transform)return;if(!sizeGesture){remember();sizeGesture=true;}fitShape(selected,Number(shapeSize.value)/100);markChanged();});
   shapeSize?.addEventListener('change',()=>{sizeGesture=false;});
+  shapeAngle?.addEventListener('input',()=>{if(!selected||activeStroke||transform)return;if(!sizeGesture){remember();sizeGesture=true;}selected.angle=limit(Number(shapeAngle.value)||0,-180,180);fitShape(selected);markChanged();});
+  shapeAngle?.addEventListener('change',()=>{sizeGesture=false;});
   dialog.querySelectorAll('[data-sketch-preset]').forEach(button=>button.addEventListener('click',()=>preset(button.dataset.sketchPreset)));
   dialog.querySelectorAll('[data-sketch-view]').forEach(button=>button.addEventListener('click',()=>setView(button.dataset.sketchView)));
   dialog.querySelectorAll('[data-sketch-rotate]').forEach(button=>button.addEventListener('click',()=>rotate(button.dataset.sketchRotate)));
