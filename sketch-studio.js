@@ -17,6 +17,7 @@
   const deleteSelected=dialog.querySelector('.sketch-delete');
   const motion=matchMedia('(prefers-reduced-motion: reduce)'),COLS=160,ROWS=100,DURATION=2400;
   const colors={Yeşil:'#c7fa5f',Beyaz:'#f3f1ec',Mavi:'#5795ef',Siyah:'#454e48'};
+  const paletteNames=Object.keys(colors),paletteRGB=Object.values(colors).map(rgb);
   const limit=(v,a,b)=>Math.max(a,Math.min(b,v));
   let paths=[],activeStroke=null,tool='pen',color='Yeşil',mesh=null,changed=true,building=false,progress=1;
   let selected=null,transform=null,sizeGesture=false;const history=[];
@@ -24,31 +25,32 @@
   let yaw=-.48,pitch=.72,rotation=null,frameId=0,started=0,saved=null,inkDirty=true,inkSize={w:800,h:500},modelSize={w:800,h:600};
   // Merge occupied raster cells into flat top rectangles and exposed boundary runs.
   // Empty cells remain holes; interior edges never generate side walls.
-  function reliefGeometry(bits,cols,rows){
+  function reliefGeometry(bits,cols,rows,tones=null){
     const tops=[],walls=[],edges=new Map();let active=new Map(),cells=0;
     for(let z=0;z<rows;z++){
       const next=new Map();
       for(let x=0;x<cols;){
         if(!bits[z*cols+x]){x++;continue;}
-        const first=x;while(x<cols&&bits[z*cols+x]){cells++;x++;}
-        const key=first+':'+x,rect=active.get(key)||[first,z,x,z+1];rect[3]=z+1;next.set(key,rect);
+        const first=x,tone=tones?.[z*cols+x];while(x<cols&&bits[z*cols+x]&&(!tones||tones[z*cols+x]===tone)){cells++;x++;}
+        const key=first+':'+x+':'+tone,rect=active.get(key)||(tones?[first,z,x,z+1,tone]:[first,z,x,z+1]);rect[3]=z+1;next.set(key,rect);
       }
       for(const [key,rect] of active)if(!next.has(key))tops.push(rect);
       active=next;
     }
     for(const rect of active.values())tops.push(rect);
-    function edge(side,line,at){const key=side+':'+line;if(!edges.has(key))edges.set(key,[]);edges.get(key).push(at);}
+    function edge(side,line,at,tone){const key=side+':'+line+(tones?':'+tone:'');if(!edges.has(key))edges.set(key,[]);edges.get(key).push(at);}
     for(let z=0;z<rows;z++)for(let x=0;x<cols;x++)if(bits[z*cols+x]){
-      if(x===0||!bits[z*cols+x-1])edge(0,x,z);
-      if(x===cols-1||!bits[z*cols+x+1])edge(1,x+1,z);
-      if(z===0||!bits[(z-1)*cols+x])edge(2,z,x);
-      if(z===rows-1||!bits[(z+1)*cols+x])edge(3,z+1,x);
+      const tone=tones?.[z*cols+x];
+      if(x===0||!bits[z*cols+x-1])edge(0,x,z,tone);
+      if(x===cols-1||!bits[z*cols+x+1])edge(1,x+1,z,tone);
+      if(z===0||!bits[(z-1)*cols+x])edge(2,z,x,tone);
+      if(z===rows-1||!bits[(z+1)*cols+x])edge(3,z+1,x,tone);
     }
     for(const [key,values] of edges){
-      const [side,line]=key.split(':').map(Number);let start=values[0],end=start+1;
+      const [side,line,tone]=key.split(':').map(Number);let start=values[0],end=start+1;
       for(let i=1;i<=values.length;i++){
         if(i<values.length&&values[i]===end){end++;continue;}
-        walls.push([side,line,start,end]);if(i<values.length){start=values[i];end=start+1;}
+        walls.push(tones?[side,line,start,end,tone]:[side,line,start,end]);if(i<values.length){start=values[i];end=start+1;}
       }
     }
     return {tops,walls,cells,cols,rows};
@@ -57,7 +59,7 @@
     context.clearRect(0,0,w,h);context.lineCap='round';context.lineJoin='round';
     for(const path of paths){
       context.globalCompositeOperation=path.tool==='eraser'?'destination-out':'source-over';
-      context.strokeStyle='#c7fa5f';context.fillStyle='#c7fa5f';context.lineWidth=path.width*w;
+      context.strokeStyle=colors[path.color]||colors.Yeşil;context.fillStyle=colors[path.color]||colors.Yeşil;context.lineWidth=path.width*w;
       if(path.shape==='text'){
         context.save();context.translate(path.center[0]*w,path.center[1]*h);context.scale(w/800,h/500);
         context.rotate((path.angle||0)*Math.PI/180);context.scale(path.scale,path.scale);
@@ -134,12 +136,12 @@
     baseFaces.sort((a,b)=>a.depth-b.depth).forEach(paint);
     if(!mesh||raised<=0)return;
     const x=v=>(v/mesh.cols-.5)*3.2,z=v=>(v/mesh.rows-.5)*2,top=.15+raised,material=rgb(colors[color]),faces=[];
-    for(const [x0,z0,x1,z1] of mesh.tops)faces.push(polygon([[x(x0),top,z(z0)],[x(x1),top,z(z0)],[x(x1),top,z(z1)],[x(x0),top,z(z1)]],[0,1,0],material));
-    for(const [side,line,start,end] of mesh.walls){
+    for(const [x0,z0,x1,z1,tone] of mesh.tops)faces.push(polygon([[x(x0),top,z(z0)],[x(x1),top,z(z0)],[x(x1),top,z(z1)],[x(x0),top,z(z1)]],[0,1,0],paletteRGB[tone]||material));
+    for(const [side,line,start,end,tone] of mesh.walls){
       let a,b,normal;
       if(side<2){a=[x(line),.15,z(start)];b=[x(line),.15,z(end)];normal=[side===0?-1:1,0,0];}
       else{a=[x(start),.15,z(line)];b=[x(end),.15,z(line)];normal=[0,0,side===2?-1:1];}
-      const face=polygon([a,[a[0],top,a[2]],[b[0],top,b[2]],b],normal,material,true);if(face)faces.push(face);
+      const face=polygon([a,[a[0],top,a[2]],[b[0],top,b[2]],b],normal,paletteRGB[tone]||material,true);if(face)faces.push(face);
     }
     faces.filter(Boolean).sort((a,b)=>a.depth-b.depth).forEach(paint);
   }
@@ -162,7 +164,7 @@
     const ready=!!mesh&&!changed&&!building;
     download.disabled=!ready;quote.setAttribute('aria-disabled',String(!ready));quote.setAttribute('tabindex',ready?'0':'-1');
     if(ready){
-      const text=['Merhaba KATMANYA, kendi çizimimden kabartmalı bir plaka için teklif almak istiyorum.','Renk tercihi: '+color,'Taslağımı sohbete ekleyeceğim.','Ölçü ve adet bilgisini birlikte netleştirelim.'].join('\n');
+      const text=['Merhaba KATMANYA, kendi çizimimden kabartmalı bir plaka için teklif almak istiyorum.','Renk tercihi: '+usedColors(),'Taslağımı sohbete ekleyeceğim.','Ölçü ve adet bilgisini birlikte netleştirelim.'].join('\n');
       quote.href='https://wa.me/905304815341?text='+encodeURIComponent(text);
     }else quote.removeAttribute('href');
   }
@@ -183,6 +185,8 @@
   function syncSelection(){
     if(selected&&!paths.includes(selected))selected=null;
     if(deleteSelected)deleteSelected.disabled=!selected||!!activeStroke||!!transform;
+    if(selected&&tool==='move')color=selected.color||'Yeşil';
+    dialog.querySelectorAll('[data-sketch-color]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sketchColor===color)));
     if(shapeSelect){
       shapeSelect.innerHTML='<option value="">Şekil seç</option>'+paths.map((p,i)=>p.shape?'<option value="'+i+'">'+shapeNames[p.shape]+' · '+(i+1)+'</option>':'').join('');
       shapeSelect.value=selected?String(paths.indexOf(selected)):'';shapeSelect.disabled=!paths.some(p=>p.shape);
@@ -195,8 +199,9 @@
   function chooseTool(value){
     tool=value;ink.classList.toggle('is-eraser',tool==='eraser');ink.classList.toggle('is-moving',tool==='move');
     dialog.querySelectorAll('[data-sketch-tool]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sketchTool===tool)));
-    inkDirty=true;requestPaint();
+    syncSelection();inkDirty=true;requestPaint();
   }
+  function usedColors(){return [...new Set(paths.filter(p=>p.tool!=='eraser').map(p=>p.color||'Yeşil'))].join(' / ')||color;}
   function removeSelected(){
     if(!selected||activeStroke||transform)return;const index=paths.indexOf(selected);if(index<0)return;
     remember();paths.splice(index,1);selected=null;sizeGesture=false;markChanged();
@@ -220,7 +225,7 @@
     }
     remember();
     const width=limit(Number(brush.value)||4,2,9)*.006*(tool==='eraser'?2:1);
-    activeStroke={id:event.pointerId,path:{tool,width,points:[point(event)]}};paths.push(activeStroke.path);
+    activeStroke={id:event.pointerId,path:{tool,width,color,points:[point(event)]}};paths.push(activeStroke.path);
     ink.setPointerCapture(event.pointerId);markChanged();event.preventDefault();
   }
   function moveStroke(event){
@@ -257,15 +262,18 @@
     if(name==='rectangle')pts=[[.22,.23],[.78,.23],[.78,.77],[.22,.77],[.22,.23]];
     if(!pts.length)return;
     remember();const xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2;
-    selected={tool:'pen',width:.024,points:pts,shape:name,base:pts.map(p=>[p[0]-cx,p[1]-cy]),center:[cx,cy],scale:1};
+    selected={tool:'pen',width:.024,color,points:pts,shape:name,base:pts.map(p=>[p[0]-cx,p[1]-cy]),center:[cx,cy],scale:1};
     paths.push(selected);chooseTool('move');markChanged();setView('draw');
   }
   function build(){
     if(activeStroke||transform||building)return;
     mask.width=COLS;mask.height=ROWS;paintPaths(maskCtx,COLS,ROWS);
-    const data=maskCtx.getImageData(0,0,COLS,ROWS).data,bits=new Uint8Array(COLS*ROWS);
-    for(let i=0;i<bits.length;i++)bits[i]=data[i*4+3]>=128?1:0;
-    const result=reliefGeometry(bits,COLS,ROWS);
+    const data=maskCtx.getImageData(0,0,COLS,ROWS).data,bits=new Uint8Array(COLS*ROWS),tones=new Uint8Array(COLS*ROWS);
+    for(let i=0;i<bits.length;i++){
+      if(data[i*4+3]<128)continue;bits[i]=1;let distance=Infinity;
+      paletteRGB.forEach((rgb,index)=>{const d=rgb.reduce((sum,v,j)=>sum+(v-data[i*4+j])**2,0);if(d<distance){distance=d;tones[i]=index;}});
+    }
+    const result=reliefGeometry(bits,COLS,ROWS,tones);
     if(!result.cells){mesh=null;changed=true;status.textContent='Çizim boş · bir şekil çiz';updateActions();requestPaint();return;}
     result.reliefHeight=paths.some(p=>p.shape==='text')?.12:.38;
     mesh=result;changed=false;building=true;progress=0;started=performance.now();updateActions();setView('preview');requestPaint();
@@ -275,7 +283,7 @@
     const text=textInput?.value.trim().slice(0,32);if(!text||activeStroke||transform)return;
     strokeCtx.font='700 64px Arial, sans-serif';const measured=strokeCtx.measureText(text).width;
     const fontPx=Math.min(64,560/Math.max(measured,1)*64),bw=measured*fontPx/64/800,bh=fontPx/500;
-    remember();selected={tool:'pen',width:.024,shape:'text',text,fontPx,center:[.5,.5],scale:1,angle:0,base:[[-bw/2,-bh/2],[bw/2,-bh/2],[bw/2,bh/2],[-bw/2,bh/2]],points:[]};
+    remember();selected={tool:'pen',width:.024,color,shape:'text',text,fontPx,center:[.5,.5],scale:1,angle:0,base:[[-bw/2,-bh/2],[bw/2,-bh/2],[bw/2,bh/2],[-bw/2,bh/2]],points:[]};
     fitShape(selected);paths.push(selected);chooseTool('move');markChanged();setView('draw');textInput.blur?.();
   }
   function rotate(direction){
@@ -294,7 +302,7 @@
     const lines=document.createElement('canvas');lines.width=640;lines.height=400;paintPaths(lines.getContext('2d'),640,400);flatCtx.drawImage(lines,0,0);
     c.drawImage(flat,64,240);c.strokeStyle='#c7fa5f35';c.strokeRect(64,240,640,400);
     c.save();c.translate(780,220);renderModel(c,756,560,1,false);c.restore();
-    c.fillStyle='#a9b69e';c.font='17px Manrope, sans-serif';c.fillText('Renk tercihi: '+color,64,716);
+    c.fillStyle='#a9b69e';c.font='17px Manrope, sans-serif';c.fillText('Renk tercihi: '+usedColors(),64,716);
     c.font='14px Manrope, sans-serif';c.fillText('Baskı için ölçü ve adedi birlikte netleştirelim.',64,753);
     c.strokeStyle='#c7fa5f35';c.beginPath();c.moveTo(64,863);c.lineTo(1536,863);c.stroke();
     c.fillStyle='#c7fa5f';c.font='18px monospace';c.fillText('katmanya.com',64,921);
@@ -346,8 +354,10 @@
   dialog.querySelectorAll('[data-sketch-view]').forEach(button=>button.addEventListener('click',()=>setView(button.dataset.sketchView)));
   dialog.querySelectorAll('[data-sketch-rotate]').forEach(button=>button.addEventListener('click',()=>rotate(button.dataset.sketchRotate)));
   dialog.querySelectorAll('[data-sketch-color]').forEach(button=>button.addEventListener('click',()=>{
-    if(!colors[button.dataset.sketchColor])return;color=button.dataset.sketchColor;
-    dialog.querySelectorAll('[data-sketch-color]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));updateActions();requestPaint();
+    if(!colors[button.dataset.sketchColor]||activeStroke||transform)return;
+    const next=button.dataset.sketchColor;
+    if(selected&&tool==='move'&&(selected.color||'Yeşil')!==next){remember();selected.color=next;color=next;markChanged();}
+    else{color=next;updateActions();requestPaint();}
   }));
   undo.addEventListener('click',()=>{if(activeStroke||transform||!history.length)return;const old=history.pop();paths=old.paths;selected=paths[old.index]||null;sizeGesture=false;markChanged();});
   clear.addEventListener('click',()=>{if(activeStroke||transform)return;remember();paths=[];selected=null;mesh=null;markChanged();});
