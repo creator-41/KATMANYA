@@ -416,6 +416,7 @@ body{max-width:100%;touch-action:pan-y}
 .printer-explore-hotspots{position:absolute;inset:0;z-index:3;pointer-events:none}
 .printer-explore-hotspot{position:absolute;transform:translate(-50%,-50%);display:grid;place-items:center;width:44px;height:44px;padding:0;border:1px solid #c7fa5f99;border-radius:50%;background:#111b12e8;color:#c7fa5f;font:11px var(--mono);box-shadow:0 0 0 6px #c7fa5f0d,0 5px 24px #0008;pointer-events:auto;cursor:pointer;transition:background .2s,box-shadow .2s}
 .printer-explore-hotspot[aria-pressed="true"]{background:#c7fa5f;color:#101212;box-shadow:0 0 0 7px #c7fa5f22,0 0 28px #c7fa5f55}
+.printer-explore-hotspot[data-printer-part="head"]::after{content:"";position:absolute;left:100%;top:50%;width:29px;height:1px;background:#c7fa5f88;pointer-events:none}
 .printer-explore-info{min-height:0;padding:28px 24px;overflow:auto;border-left:1px solid #c7fa5f20;background:#151c16}
 .printer-explore-kicker{margin-bottom:20px}
 .printer-explore-parts{display:grid;gap:8px}

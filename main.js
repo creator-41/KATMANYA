@@ -144,7 +144,7 @@
   const colors={frame:[.14,.17,.15],dark:[.055,.068,.06],edge:[.29,.33,.28],silver:[.51,.57,.49],acid:[.69,.94,.29],brass:[.66,.42,.15],helmet:[.78,.82,.84],visor:[.018,.035,.052],blue:[.10,.20,.92],green:[.08,.65,.26]};
   const exploreParts={
     filament:{offset:[.48,.12,0],step:'01 / MALZEME',name:'Filament makarası',description:'Fikrinin ham maddesi burada. Makara, ince plastik filamenti baskı kafasına besler.'},
-    head:{offset:[-.42,.50,.62],step:'02 / ŞEKİL VERME',name:'Baskı kafası',description:'Filament burada ısınıp erir. Nozul, eriyen malzemeyi ince bir iz halinde bırakarak her katmanı oluşturur.'},
+    head:{offset:[-.42,1.05,1.15],step:'02 / ŞEKİL VERME',name:'Baskı kafası',description:'Filament burada ısınıp erir. Nozul, eriyen malzemeyi ince bir iz halinde bırakarak her katmanı oluşturur.'},
     bed:{offset:[-.12,-.28,.70],step:'03 / KATMANLAR',name:'Baskı tablası',description:'Ürün bu yüzeyde yükselir. Bu yazıcıda tabla, yeni katmanlara yer açmak için baskı ilerledikçe aşağı iner.'}
   };
   let drawingPart='',selectedPart='filament',exploreSaved=null;
@@ -383,7 +383,7 @@
   function placeExploreHotspots(anchors){
     exploreDialog.querySelectorAll('.printer-explore-hotspot').forEach(button=>{
       const id=button.dataset.printerPart,offset=partOffset(id),point=projectScene(anchors[id].map((v,i)=>v+offset[i]));
-      button.style.left=clamp(point[0],24,w-24)+'px';button.style.top=clamp(point[1],24,h-24)+'px';
+      button.style.left=clamp(point[0]-(id==='head'?52:0),24,w-24)+'px';button.style.top=clamp(point[1],24,h-24)+'px';
     });
   }
   function selectExplorePart(id){
