@@ -175,11 +175,12 @@
   function shade(base,amount){return 'rgb('+base.map(v=>Math.round(limit(v*amount,0,255))).join(',')+')';}
   function renderModel(context,w,h,value=progress,clearCanvas=true){
     if(clearCanvas)context.clearRect(0,0,w,h);
-    const unit=Math.min(w/4.9,h/3.65),cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);
+    const frame=mesh?.backing?.frame,viewPitch=frame?limit(pitch+.4,.32,1.35):pitch;
+    const unit=Math.min(w/4.9,h/3.65)*(frame?limit(3/Math.hypot(frame.w,frame.h),.85,1.7):1),cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(viewPitch),sp=Math.sin(viewPitch);
     const relief=mesh?.reliefHeight??.38;
     const baseH=Math.min(.15,(.15+relief)*value),raised=Math.max(0,(.15+relief)*value-.15);
     const project=v=>{
-      const x=v[0]*cy+v[2]*sy,z=-v[0]*sy+v[2]*cy,y=v[1]-.18,depth=z*cp+y*sp,f=7/(7-depth);
+      const vx=v[0]-(frame?.x||0),vz=v[2]-(frame?.z||0),x=vx*cy+vz*sy,z=-vx*sy+vz*cy,y=v[1]-.18,depth=z*cp+y*sp,f=7/(7-depth);
       return {x:w/2+x*f*unit,y:h/2+(-y*cp+z*sp)*f*unit,depth};
     };
     const facing=n=>(-n[0]*sy+n[2]*cy)*cp+n[1]*sp;
@@ -374,7 +375,11 @@
   function build(){
     if(activeStroke||transform||building)return;
     const {bits,tones}=drawingRaster();let backing=null;
-    if(keychain.enabled){const baseBits=keychainBacking(bits,COLS,ROWS,keychain.hole);for(let i=0;i<bits.length;i++)if(!baseBits[i])bits[i]=0;backing=reliefGeometry(baseBits,COLS,ROWS);}
+    if(keychain.enabled){
+      const baseBits=keychainBacking(bits,COLS,ROWS,keychain.hole);for(let i=0;i<bits.length;i++)if(!baseBits[i])bits[i]=0;backing=reliefGeometry(baseBits,COLS,ROWS);
+      if(backing.cells){const xs=backing.tops.flatMap(r=>[r[0],r[2]]),ys=backing.tops.flatMap(r=>[r[1],r[3]]),left=Math.min(...xs),right=Math.max(...xs),front=Math.min(...ys),back=Math.max(...ys);
+        backing.frame={x:((left+right)/2/COLS-.5)*3.2,z:((front+back)/2/ROWS-.5)*2,w:(right-left)/COLS*3.2,h:(back-front)/ROWS*2};}
+    }
     const result=reliefGeometry(bits,COLS,ROWS,tones);
     if(!result.cells){mesh=null;changed=true;status.textContent='Çizim boş · bir şekil çiz';updateActions();requestPaint();return;}
     result.reliefHeight=keychain.enabled||paths.some(p=>p.shape==='text')?.12:.38;
