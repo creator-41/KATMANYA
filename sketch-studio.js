@@ -11,6 +11,7 @@
   if(!inkCtx||!previewCtx||!strokeCtx||!maskCtx||!cutCtx)return;
   const buildButton=dialog.querySelector('.sketch-build'),undo=dialog.querySelector('.sketch-undo'),clear=dialog.querySelector('.sketch-clear');
   const download=dialog.querySelector('.sketch-download'),quote=dialog.querySelector('.sketch-quote');
+  const share=dialog.querySelector('.sketch-share'),shareStatus=dialog.querySelector('.sketch-share-status'),shareInput=dialog.querySelector('.sketch-share-link');
   const brush=dialog.querySelector('.sketch-brush input'),empty=dialog.querySelector('.sketch-empty'),status=dialog.querySelector('.sketch-build-status');
   const shapeSelect=dialog.querySelector('.sketch-shape-select'),shapeSize=dialog.querySelector('.sketch-shape-size'),shapePercent=dialog.querySelector('.sketch-shape-percent');
   const shapeAngle=dialog.querySelector('.sketch-shape-angle'),angleValue=dialog.querySelector('.sketch-angle-value');
@@ -30,6 +31,7 @@
   let keychain={enabled:false,hole:[.5,.1]},holeGesture=false;
   let finish='raised';
   let otherPaths=[],otherFinish='raised',face='front',modelFace='front';
+  let shareUrl='',shareSnapshot='',shareRevision=0;
   const shapeNames={bolt:'Şimşek',heart:'Kalp',star:'Yıldız',triangle:'Üçgen',circle:'Daire',rectangle:'Dikdörtgen',text:'Metin'};
   let yaw=-.48,pitch=.72,rotation=null,frameId=0,started=0,saved=null,inkDirty=true,inkSize={w:800,h:500},modelSize={w:800,h:600};
   // Merge occupied raster cells into flat top rectangles and exposed boundary runs.
@@ -331,13 +333,23 @@
     const ready=!!mesh&&!changed&&!building;
     download.disabled=!ready;quote.setAttribute('aria-disabled',String(!ready));quote.setAttribute('tabindex',ready?'0':'-1');
     if(ready){
+      const snapshot=JSON.stringify({v:1,p:facePaths('front'),b:keychain.enabled?facePaths('back'):[],f:faceFinish('front'),r:keychain.enabled?faceFinish('back'):'raised',k:keychain.enabled?keychain.hole:false,c:color,s:keychain.enabled?modelFace:'front'});
+      if(snapshot!==shareSnapshot){
+        shareSnapshot=snapshot;shareUrl='';
+        try{const url=new URL('./',window.location.href);url.search='';url.hash='tasarim='+packDraft(snapshot);shareUrl=url.href;}
+        catch{if(shareStatus)shareStatus.textContent='Çizimin link için çok ayrıntılı. Taslağı PNG olarak indirebilirsin.';}
+      }
+    }else{shareUrl='';shareSnapshot='';}
+    if(share)share.disabled=!ready||!shareUrl;
+    if(ready){
       const styles=keychain.enabled?'Ön yüz: '+finishName(faceFinish('front'))+' · Arka yüz: '+(facePaths('back').length?finishName(faceFinish('back')):'Boş'):finishName(finish);
-      const text=['Merhaba KATMANYA, kendi çizimimden '+(keychain.enabled?(facePaths('back').length?'çift taraflı ':'')+'bir anahtarlık':finish==='engrave'?'oymalı bir plaka':'kabartmalı bir plaka')+' için teklif almak istiyorum.','Renk tercihi: '+usedColors(),'Baskı tarzı: '+styles,'Taslağımı sohbete ekleyeceğim.','Ölçü ve adet bilgisini birlikte netleştirelim.'].join('\n');
+      const text=['Merhaba KATMANYA, kendi çizimimden '+(keychain.enabled?(facePaths('back').length?'çift taraflı ':'')+'bir anahtarlık':finish==='engrave'?'oymalı bir plaka':'kabartmalı bir plaka')+' için teklif almak istiyorum.','Renk tercihi: '+usedColors(),'Baskı tarzı: '+styles,shareUrl?'Tasarım bağlantısı: '+shareUrl:'Taslağımı sohbete ekleyeceğim.','Ölçü ve adet bilgisini birlikte netleştirelim.'].join('\n');
       quote.href='https://wa.me/905304815341?text='+encodeURIComponent(text);
     }else quote.removeAttribute('href');
   }
   function markChanged(){
     changed=true;building=false;progress=1;inkDirty=true;
+    shareRevision++;if(shareStatus)shareStatus.textContent='';if(shareInput){shareInput.hidden=true;shareInput.value='';}
     status.textContent=mesh?'Çizim değişti · tekrar çevir':'Çizimini bekliyor';updateActions();requestPaint();
   }
   function setView(view){
@@ -496,6 +508,90 @@
     if(direction==='reset'){yaw=-.48;pitch=.72;}else yaw+=direction==='left'?-.25:.25;
     requestPaint();
   }
+  // Self-contained UTF-8 LZSS links. No upload or browser-local ID is needed.
+  // Both encoded and expanded sizes are bounded before accepting external data.
+  function packDraft(json){
+    if(json.length>256000)throw Error('draft-size');validateDraft(JSON.parse(json));
+    const bytes=new TextEncoder().encode(json);if(bytes.length>256000)throw Error('draft-size');
+    const out=[],positions=new Map();let at=0;
+    const key=i=>(bytes[i]<<16)|(bytes[i+1]<<8)|bytes[i+2];
+    const rememberAt=i=>{if(i+2>=bytes.length)return;const k=key(i),list=positions.get(k)||[];list.push(i);if(list.length>24)list.shift();positions.set(k,list);};
+    while(at<bytes.length){
+      const flagAt=out.length;out.push(0);let flags=0;
+      for(let token=0;token<8&&at<bytes.length;token++){
+        let length=0,distance=0;
+        if(at+2<bytes.length)for(const pos of (positions.get(key(at))||[]).slice().reverse()){
+          const offset=at-pos;if(offset>4095)break;let n=0;
+          while(n<18&&at+n<bytes.length&&bytes[pos+n]===bytes[at+n])n++;
+          if(n>length&&n>=3){length=n;distance=offset;if(n===18)break;}
+        }
+        if(length>=3){flags|=1<<token;out.push(distance>>4,((distance&15)<<4)|(length-3));}
+        else{length=1;out.push(bytes[at]);}
+        for(let i=0;i<length;i++)rememberAt(at+i);at+=length;
+      }
+      out[flagAt]=flags;if(out.length>12000)throw Error('link-size');
+    }
+    let binary='';for(let i=0;i<out.length;i+=8192)binary+=String.fromCharCode(...out.slice(i,i+8192));
+    const token='1.'+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+    if(token.length>12000)throw Error('link-size');return token;
+  }
+  function unpackDraft(token){
+    if(typeof token!=='string'||token.length>12000||!/^1\.[A-Za-z0-9_-]+$/.test(token))throw Error('link-format');
+    const binary=atob(token.slice(2).replace(/-/g,'+').replace(/_/g,'/')),out=new Uint8Array(256000);let at=0,size=0;
+    while(at<binary.length){
+      const flags=binary.charCodeAt(at++);
+      for(let bit=0;bit<8&&at<binary.length;bit++){
+        if(flags&(1<<bit)){
+          if(at+1>=binary.length)throw Error('link-truncated');const a=binary.charCodeAt(at++),b=binary.charCodeAt(at++),distance=(a<<4)|(b>>4),length=(b&15)+3;
+          if(!distance||distance>size||size+length>out.length)throw Error('link-offset');
+          for(let i=0;i<length;i++){out[size]=out[size-distance];size++;}
+        }else{if(size>=out.length)throw Error('draft-size');out[size++]=binary.charCodeAt(at++);}
+      }
+    }
+    return validateDraft(JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(out.subarray(0,size))));
+  }
+  function validateDraft(data){
+    if(!data||data.v!==1||!Array.isArray(data.p)||!Array.isArray(data.b)||data.p.length+data.b.length>200)throw Error('draft-format');
+    let pointCount=0,cutCount=0;
+    const number=(v,min,max)=>{if(typeof v!=='number'||!Number.isFinite(v)||v<min||v>max)throw Error('draft-number');return v;};
+    const point=(v,min=0,max=1)=>{if(!Array.isArray(v)||v.length!==2)throw Error('draft-point');return v.map(n=>number(n,min,max));};
+    const points=(v,min=0,max=1)=>{if(!Array.isArray(v)||!v.length||v.length>8000||(pointCount+=v.length)>20000)throw Error('draft-points');return v.map(p=>point(p,min,max));};
+    const palette=['Yeşil','Beyaz','Mavi','Siyah'],shapes=['bolt','heart','star','triangle','circle','rectangle','text'];
+    const cleanPath=p=>{
+      if(!p||p.tool!=='pen'||!palette.includes(p.color))throw Error('draft-path');
+      const path={tool:'pen',width:number(p.width,.000001,1),color:p.color,points:points(p.points)};
+      if(p.shape!==undefined){
+        if(!shapes.includes(p.shape))throw Error('draft-shape');path.shape=p.shape;path.base=points(p.base,-1,1);path.center=point(p.center);path.scale=number(p.scale,.25,1.5);
+        if(p.angle!==undefined)path.angle=number(p.angle,-180,180);
+        if(p.shape==='text'){if(typeof p.text!=='string'||!p.text.length||p.text.length>32)throw Error('draft-text');path.text=p.text;path.fontPx=number(p.fontPx,.01,64);}
+      }
+      if(p.cuts!==undefined){
+        if(!Array.isArray(p.cuts)||(cutCount+=p.cuts.length)>1000)throw Error('draft-cuts');
+        path.cuts=p.cuts.map(c=>({width:number(c?.width,.000001,1),points:points(c?.points,-8,8)}));
+      }
+      return path;
+    };
+    if(!['raised','engrave'].includes(data.f)||!['raised','engrave'].includes(data.r)||!palette.includes(data.c)||!['front','back'].includes(data.s))throw Error('draft-style');
+    const hole=data.k===false?false:point(data.k);if(hole){number(hole[0],.07,.93);number(hole[1],.1,.9);}
+    const front=data.p.map(cleanPath),back=data.b.map(cleanPath);
+    if(!(hole?[...front,...back]:front).length)throw Error('draft-empty');
+    return {v:1,p:front,b:back,f:data.f,r:data.r,k:hole,c:data.c,s:hole?data.s:'front'};
+  }
+  async function copyDraftLink(){
+    if(!shareUrl||changed||building)return;const link=shareUrl,revision=shareRevision;
+    try{if(!navigator.clipboard?.writeText)throw Error('clipboard');await navigator.clipboard.writeText(link);if(revision===shareRevision&&shareStatus)shareStatus.textContent='Link kopyalandı ✓ Açan kişi tasarımını hazır görecek.';}
+    catch{if(revision!==shareRevision)return;if(shareInput){shareInput.hidden=false;shareInput.value=link;shareInput.focus();shareInput.select();}if(shareStatus)shareStatus.textContent='Bağlantıyı aşağıdan seçip kopyalayabilirsin.';}
+  }
+  function loadSharedDraft(){
+    if(!window.location.hash.startsWith('#tasarim='))return;
+    try{
+      const data=unpackDraft(window.location.hash.slice(9));if(paths.length||otherPaths.length)remember();
+      paths=data.p;otherPaths=data.b;finish=data.f;otherFinish=data.r;face='front';modelFace=data.s;color=data.c;keychain={enabled:!!data.k,hole:data.k||[.5,.1]};
+      selected=null;activeStroke=null;transform=null;sizeGesture=false;holeGesture=false;mesh=null;building=false;changed=true;yaw=-.48;pitch=.72;
+      if(data.s==='back')swapFace('back');chooseTool('pen');markChanged();open();build();
+      if(mesh){progress=1;building=false;status.textContent='Paylaşılan tasarım hazır';updateActions();requestPaint();}
+    }catch{open();if(shareStatus)shareStatus.textContent='Bu tasarım bağlantısı açılamadı. Yeni bir çizim oluşturabilir veya bağlantıyı tekrar isteyebilirsin.';}
+  }
   async function exportDraft(){
     if(!mesh||changed||building)return;
     const sheet=document.createElement('canvas');sheet.width=1600;sheet.height=1000;const c=sheet.getContext('2d');
@@ -603,6 +699,7 @@
   undo.addEventListener('click',()=>{if(activeStroke||transform||!history.length)return;const old=history.pop();paths=old.paths;otherPaths=old.otherPaths||[];otherFinish=old.otherFinish||'raised';face=old.face||'front';modelFace=face;keychain=old.keychain;finish=old.finish||'raised';selected=paths[old.index]||null;sizeGesture=false;holeGesture=false;if(tool==='hole'&&!keychain.enabled)chooseTool('move');markChanged();});
   clear.addEventListener('click',()=>{if(activeStroke||transform)return;remember();paths=[];otherPaths=[];selected=null;mesh=null;keychain.enabled=false;finish='raised';otherFinish='raised';face='front';modelFace='front';if(tool==='hole')chooseTool('pen');markChanged();});
   buildButton.addEventListener('click',build);download.addEventListener('click',exportDraft);
+  share?.addEventListener('click',copyDraftLink);window.addEventListener('hashchange',loadSharedDraft);
   quote.addEventListener('click',event=>{if(!mesh||changed||building)event.preventDefault();});
   dialog.querySelector('.sketch-close').addEventListener('click',()=>dialog.close());dialog.addEventListener('close',restore);
   trigger.addEventListener('click',open);window.addEventListener('resize',()=>{if(dialog.open)measure();},{passive:true});
@@ -611,6 +708,6 @@
     if(document.hidden){if(frameId)cancelAnimationFrame(frameId);frameId=0;}else if(dialog.open){if(building)started=performance.now()-progress*DURATION;requestPaint();}
   });
   window.addEventListener('pageshow',()=>{if(dialog.open)dialog.close();});
-  motion.addEventListener('change',requestPaint);dialog.dataset.sketchView='draw';updateActions();trigger.disabled=false;
+  motion.addEventListener('change',requestPaint);dialog.dataset.sketchView='draw';updateActions();trigger.disabled=false;loadSharedDraft();
 })();
 
