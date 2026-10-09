@@ -35,7 +35,7 @@
   <link rel="icon" type="image/svg+xml" href="./assets/katmanya-icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/katmanya-192.png">
   <link rel="apple-touch-icon" href="./assets/katmanya-180.png">
-  <link rel="stylesheet" href="styles.css?v=78">
+  <link rel="stylesheet" href="styles.css?v=79">
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#top" aria-label="KATMANYA ana sayfa"><img class="katmanya-brand" src="./assets/katmanya-logo.svg" width="631" height="128" alt="KATMANYA"></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a><a href="#sss">Sık sorulanlar</a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="KATMANYA uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
@@ -156,10 +156,18 @@
           <div class="sketch-rotation" role="group" aria-label="3B görünümü döndür"><button type="button" data-sketch-rotate="left" aria-label="Plakayı sola döndür">←</button><span>SÜRÜKLE, DÖNDÜR</span><button type="button" data-sketch-rotate="reset" aria-label="Plakayı ilk açıya döndür">↻</button><button type="button" data-sketch-rotate="right" aria-label="Plakayı sağa döndür">→</button></div>
           <div class="sketch-actions"><button class="sketch-download" type="button" disabled>TASLAĞI İNDİR ↓</button><a class="sketch-quote" aria-disabled="true" target="_blank" rel="noopener noreferrer">WhatsApp’tan fiyat iste <span aria-hidden="true">↗</span></a></div>
           <button class="sketch-share" type="button" disabled>TASARIM LİNKİNİ KOPYALA <span aria-hidden="true">↗</span></button><p class="sketch-share-status" role="status" aria-live="polite"></p><input class="sketch-share-link" type="text" readonly aria-label="Paylaşılacak tasarım bağlantısı" hidden>
+          <button class="sketch-story" type="button" disabled>HİKÂYE GÖRSELİ HAZIRLA <span aria-hidden="true">↗</span></button>
           <p class="sketch-quote-note">Linki açan kişi tasarımını hazır görür. Bağlantı WhatsApp teklifine de eklenir; istersen PNG taslağını da gönder.</p>
         </section>
       </div>
     </div>
+  </dialog>
+  <dialog class="sketch-story-dialog" aria-labelledby="sketch-story-title" aria-describedby="sketch-story-help">
+    <div class="sketch-story-head"><div><p class="sketch-eyebrow">KATMANYA / SENİN TASARIMIN</p><h2 id="sketch-story-title">Vitrine çıkar.</h2></div><button class="sketch-story-close" type="button" aria-label="Görseli kapat">×</button></div>
+    <p id="sketch-story-help">1080 × 1920 · Hikâyende paylaş. QR koddan tasarımın açılsın.</p>
+    <div class="sketch-story-stage"><img class="sketch-story-image" alt="KATMANYA logosu ve kendi 3B tasarımınla hikâye görseli" hidden></div>
+    <p class="sketch-story-status" role="status" aria-live="polite"></p>
+    <button class="sketch-story-download" type="button" disabled>PNG İNDİR ↓</button>
   </dialog>
   <dialog class="printer-explore-dialog" id="printer-explorer" aria-labelledby="printer-explore-title" aria-describedby="printer-explore-help">
     <div class="printer-explore-shell">
@@ -262,7 +270,9 @@
   </dialog>
   </main>
   <script src="desk-set.js?v=1" defer></script>
-  <script src="sketch-studio.js?v=18" defer></script>
+  <script src="vendor/qrcodegen.js?v=1" defer></script>
+  <script src="story-card.js?v=1" defer></script>
+  <script src="sketch-studio.js?v=19" defer></script>
   <script src="main.js?v=44" defer></script>
 
   <aside id="quote-chat" aria-label="KATMANYA teklif asistanı">

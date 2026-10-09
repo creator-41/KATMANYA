@@ -12,6 +12,9 @@
   const buildButton=dialog.querySelector('.sketch-build'),undo=dialog.querySelector('.sketch-undo'),clear=dialog.querySelector('.sketch-clear');
   const download=dialog.querySelector('.sketch-download'),quote=dialog.querySelector('.sketch-quote');
   const share=dialog.querySelector('.sketch-share'),shareStatus=dialog.querySelector('.sketch-share-status'),shareInput=dialog.querySelector('.sketch-share-link');
+  const story=dialog.querySelector('.sketch-story'),storyDialog=document.querySelector('.sketch-story-dialog');
+  const storyImage=storyDialog?.querySelector('.sketch-story-image'),storyStatus=storyDialog?.querySelector('.sketch-story-status'),storyDownload=storyDialog?.querySelector('.sketch-story-download');
+  let storyRevision=0,storyObjectUrl='';
   const brush=dialog.querySelector('.sketch-brush input'),empty=dialog.querySelector('.sketch-empty'),status=dialog.querySelector('.sketch-build-status');
   const shapeSelect=dialog.querySelector('.sketch-shape-select'),shapeSize=dialog.querySelector('.sketch-shape-size'),shapePercent=dialog.querySelector('.sketch-shape-percent');
   const shapeAngle=dialog.querySelector('.sketch-shape-angle'),angleValue=dialog.querySelector('.sketch-angle-value');
@@ -341,6 +344,7 @@
       }
     }else{shareUrl='';shareSnapshot='';}
     if(share)share.disabled=!ready||!shareUrl;
+    if(story)story.disabled=!ready||!window.KatmanyaStory;
     if(ready){
       const styles=keychain.enabled?'Ön yüz: '+finishName(faceFinish('front'))+' · Arka yüz: '+(facePaths('back').length?finishName(faceFinish('back')):'Boş'):finishName(finish);
       const text=['Merhaba KATMANYA, kendi çizimimden '+(keychain.enabled?(facePaths('back').length?'çift taraflı ':'')+'bir anahtarlık':finish==='engrave'?'oymalı bir plaka':'kabartmalı bir plaka')+' için teklif almak istiyorum.','Renk tercihi: '+usedColors(),'Baskı tarzı: '+styles,shareUrl?'Tasarım bağlantısı: '+shareUrl:'Taslağımı sohbete ekleyeceğim.','Ölçü ve adet bilgisini birlikte netleştirelim.'].join('\n');
@@ -630,6 +634,32 @@
     else if(finish==='engrave')link.download='katmanya-oyma-plaka-taslagi.png';
     document.body.append(link);link.click();link.remove();window.setTimeout(()=>URL.revokeObjectURL(url),30000);
   }
+  function releaseStory(){
+    storyRevision++;if(storyObjectUrl){const url=storyObjectUrl;storyObjectUrl='';window.setTimeout(()=>URL.revokeObjectURL(url),30000);}
+    if(storyImage){storyImage.hidden=true;storyImage.removeAttribute('src');}if(storyDownload)storyDownload.disabled=true;
+  }
+  async function prepareStory(){
+    if(!mesh||changed||building||!storyDialog||!window.KatmanyaStory)return;
+    releaseStory();const revision=storyRevision;
+    // Freeze the displayed face and camera before any fonts or logo finish loading.
+    const model=document.createElement('canvas');model.width=980;model.height=700;renderModel(model.getContext('2d'),980,700,1);
+    const details={model,link:shareUrl,product:keychain.enabled?'ANAHTARLIK':'PLAKA',side:keychain.enabled?(modelFace==='back'?'ARKA YÜZ':'ÖN YÜZ'):'',finish:finishName(keychain.enabled?faceFinish(modelFace):finish).toLocaleUpperCase('tr-TR')};
+    storyStatus.textContent='Görselin hazırlanıyor…';storyDialog.showModal();storyDialog.querySelector('.sketch-story-close').focus({preventScroll:true});
+    try{
+      const result=await window.KatmanyaStory.create(details);if(revision!==storyRevision||!storyDialog.open)return;
+      storyObjectUrl=URL.createObjectURL(result.blob);storyImage.src=storyObjectUrl;storyImage.hidden=false;
+      storyImage.alt='KATMANYA logosu, “Bunu ben tasarladım.” başlığı ve '+details.product.toLocaleLowerCase('tr-TR')+' tasarımının 3B görüntüsü'+(result.qr?', tasarımı açan QR kodla.':'.');
+      storyDownload.disabled=false;
+      storyStatus.textContent=result.qr?'Hazır ✓ QR kod senin tasarımını açar. PNG’yi indirip hikâyende paylaş.':'Görsel hazır. Tasarım bağlantın QR koda sığmadı; linki ayrıca paylaşabilirsin.';
+    }catch{if(revision===storyRevision&&storyDialog.open)storyStatus.textContent='Görsel hazırlanamadı. Kapatıp yeniden deneyebilirsin.';}
+  }
+  story?.addEventListener('click',prepareStory);
+  storyDialog?.querySelector('.sketch-story-close')?.addEventListener('click',()=>storyDialog.close());
+  storyDialog?.addEventListener('close',()=>{releaseStory();if(dialog.open)story?.focus({preventScroll:true});});
+  storyDownload?.addEventListener('click',()=>{
+    if(!storyObjectUrl||storyDownload.disabled)return;
+    const link=document.createElement('a');link.href=storyObjectUrl;link.download='katmanya-ben-tasarladim-hikaye.png';document.body.append(link);link.click();link.remove();
+  });
   function open(){
     if(dialog.open)return;
     saved={scrollY:window.scrollY,body:{position:document.body.style.position,top:document.body.style.top,width:document.body.style.width}};
@@ -637,6 +667,7 @@
     dialog.showModal();setView('draw');updateActions();inkDirty=true;measure();dialog.querySelector('.sketch-close').focus({preventScroll:true});
   }
   function restore(){
+    if(storyDialog?.open)storyDialog.close();
     if(frameId)cancelAnimationFrame(frameId);frameId=0;building=false;progress=1;activeStroke=null;transform=null;sizeGesture=false;holeGesture=false;rotation=null;
     if(saved){Object.assign(document.body.style,saved.body);window.scrollTo({top:saved.scrollY,left:0,behavior:'instant'});saved=null;}
     updateActions();trigger.focus({preventScroll:true});
