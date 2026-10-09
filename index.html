@@ -35,7 +35,7 @@
   <link rel="icon" type="image/svg+xml" href="./assets/katmanya-icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/katmanya-192.png">
   <link rel="apple-touch-icon" href="./assets/katmanya-180.png">
-  <link rel="stylesheet" href="styles.css?v=70">
+  <link rel="stylesheet" href="styles.css?v=71">
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#top" aria-label="KATMANYA ana sayfa"><img class="katmanya-brand" src="./assets/katmanya-logo.svg" width="631" height="128" alt="KATMANYA"></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a><a href="#sss">Sık sorulanlar</a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="KATMANYA uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
@@ -70,7 +70,7 @@
         <div class="scene-wrap"><canvas id="printer" aria-label="Kaydırdıkça hareket eden KATMANYA yazıcısı ve katman katman basılan robot kaskı"></canvas><div class="printer-badge" aria-hidden="true">KATMANYA</div><div class="scene-fallback" hidden><p>Aklındaki fikri üretelim.</p><small>Bu cihazda 3D görünüm açılamadı. Ürünleri kaydırarak inceleyebilirsin.</small></div></div>
         <button class="printer-explore-trigger" type="button" aria-haspopup="dialog" aria-controls="printer-explorer" disabled>YAZICIYI KEŞFET <span aria-hidden="true">↗</span></button>
         <div class="story-copies">
-          <article class="chapter active" data-chapter="0"><p class="eyebrow"><span class="live-dot"></span> KATMANYA · İLK ÜRETİMLER İÇİN TEKLİF ALIYORUZ</p><h1>Fikrini anlat, <br><em>üretelim.</em></h1><p class="chapter-desc">İlk ürünler için teklif topluyoruz. Fikrini ve ölçünü gönder; fiyatı ve teslim süresini birlikte netleştirelim.</p><a class="scroll-invite" href="#baski-baslangici"><span class="scroll-line"></span> KEŞFETMEK İÇİN KAYDIR <b>↓</b></a></article>
+          <article class="chapter active" data-chapter="0"><p class="eyebrow"><span class="live-dot"></span> KATMANYA · İLK ÜRETİMLER İÇİN TEKLİF ALIYORUZ</p><h1>Fikrini anlat, <br><em>üretelim.</em></h1><p class="chapter-desc">İlk ürünler için teklif topluyoruz. Fikrini ve ölçünü gönder; fiyatı ve teslim süresini birlikte netleştirelim.</p><a class="scroll-invite" href="#baski-baslangici"><span class="scroll-line"></span> KEŞFETMEK İÇİN KAYDIR <b>↓</b></a><button class="sketch-trigger" type="button" aria-haspopup="dialog" aria-controls="sketch-studio" disabled>ÇİZ, KATMANA DÖNÜŞSÜN <span aria-hidden="true">↗</span></button></article>
           <article class="chapter product-slide" data-chapter="1" data-desk-set aria-hidden="true">
             <h2>Modüler <br><em>masaüstü seti</em></h2>
             <p class="chapter-desc product-desc">Telefon standı, kulaklık askısı, oyun kolu standı. Setini ihtiyacına göre kur.</p>
@@ -124,6 +124,34 @@
         </div>
       </div>
     </section>
+  <dialog class="sketch-dialog" id="sketch-studio" aria-labelledby="sketch-title" aria-describedby="sketch-help">
+    <div class="sketch-shell">
+      <header class="sketch-head">
+        <div><p class="sketch-eyebrow">KATMANYA / SENİN ÇİZGİN</p><h2 id="sketch-title">Çiz, <em>katmana dönüşsün.</em></h2><p id="sketch-help">Bir şekil çiz. Kabartmalı plakanı döndürerek keşfet.</p></div>
+        <button class="sketch-close" type="button" aria-label="Çizim stüdyosunu kapat">×</button>
+      </header>
+      <div class="sketch-view-switch" role="group" aria-label="Çizim stüdyosu görünümü"><button type="button" data-sketch-view="draw" aria-pressed="true">01 · ÇİZİM</button><button type="button" data-sketch-view="preview" aria-pressed="false">02 · 3B TASLAK</button></div>
+      <div class="sketch-workspace">
+        <section class="sketch-draw-pane" aria-label="Çizim alanı">
+          <div class="sketch-pane-top"><span>01 / FİKRİNİ ÇİZ</span><span class="sketch-local-note">Çizimin cihazında kalır</span></div>
+          <div class="sketch-presets" role="group" aria-label="Çizim örnekleri"><span>BİR ÖRNEKLE BAŞLA</span><button type="button" data-sketch-preset="bolt">Şimşek</button><button type="button" data-sketch-preset="heart">Kalp</button><button type="button" data-sketch-preset="star">Yıldız</button></div>
+          <div class="sketch-pad"><canvas class="sketch-ink" width="800" height="500" aria-label="Fareyle veya parmağınla çizim yapabileceğin alan"></canvas><div class="sketch-empty" aria-hidden="true"><svg viewBox="0 0 70 50"><path d="M8 37C17 9 22 43 31 20S41 45 61 9"/></svg><strong>Çizgin burada başlasın.</strong><span>Fareyle veya parmağınla çiz.</span></div></div>
+          <div class="sketch-tools" role="group" aria-label="Çizim araçları"><button type="button" data-sketch-tool="pen" aria-pressed="true">Kalem</button><button type="button" data-sketch-tool="eraser" aria-pressed="false">Silgi</button><button class="sketch-undo" type="button" disabled>Geri al</button><button class="sketch-clear" type="button" disabled>Temizle</button></div>
+          <label class="sketch-brush"><span>ÇİZGİ KALINLIĞI</span><input type="range" min="2" max="9" value="4" aria-label="Çizgi kalınlığı"><span class="sketch-brush-scale">İNCE <b>·</b> KALIN</span></label>
+          <button class="sketch-build" type="button" disabled>3B’YE ÇEVİR <span aria-hidden="true">↗</span></button>
+          <p class="sketch-draw-note">Kendi sembolünü, basit bir armayı veya imzanı dene.</p>
+        </section>
+        <section class="sketch-preview-pane" aria-label="Kabartmalı plaka taslağı">
+          <div class="sketch-pane-top"><span>02 / KATMANINI GÖR</span><span class="sketch-build-status" role="status">Çizimini bekliyor</span></div>
+          <div class="sketch-model"><canvas class="sketch-preview" width="800" height="600" tabindex="0" aria-label="Kabartmalı 3B plaka önizlemesi. Döndürmek için sürükle veya ok tuşlarını kullan."></canvas><span class="sketch-model-label">3B TASLAK</span></div>
+          <div class="sketch-rotation" role="group" aria-label="3B görünümü döndür"><button type="button" data-sketch-rotate="left" aria-label="Plakayı sola döndür">←</button><span>SÜRÜKLE, DÖNDÜR</span><button type="button" data-sketch-rotate="reset" aria-label="Plakayı ilk açıya döndür">↻</button><button type="button" data-sketch-rotate="right" aria-label="Plakayı sağa döndür">→</button></div>
+          <div class="sketch-colors" role="group" aria-label="Kabartma rengi"><span>RENK</span><button type="button" data-sketch-color="Yeşil" aria-label="Yeşil kabartma" aria-pressed="true" style="--sketch-color:#c7fa5f"></button><button type="button" data-sketch-color="Beyaz" aria-label="Beyaz kabartma" aria-pressed="false" style="--sketch-color:#f3f1ec"></button><button type="button" data-sketch-color="Mavi" aria-label="Mavi kabartma" aria-pressed="false" style="--sketch-color:#5795ef"></button><button type="button" data-sketch-color="Siyah" aria-label="Siyah kabartma" aria-pressed="false" style="--sketch-color:#454e48"></button></div>
+          <div class="sketch-actions"><button class="sketch-download" type="button" disabled>TASLAĞI İNDİR ↓</button><a class="sketch-quote" aria-disabled="true" target="_blank" rel="noopener noreferrer">WhatsApp’tan fiyat iste <span aria-hidden="true">↗</span></a></div>
+          <p class="sketch-quote-note">Taslağı indirip WhatsApp sohbetine ekle. Baskı için ölçü ve adedi birlikte netleştirelim.</p>
+        </section>
+      </div>
+    </div>
+  </dialog>
   <dialog class="printer-explore-dialog" id="printer-explorer" aria-labelledby="printer-explore-title" aria-describedby="printer-explore-help">
     <div class="printer-explore-shell">
       <header class="printer-explore-head">
@@ -225,7 +253,8 @@
   </dialog>
   </main>
   <script src="desk-set.js?v=1" defer></script>
-  <script src="main.js?v=43" defer></script>
+  <script src="sketch-studio.js?v=1" defer></script>
+  <script src="main.js?v=44" defer></script>
 
   <aside id="quote-chat" aria-label="KATMANYA teklif asistanı">
     <section id="quote-chat-panel" class="quote-chat-panel" role="dialog" aria-modal="false" aria-labelledby="quote-chat-title" hidden>

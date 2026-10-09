@@ -769,10 +769,15 @@
     installPromptDialog.close();
   });
   installPromptDialog.addEventListener("cancel",deferInstallPrompt);
-  window.setTimeout(()=>{
-    if(appIsInstalled||installPromptIsDeferred())return;
+  let installPromptDue=false;
+  function showScheduledInstallPrompt(){
+    if(!installPromptDue||appIsInstalled||installPromptIsDeferred())return;
+    if(document.querySelector('dialog[open]'))return;
+    installPromptDue=false;
     if(typeof installPromptDialog.showModal==="function")installPromptDialog.showModal();
-  },5000);
+  }
+  document.querySelectorAll('dialog').forEach(dialog=>dialog.addEventListener('close',()=>{if(installPromptDue)window.setTimeout(showScheduledInstallPrompt,0);}));
+  window.setTimeout(()=>{installPromptDue=true;showScheduledInstallPrompt();},5000);
 
   if("serviceWorker"in navigator){
     window.addEventListener("load",()=>{
