@@ -238,7 +238,7 @@
     let pts=[];
     if(name==='bolt')pts=[[.56,.16],[.29,.53],[.48,.53],[.43,.86],[.72,.42],[.53,.42],[.56,.16]];
     if(name==='heart')for(let i=0;i<=100;i++){const t=i/100*Math.PI*2;pts.push([.5+Math.pow(Math.sin(t),3)*.30,.47-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))*.023]);}
-    if(name==='star')for(let i=0;i<=10;i++){const t=-Math.PI/2+i*Math.PI/5,r=i%2?.15:.34;pts.push([.5+Math.cos(t)*r,.5+Math.sin(t)*r]);}
+    if(name==='star')for(let i=0;i<=10;i++){const t=-Math.PI/2+i*Math.PI/5,r=i%2?.10:.225;pts.push([.5+Math.cos(t)*r,.5+Math.sin(t)*r*1.6]);}
     if(name==='triangle')pts=[[.5,.12],[.75,.813],[.25,.813],[.5,.12]];
     if(name==='circle')for(let i=0;i<=100;i++){const t=i/100*Math.PI*2;pts.push([.5+Math.cos(t)*.20,.5+Math.sin(t)*.32]);}
     if(name==='rectangle')pts=[[.22,.23],[.78,.23],[.78,.77],[.22,.77],[.22,.23]];
