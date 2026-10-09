@@ -21,7 +21,7 @@
   <meta name="twitter:image:alt" content="Yeşil katmanlı küp logosu ve altında KATMANYA yazısı">
   <script>
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    if (location.hash && !location.hash.startsWith('#tasarim=')) history.replaceState(null, '', location.pathname + location.search);
     window.addEventListener('pageshow', () => {
       window.scrollTo({top: 0, left: 0, behavior: 'instant'});
     });
@@ -262,7 +262,7 @@
   </dialog>
   </main>
   <script src="desk-set.js?v=1" defer></script>
-  <script src="sketch-studio.js?v=17" defer></script>
+  <script src="sketch-studio.js?v=18" defer></script>
   <script src="main.js?v=44" defer></script>
 
   <aside id="quote-chat" aria-label="KATMANYA teklif asistanı">

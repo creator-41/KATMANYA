@@ -707,7 +707,7 @@
   document.addEventListener('visibilitychange',()=>{
     if(document.hidden){if(frameId)cancelAnimationFrame(frameId);frameId=0;}else if(dialog.open){if(building)started=performance.now()-progress*DURATION;requestPaint();}
   });
-  window.addEventListener('pageshow',()=>{if(dialog.open)dialog.close();});
+  window.addEventListener('pageshow',event=>{if(!event.persisted&&window.location.hash.startsWith('#tasarim='))return;if(dialog.open)dialog.close();});
   motion.addEventListener('change',requestPaint);dialog.dataset.sketchView='draw';updateActions();trigger.disabled=false;loadSharedDraft();
 })();
 
