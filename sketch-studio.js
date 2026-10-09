@@ -11,10 +11,13 @@
   const buildButton=dialog.querySelector('.sketch-build'),undo=dialog.querySelector('.sketch-undo'),clear=dialog.querySelector('.sketch-clear');
   const download=dialog.querySelector('.sketch-download'),quote=dialog.querySelector('.sketch-quote');
   const brush=dialog.querySelector('.sketch-brush input'),empty=dialog.querySelector('.sketch-empty'),status=dialog.querySelector('.sketch-build-status');
+  const shapeSelect=dialog.querySelector('.sketch-shape-select'),shapeSize=dialog.querySelector('.sketch-shape-size'),shapePercent=dialog.querySelector('.sketch-shape-percent');
   const motion=matchMedia('(prefers-reduced-motion: reduce)'),COLS=160,ROWS=100,DURATION=2400;
   const colors={Yeşil:'#c7fa5f',Beyaz:'#f3f1ec',Mavi:'#5795ef',Siyah:'#454e48'};
   const limit=(v,a,b)=>Math.max(a,Math.min(b,v));
   let paths=[],activeStroke=null,tool='pen',color='Yeşil',mesh=null,changed=true,building=false,progress=1;
+  let selected=null,transform=null,sizeGesture=false;const history=[];
+  const shapeNames={bolt:'Şimşek',heart:'Kalp',star:'Yıldız',triangle:'Üçgen',circle:'Daire',rectangle:'Dikdörtgen'};
   let yaw=-.48,pitch=.72,rotation=null,frameId=0,started=0,saved=null,inkDirty=true,inkSize={w:800,h:500},modelSize={w:800,h:600};
   // Merge occupied raster cells into flat top rectangles and exposed boundary runs.
   // Empty cells remain holes; interior edges never generate side walls.
@@ -68,6 +71,10 @@
     const {w,h,dpr}=inkSize;inkCtx.setTransform(dpr,0,0,dpr,0,0);drawGrid(inkCtx,w,h);
     paintPaths(strokeCtx,strokeBuffer.width,strokeBuffer.height);
     inkCtx.drawImage(strokeBuffer,0,0,w,h);
+    if(selected&&tool==='move'){
+      const b=bounds(selected);inkCtx.save();inkCtx.strokeStyle='#efffd7';inkCtx.lineWidth=1;inkCtx.setLineDash([5,4]);
+      inkCtx.strokeRect(b.x*w-5,b.y*h-5,b.w*w+10,b.h*h+10);inkCtx.restore();
+    }
   }
   function resizeCanvas(canvas){
     const rect=canvas.getBoundingClientRect();if(rect.width<1||rect.height<1)return null;
@@ -140,8 +147,9 @@
   }
   function requestPaint(){if(!frameId&&dialog.open&&!document.hidden)frameId=requestAnimationFrame(paintFrame);}
   function updateActions(){
-    undo.disabled=!paths.length;clear.disabled=!paths.length;empty.hidden=!!paths.length;
-    buildButton.disabled=!paths.some(p=>p.tool==='pen')||!!activeStroke||building;
+    undo.disabled=!history.length;clear.disabled=!paths.length;empty.hidden=!!paths.length;
+    buildButton.disabled=!paths.some(p=>p.tool==='pen')||!!activeStroke||!!transform||building;
+    syncSelection();
     const ready=!!mesh&&!changed&&!building;
     download.disabled=!ready;quote.setAttribute('aria-disabled',String(!ready));quote.setAttribute('tabindex',ready?'0':'-1');
     if(ready){
@@ -161,13 +169,48 @@
   function point(event){
     const r=ink.getBoundingClientRect();return [limit((event.clientX-r.left)/r.width,0,1),limit((event.clientY-r.top)/r.height,0,1)];
   }
+  function remember(){history.push({paths:JSON.parse(JSON.stringify(paths)),index:paths.indexOf(selected)});if(history.length>100)history.shift();}
+  function bounds(path){const xs=path.points.map(p=>p[0]),ys=path.points.map(p=>p[1]);return {x:Math.min(...xs),y:Math.min(...ys),w:Math.max(...xs)-Math.min(...xs),h:Math.max(...ys)-Math.min(...ys)};}
+  function syncSelection(){
+    if(selected&&!paths.includes(selected))selected=null;
+    if(shapeSelect){
+      shapeSelect.innerHTML='<option value="">Şekil seç</option>'+paths.map((p,i)=>p.shape?'<option value="'+i+'">'+shapeNames[p.shape]+' · '+(i+1)+'</option>':'').join('');
+      shapeSelect.value=selected?String(paths.indexOf(selected)):'';shapeSelect.disabled=!paths.some(p=>p.shape);
+    }
+    if(shapeSize){shapeSize.disabled=!selected;shapeSize.value=selected?Math.round(selected.scale*100):100;}
+    if(shapePercent)shapePercent.textContent=selected?Math.round(selected.scale*100)+'%':'—';
+  }
+  function chooseTool(value){
+    tool=value;ink.classList.toggle('is-eraser',tool==='eraser');ink.classList.toggle('is-moving',tool==='move');
+    dialog.querySelectorAll('[data-sketch-tool]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sketchTool===tool)));
+    inkDirty=true;requestPaint();
+  }
+  function fitShape(path,scale=path.scale){
+    const xs=path.base.map(p=>p[0]),ys=path.base.map(p=>p[1]),bw=Math.max(...xs)-Math.min(...xs),bh=Math.max(...ys)-Math.min(...ys);
+    path.scale=limit(scale,.25,Math.min(1.5,.96/(bw+.024),.96/(bh+.0384)));
+    const rx=(bw+.024)*path.scale/2,ry=(bh+.0384)*path.scale/2;
+    path.center=[limit(path.center[0],.02+rx,.98-rx),limit(path.center[1],.02+ry,.98-ry)];
+    path.points=path.base.map(p=>[path.center[0]+p[0]*path.scale,path.center[1]+p[1]*path.scale]);path.width=.024*path.scale;
+  }
   function beginStroke(event){
-    if(activeStroke||event.button!==0)return;
+    if(activeStroke||transform||event.button!==0)return;
+    if(tool==='move'){
+      const p=point(event),r=ink.getBoundingClientRect(),pad=14/r.width;
+      selected=[...paths].reverse().find(path=>{if(!path.shape)return false;const b=bounds(path);return p[0]>=b.x-pad&&p[0]<=b.x+b.w+pad&&p[1]>=b.y-pad*1.6&&p[1]<=b.y+b.h+pad*1.6;})||null;
+      if(selected){transform={id:event.pointerId,start:p,center:[...selected.center],saved:false};ink.setPointerCapture(event.pointerId);ink.focus({preventScroll:true});}
+      syncSelection();updateActions();inkDirty=true;requestPaint();event.preventDefault();return;
+    }
+    remember();
     const width=limit(Number(brush.value)||4,2,9)*.006*(tool==='eraser'?2:1);
     activeStroke={id:event.pointerId,path:{tool,width,points:[point(event)]}};paths.push(activeStroke.path);
     ink.setPointerCapture(event.pointerId);markChanged();event.preventDefault();
   }
   function moveStroke(event){
+    if(transform?.id===event.pointerId){
+      const p=point(event),dx=p[0]-transform.start[0],dy=p[1]-transform.start[1];
+      if(Math.hypot(dx,dy)>.001){if(!transform.saved){remember();transform.saved=true;}selected.center=[transform.center[0]+dx,transform.center[1]+dy];fitShape(selected);markChanged();}
+      event.preventDefault();return;
+    }
     if(activeStroke?.id!==event.pointerId)return;
     const samples=typeof event.getCoalescedEvents==='function'?event.getCoalescedEvents():[event];
     for(const sample of samples.length?samples:[event]){
@@ -177,6 +220,10 @@
     inkDirty=true;requestPaint();event.preventDefault();
   }
   function endStroke(event){
+    if(transform?.id===event.pointerId){
+      if(event.type==='pointerup')moveStroke(event);transform=null;
+      if(ink.hasPointerCapture(event.pointerId))ink.releasePointerCapture(event.pointerId);updateActions();return;
+    }
     if(activeStroke?.id!==event.pointerId)return;
     if(event.type==='pointerup')moveStroke(event);
     activeStroke=null;if(ink.hasPointerCapture(event.pointerId))ink.releasePointerCapture(event.pointerId);
@@ -191,10 +238,12 @@
     if(name==='circle')for(let i=0;i<=100;i++){const t=i/100*Math.PI*2;pts.push([.5+Math.cos(t)*.20,.5+Math.sin(t)*.32]);}
     if(name==='rectangle')pts=[[.22,.23],[.78,.23],[.78,.77],[.22,.77],[.22,.23]];
     if(!pts.length)return;
-    paths.push({tool:'pen',width:.024,points:pts});markChanged();setView('draw');
+    remember();const xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2;
+    selected={tool:'pen',width:.024,points:pts,shape:name,base:pts.map(p=>[p[0]-cx,p[1]-cy]),center:[cx,cy],scale:1};
+    paths.push(selected);chooseTool('move');markChanged();setView('draw');
   }
   function build(){
-    if(activeStroke||building)return;
+    if(activeStroke||transform||building)return;
     mask.width=COLS;mask.height=ROWS;paintPaths(maskCtx,COLS,ROWS);
     const data=maskCtx.getImageData(0,0,COLS,ROWS).data,bits=new Uint8Array(COLS*ROWS);
     for(let i=0;i<bits.length;i++)bits[i]=data[i*4+3]>=128?1:0;
@@ -234,12 +283,18 @@
     dialog.showModal();setView('draw');updateActions();inkDirty=true;measure();dialog.querySelector('.sketch-close').focus({preventScroll:true});
   }
   function restore(){
-    if(frameId)cancelAnimationFrame(frameId);frameId=0;building=false;progress=1;activeStroke=null;rotation=null;
+    if(frameId)cancelAnimationFrame(frameId);frameId=0;building=false;progress=1;activeStroke=null;transform=null;sizeGesture=false;rotation=null;
     if(saved){Object.assign(document.body.style,saved.body);window.scrollTo({top:saved.scrollY,left:0,behavior:'instant'});saved=null;}
     updateActions();trigger.focus({preventScroll:true});
   }
   ink.addEventListener('pointerdown',beginStroke);ink.addEventListener('pointermove',moveStroke);
   ['pointerup','pointercancel','lostpointercapture'].forEach(type=>ink.addEventListener(type,endStroke));
+  ink.addEventListener('keydown',event=>{
+    if(tool!=='move'||!selected||transform||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key))return;
+    event.preventDefault();remember();const step=event.shiftKey?.04:.01;
+    selected.center[0]+=event.key==='ArrowLeft'?-step:event.key==='ArrowRight'?step:0;
+    selected.center[1]+=event.key==='ArrowUp'?-step:event.key==='ArrowDown'?step:0;fitShape(selected);markChanged();
+  });
   preview.addEventListener('pointerdown',event=>{if(event.button!==0||rotation)return;rotation={id:event.pointerId,x:event.clientX,y:event.clientY};preview.setPointerCapture(event.pointerId);event.preventDefault();});
   preview.addEventListener('pointermove',event=>{
     if(rotation?.id!==event.pointerId)return;yaw+=(event.clientX-rotation.x)*.008;pitch=limit(pitch+(event.clientY-rotation.y)*.006,.32,1.2);
@@ -250,10 +305,10 @@
     if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home'].includes(event.key))return;event.preventDefault();
     if(event.key==='Home')rotate('reset');else if(event.key==='ArrowLeft'||event.key==='ArrowRight')rotate(event.key==='ArrowLeft'?'left':'right');else{pitch=limit(pitch+(event.key==='ArrowUp' ? .1 : -.1),.32,1.2);requestPaint();}
   });
-  dialog.querySelectorAll('[data-sketch-tool]').forEach(button=>button.addEventListener('click',()=>{
-    tool=button.dataset.sketchTool;ink.classList.toggle('is-eraser',tool==='eraser');
-    dialog.querySelectorAll('[data-sketch-tool]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
-  }));
+  dialog.querySelectorAll('[data-sketch-tool]').forEach(button=>button.addEventListener('click',()=>chooseTool(button.dataset.sketchTool)));
+  shapeSelect?.addEventListener('change',()=>{selected=paths[Number(shapeSelect.value)]||null;if(!selected?.shape||shapeSelect.value==='')selected=null;chooseTool('move');syncSelection();});
+  shapeSize?.addEventListener('input',()=>{if(!selected||activeStroke||transform)return;if(!sizeGesture){remember();sizeGesture=true;}fitShape(selected,Number(shapeSize.value)/100);markChanged();});
+  shapeSize?.addEventListener('change',()=>{sizeGesture=false;});
   dialog.querySelectorAll('[data-sketch-preset]').forEach(button=>button.addEventListener('click',()=>preset(button.dataset.sketchPreset)));
   dialog.querySelectorAll('[data-sketch-view]').forEach(button=>button.addEventListener('click',()=>setView(button.dataset.sketchView)));
   dialog.querySelectorAll('[data-sketch-rotate]').forEach(button=>button.addEventListener('click',()=>rotate(button.dataset.sketchRotate)));
@@ -261,8 +316,8 @@
     if(!colors[button.dataset.sketchColor])return;color=button.dataset.sketchColor;
     dialog.querySelectorAll('[data-sketch-color]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));updateActions();requestPaint();
   }));
-  undo.addEventListener('click',()=>{if(activeStroke)return;paths.pop();markChanged();});
-  clear.addEventListener('click',()=>{paths=[];activeStroke=null;mesh=null;markChanged();});
+  undo.addEventListener('click',()=>{if(activeStroke||transform||!history.length)return;const old=history.pop();paths=old.paths;selected=paths[old.index]||null;sizeGesture=false;markChanged();});
+  clear.addEventListener('click',()=>{if(activeStroke||transform)return;remember();paths=[];selected=null;mesh=null;markChanged();});
   buildButton.addEventListener('click',build);download.addEventListener('click',exportDraft);
   quote.addEventListener('click',event=>{if(!mesh||changed||building)event.preventDefault();});
   dialog.querySelector('.sketch-close').addEventListener('click',()=>dialog.close());dialog.addEventListener('close',restore);
