@@ -7,7 +7,8 @@
   const inkCtx=ink.getContext('2d'),previewCtx=preview.getContext('2d');
   const strokeBuffer=document.createElement('canvas'),mask=document.createElement('canvas');
   const strokeCtx=strokeBuffer.getContext('2d'),maskCtx=mask.getContext('2d',{willReadFrequently:true});
-  if(!inkCtx||!previewCtx||!strokeCtx||!maskCtx)return;
+  const cutLayer=document.createElement('canvas'),cutCtx=cutLayer.getContext('2d');
+  if(!inkCtx||!previewCtx||!strokeCtx||!maskCtx||!cutCtx)return;
   const buildButton=dialog.querySelector('.sketch-build'),undo=dialog.querySelector('.sketch-undo'),clear=dialog.querySelector('.sketch-clear');
   const download=dialog.querySelector('.sketch-download'),quote=dialog.querySelector('.sketch-quote');
   const brush=dialog.querySelector('.sketch-brush input'),empty=dialog.querySelector('.sketch-empty'),status=dialog.querySelector('.sketch-build-status');
@@ -55,23 +56,39 @@
     }
     return {tops,walls,cells,cols,rows};
   }
-  function paintPaths(context,w,h){
-    context.clearRect(0,0,w,h);context.lineCap='round';context.lineJoin='round';
-    for(const path of paths){
-      context.globalCompositeOperation=path.tool==='eraser'?'destination-out':'source-over';
-      context.strokeStyle=colors[path.color]||colors.Yeşil;context.fillStyle=colors[path.color]||colors.Yeşil;context.lineWidth=path.width*w;
-      if(path.shape==='text'){
-        context.save();context.translate(path.center[0]*w,path.center[1]*h);context.scale(w/800,h/500);
-        context.rotate((path.angle||0)*Math.PI/180);context.scale(path.scale,path.scale);
-        context.font='700 '+path.fontPx+'px Arial, sans-serif';context.textAlign='center';context.textBaseline='middle';context.fillText(path.text,0,0);context.restore();continue;
-      }
-      const first=path.points[0];if(!first)continue;
-      if(path.points.length===1){context.beginPath();context.arc(first[0]*w,first[1]*h,path.width*w/2,0,Math.PI*2);context.fill();continue;}
-      context.beginPath();context.moveTo(first[0]*w,first[1]*h);
-      for(let i=1;i<path.points.length;i++)context.lineTo(path.points[i][0]*w,path.points[i][1]*h);
-      context.stroke();
+  function paintStroke(context,points,width,w,h){
+    const first=points[0];if(!first)return;
+    context.lineCap='round';context.lineJoin='round';context.lineWidth=width*w;
+    context.beginPath();
+    if(points.length===1){context.arc(first[0]*w,first[1]*h,width*w/2,0,Math.PI*2);context.fill();return;}
+    context.moveTo(first[0]*w,first[1]*h);for(let i=1;i<points.length;i++)context.lineTo(points[i][0]*w,points[i][1]*h);context.stroke();
+  }
+  function paintItem(context,path,w,h){
+    context.strokeStyle=colors[path.color]||colors.Yeşil;context.fillStyle=colors[path.color]||colors.Yeşil;
+    if(path.shape==='text'){
+      context.save();context.translate(path.center[0]*w,path.center[1]*h);context.scale(w/800,h/500);
+      context.rotate((path.angle||0)*Math.PI/180);context.scale(path.scale,path.scale);
+      context.font='700 '+path.fontPx+'px Arial, sans-serif';context.textAlign='center';context.textBaseline='middle';context.fillText(path.text,0,0);context.restore();return;
     }
-    context.globalCompositeOperation='source-over';
+    paintStroke(context,path.points,path.width,w,h);
+  }
+  function cutPoint(path,p,inverse=false){
+    if(!path.shape)return [...p];
+    const scale=path.scale||1,angle=(path.angle||0)*Math.PI/180,c=Math.cos(angle),s=Math.sin(angle);
+    if(inverse){const x=(p[0]-path.center[0])/scale,y=(p[1]-path.center[1])/scale;return [x*c+y*s/1.6,-x*s*1.6+y*c];}
+    return [path.center[0]+(p[0]*c-p[1]*s/1.6)*scale,path.center[1]+(p[0]*s*1.6+p[1]*c)*scale];
+  }
+  function paintPaths(context,w,h){
+    context.clearRect(0,0,w,h);context.globalCompositeOperation='source-over';
+    for(const path of paths){
+      if(path.tool==='eraser')continue;
+      if(!path.cuts?.length){paintItem(context,path,w,h);continue;}
+      if(cutLayer.width!==w)cutLayer.width=w;if(cutLayer.height!==h)cutLayer.height=h;
+      cutCtx.clearRect(0,0,w,h);cutCtx.globalCompositeOperation='source-over';paintItem(cutCtx,path,w,h);
+      cutCtx.globalCompositeOperation='destination-out';cutCtx.strokeStyle='#000';cutCtx.fillStyle='#000';
+      for(const cut of path.cuts)paintStroke(cutCtx,cut.points.map(p=>cutPoint(path,p)),cut.width*(path.shape?path.scale:1),w,h);
+      cutCtx.globalCompositeOperation='source-over';context.drawImage(cutLayer,0,0);
+    }
   }
   function drawGrid(context,w,h){
     context.fillStyle='#0d130f';context.fillRect(0,0,w,h);context.fillStyle='#c7fa5f1b';
@@ -223,9 +240,16 @@
       if(selected){transform={id:event.pointerId,start:p,center:[...selected.center],saved:false};ink.setPointerCapture(event.pointerId);ink.focus({preventScroll:true});}
       syncSelection();updateActions();inkDirty=true;requestPaint();event.preventDefault();return;
     }
+    if(tool==='eraser'&&!paths.some(p=>p.tool==='pen'))return;
     remember();
     const width=limit(Number(brush.value)||4,2,9)*.006*(tool==='eraser'?2:1);
-    activeStroke={id:event.pointerId,path:{tool,width,color,points:[point(event)]}};paths.push(activeStroke.path);
+    const first=point(event);activeStroke={id:event.pointerId,path:{tool,width,color,points:[first]},targets:[]};
+    if(tool==='eraser'){
+      for(const path of paths.filter(p=>p.tool==='pen')){
+        const cut={width:width/(path.shape?path.scale:1),points:[cutPoint(path,first,true)]};
+        (path.cuts??=[]).push(cut);activeStroke.targets.push({path,cut});
+      }
+    }else paths.push(activeStroke.path);
     ink.setPointerCapture(event.pointerId);markChanged();event.preventDefault();
   }
   function moveStroke(event){
@@ -238,7 +262,9 @@
     const samples=typeof event.getCoalescedEvents==='function'?event.getCoalescedEvents():[event];
     for(const sample of samples.length?samples:[event]){
       const p=point(sample),last=activeStroke.path.points.at(-1);
-      if(Math.hypot(p[0]-last[0],p[1]-last[1])>.001)activeStroke.path.points.push(p);
+      if(Math.hypot(p[0]-last[0],p[1]-last[1])>.001){
+        activeStroke.path.points.push(p);for(const target of activeStroke.targets)target.cut.points.push(cutPoint(target.path,p,true));
+      }
     }
     inkDirty=true;requestPaint();event.preventDefault();
   }
