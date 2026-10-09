@@ -20,6 +20,7 @@
   const holeMove=dialog.querySelector('.sketch-hole-move'),holeX=dialog.querySelector('.sketch-hole-x'),holeY=dialog.querySelector('.sketch-hole-y');
   const productLabel=dialog.querySelector('.sketch-model-label');
   const finishHelp=dialog.querySelector('.sketch-finish-help');
+  const faceControls=dialog.querySelector('.sketch-face-controls'),modelFaces=dialog.querySelector('.sketch-model-faces');
   const motion=matchMedia('(prefers-reduced-motion: reduce)'),COLS=160,ROWS=100,DURATION=2400;
   const colors={Yeşil:'#c7fa5f',Beyaz:'#f3f1ec',Mavi:'#5795ef',Siyah:'#454e48'};
   const paletteNames=Object.keys(colors),paletteRGB=Object.values(colors).map(rgb);
@@ -28,6 +29,7 @@
   let selected=null,transform=null,sizeGesture=false;const history=[];
   let keychain={enabled:false,hole:[.5,.1]},holeGesture=false;
   let finish='raised';
+  let otherPaths=[],otherFinish='raised',face='front',modelFace='front';
   const shapeNames={bolt:'Şimşek',heart:'Kalp',star:'Yıldız',triangle:'Üçgen',circle:'Daire',rectangle:'Dikdörtgen',text:'Metin'};
   let yaw=-.48,pitch=.72,rotation=null,frameId=0,started=0,saved=null,inkDirty=true,inkSize={w:800,h:500},modelSize={w:800,h:600};
   // Merge occupied raster cells into flat top rectangles and exposed boundary runs.
@@ -116,15 +118,24 @@
     for(const geometry of [body,surface,cavity]){geometry.offsetX=offsetX;geometry.offsetZ=offsetZ;}
     return {body,surface,cavity};
   }
-  function drawingRaster(){
-    mask.width=COLS;mask.height=ROWS;paintPaths(maskCtx,COLS,ROWS);
+  function facePaths(side){return side===face?paths:otherPaths;}
+  function faceFinish(side){return side===face?finish:otherFinish;}
+  function drawingRaster(items=paths,mirror=false){
+    mask.width=COLS;mask.height=ROWS;paintPaths(maskCtx,COLS,ROWS,items);
     const data=maskCtx.getImageData(0,0,COLS,ROWS).data,bits=new Uint8Array(COLS*ROWS),tones=new Uint8Array(COLS*ROWS);
     for(let i=0;i<bits.length;i++){
-      if(data[i*4+3]<128)continue;bits[i]=1;let distance=Infinity;
-      paletteRGB.forEach((rgb,index)=>{const d=rgb.reduce((sum,v,j)=>sum+(v-data[i*4+j])**2,0);if(d<distance){distance=d;tones[i]=index;}});
+      if(data[i*4+3]<128)continue;const at=mirror?Math.floor(i/COLS)*COLS+COLS-1-i%COLS:i;bits[at]=1;let distance=Infinity;
+      paletteRGB.forEach((rgb,index)=>{const d=rgb.reduce((sum,v,j)=>sum+(v-data[i*4+j])**2,0);if(d<distance){distance=d;tones[at]=index;}});
     }
     return {bits,tones};
   }
+  function keyringRaster(){
+    const front=drawingRaster(facePaths('front')),back=drawingRaster(facePaths('back'),true);
+    const union=front.bits.map((v,i)=>v||back.bits[i]?1:0);
+    return {front,back,backingBits:keychainBacking(union,COLS,ROWS,keychain.hole)};
+  }
+  function mirrorBits(bits){return bits.map((v,i)=>bits[Math.floor(i/COLS)*COLS+COLS-1-i%COLS]);}
+  function editingHole(){return [face==='back'?1-keychain.hole[0]:keychain.hole[0],keychain.hole[1]];}
   function paintBacking(context,w,h,bits){
     context.fillStyle='#3b443c';
     for(const [x0,y0,x1,y1] of reliefGeometry(bits,COLS,ROWS).tops)context.fillRect(x0/COLS*w,y0/ROWS*h,(x1-x0)/COLS*w+.3,(y1-y0)/ROWS*h+.3);
@@ -151,9 +162,9 @@
     if(inverse){const x=(p[0]-path.center[0])/scale,y=(p[1]-path.center[1])/scale;return [x*c+y*s/1.6,-x*s*1.6+y*c];}
     return [path.center[0]+(p[0]*c-p[1]*s/1.6)*scale,path.center[1]+(p[0]*s*1.6+p[1]*c)*scale];
   }
-  function paintPaths(context,w,h){
+  function paintPaths(context,w,h,items=paths){
     context.clearRect(0,0,w,h);context.globalCompositeOperation='source-over';
-    for(const path of paths){
+    for(const path of items){
       if(path.tool==='eraser')continue;
       if(!path.cuts?.length){paintItem(context,path,w,h);continue;}
       if(cutLayer.width!==w)cutLayer.width=w;if(cutLayer.height!==h)cutLayer.height=h;
@@ -169,12 +180,12 @@
   }
   function paintInk(){
     const {w,h,dpr}=inkSize;inkCtx.setTransform(dpr,0,0,dpr,0,0);drawGrid(inkCtx,w,h);
-    if(keychain.enabled){const {bits}=drawingRaster();paintBacking(inkCtx,w,h,keychainBacking(bits,COLS,ROWS,keychain.hole));}
+    if(keychain.enabled){const {backingBits}=keyringRaster();paintBacking(inkCtx,w,h,face==='back'?mirrorBits(backingBits):backingBits);}
     paintPaths(strokeCtx,strokeBuffer.width,strokeBuffer.height);
     inkCtx.drawImage(strokeBuffer,0,0,w,h);
     if(keychain.enabled){
-      inkCtx.save();inkCtx.fillStyle='#0d130f';inkCtx.beginPath();inkCtx.arc(keychain.hole[0]*w,keychain.hole[1]*h,5/COLS*w,0,Math.PI*2);inkCtx.fill();
-      inkCtx.strokeStyle=tool==='hole'?'#f3f1ec':'#c7fa5f';inkCtx.lineWidth=1.5;inkCtx.setLineDash([3,3]);inkCtx.beginPath();inkCtx.arc(keychain.hole[0]*w,keychain.hole[1]*h,9/COLS*w,0,Math.PI*2);inkCtx.stroke();inkCtx.restore();
+      const hole=editingHole();inkCtx.save();inkCtx.fillStyle='#0d130f';inkCtx.beginPath();inkCtx.arc(hole[0]*w,hole[1]*h,5/COLS*w,0,Math.PI*2);inkCtx.fill();
+      inkCtx.strokeStyle=tool==='hole'?'#f3f1ec':'#c7fa5f';inkCtx.lineWidth=1.5;inkCtx.setLineDash([3,3]);inkCtx.beginPath();inkCtx.arc(hole[0]*w,hole[1]*h,9/COLS*w,0,Math.PI*2);inkCtx.stroke();inkCtx.restore();
     }
     if(selected&&tool==='move'){
       const b=bounds(selected);inkCtx.save();inkCtx.strokeStyle='#efffd7';inkCtx.lineWidth=1;inkCtx.setLineDash([5,4]);
@@ -194,10 +205,11 @@
   }
   function rgb(hex){return [1,3,5].map(n=>parseInt(hex.slice(n,n+2),16));}
   function shade(base,amount){return 'rgb('+base.map(v=>Math.round(limit(v*amount,0,255))).join(',')+')';}
-  function renderModel(context,w,h,value=progress,clearCanvas=true){
+  function renderModel(context,w,h,value=progress,clearCanvas=true,side=modelFace){
     if(clearCanvas)context.clearRect(0,0,w,h);
     const engraved=mesh?.finish==='engrave',frame=mesh?.backing?.frame,viewPitch=frame?limit(pitch+.4,.32,1.35):engraved?limit(pitch+.22,.32,1.35):pitch;
-    const unit=Math.min(w/4.9,h/3.65)*(frame?limit(3/Math.hypot(frame.w,frame.h),.85,1.7):1),cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(viewPitch),sp=Math.sin(viewPitch);
+    const underside=!!mesh?.backing&&side==='back',angle=yaw+(underside?Math.PI:0);
+    const unit=Math.min(w/4.9,h/3.65)*(frame?limit(3/Math.hypot(frame.w,frame.h),.85,1.7):1),cy=Math.cos(angle),sy=Math.sin(angle),cp=Math.cos(viewPitch),sp=Math.sin(viewPitch)*(underside?-1:1);
     const relief=mesh?.reliefHeight??.38;
     const baseH=Math.min(.15,(.15+relief)*value),raised=Math.max(0,(.15+relief)*value-.15);
     const project=v=>{
@@ -205,7 +217,7 @@
       return {x:w/2+x*f*unit,y:h/2+(-y*cp+z*sp)*f*unit,depth};
     };
     const facing=n=>(-n[0]*sy+n[2]*cy)*cp+n[1]*sp;
-    const light=n=>.55+.50*Math.max(0,(n[0]*cy+n[2]*sy)*-.35+n[1]*.8+(-n[0]*sy+n[2]*cy)*.6);
+    const light=n=>.55+.50*Math.max(0,(n[0]*cy+n[2]*sy)*-.35+n[1]*(underside?-.8:.8)+(-n[0]*sy+n[2]*cy)*.6);
     function polygon(vertices,normal,base,strata=false){
       if(facing(normal)<=.001)return null;
       const pts=vertices.map(project);
@@ -232,26 +244,42 @@
     baseFaces.sort((a,b)=>a.depth-b.depth).forEach(paint);
     if(!mesh)return;
     const x=v=>(v/mesh.cols-.5)*3.2,z=v=>(v/mesh.rows-.5)*2,top=.15+raised,material=rgb(colors[color]),faces=[];
-    function layer(geometry,bottom,height,baseColor,{tops=true,walls=true,tint=1}={}){
+    function layer(geometry,bottom,height,baseColor,{tops=true,walls=true,tint=1,flip=false,origin=0}={}){
       const gx=v=>x(v+(geometry.offsetX||0)),gz=v=>z(v+(geometry.offsetZ||0));
       const toneColor=tone=>(baseColor||paletteRGB[tone]||material).map(v=>v*tint);
-      if(tops)for(const [x0,z0,x1,z1,tone] of geometry.tops)faces.push(polygon([[gx(x0),height,gz(z0)],[gx(x1),height,gz(z0)],[gx(x1),height,gz(z1)],[gx(x0),height,gz(z1)]],[0,1,0],toneColor(tone)));
+      const fy=v=>flip?origin-v:v;
+      if(tops)for(const [x0,z0,x1,z1,tone] of geometry.tops)faces.push(polygon([[gx(x0),fy(height),gz(z0)],[gx(x1),fy(height),gz(z0)],[gx(x1),fy(height),gz(z1)],[gx(x0),fy(height),gz(z1)]],[0,flip?-1:1,0],toneColor(tone)));
       if(walls)for(const [side,line,start,end,tone] of geometry.walls){
         let a,b,normal;
         if(side<2){a=[gx(line),bottom,gz(start)];b=[gx(line),bottom,gz(end)];normal=[side===0?-1:1,0,0];}
         else{a=[gx(start),bottom,gz(line)];b=[gx(end),bottom,gz(line)];normal=[0,0,side===2?-1:1];}
-        const face=polygon([a,[a[0],height,a[2]],[b[0],height,b[2]],b],normal,toneColor(tone),true);if(face)faces.push(face);
+        const vertices=[a,[a[0],height,a[2]],[b[0],height,b[2]],b].map(v=>[v[0],fy(v[1]),v[2]]);
+        const face=polygon(vertices,normal,toneColor(tone),true);if(face)faces.push(face);
       }
     }
     if(engraved){
       const floor=.10*value,surface=.27*value;
       layer(mesh.engraving.body,0,surface,base,{tops:false});
-      layer(mesh.engraving.surface,surface,surface,base,{walls:false});
-      layer(mesh.engraving.cavity,floor,surface,base,{tint:.72});
-      layer(mesh,floor,floor,null,{walls:false,tint:.72});
+      if(!underside){
+        layer(mesh.engraving.surface,surface,surface,base,{walls:false});
+        layer(mesh.engraving.cavity,floor,surface,base,{tint:.72});
+        layer(mesh,floor,floor,null,{walls:false,tint:.72});
+      }
     }else{
-      if(mesh.backing)layer(mesh.backing,0,baseH,base);
-      if(raised>0)layer(mesh,.15,top,null);
+      if(mesh.backing)layer(mesh.backing,0,baseH,base,{tops:!underside});
+      if(raised>0&&!underside)layer(mesh,.15,top,null);
+    }
+    if(mesh.backing&&underside){
+      const rear=mesh.back,bodyHeight=engraved?.27*value:baseH;
+      if(rear?.finish==='engrave'){
+        const floor=Math.min(.10,bodyHeight*.38),surface=bodyHeight;
+        layer(rear.engraving.surface,surface,surface,base,{walls:false,flip:true,origin:bodyHeight});
+        layer(rear.engraving.cavity,floor,surface,base,{tint:.72,flip:true,origin:bodyHeight});
+        layer(rear,floor,floor,null,{walls:false,tint:.72,flip:true,origin:bodyHeight});
+      }else{
+        layer(mesh.backing,0,0,base,{walls:false,flip:true});
+        if(rear?.cells&&value>0)layer(rear,0,.12*value,null,{flip:true});
+      }
     }
     faces.filter(Boolean).sort((a,b)=>a.depth-b.depth).forEach(paint);
   }
@@ -268,20 +296,27 @@
   }
   function requestPaint(){if(!frameId&&dialog.open&&!document.hidden)frameId=requestAnimationFrame(paintFrame);}
   function updateActions(){
-    undo.disabled=!history.length;clear.disabled=!paths.length;empty.hidden=!!paths.length;
-    buildButton.disabled=!paths.some(p=>p.tool==='pen')||!!activeStroke||!!transform||building;
+    const allPaths=keychain.enabled?[...paths,...otherPaths]:paths;
+    undo.disabled=!history.length;clear.disabled=!paths.length&&!otherPaths.length;empty.hidden=!!paths.length||keychain.enabled;
+    buildButton.disabled=!allPaths.some(p=>p.tool==='pen')||!!activeStroke||!!transform||building;
     syncSelection();
     dialog.querySelectorAll('[data-sketch-finish]').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.sketchFinish===finish));b.disabled=!!activeStroke||!!transform||building;});
     if(finishHelp)finishHelp.textContent=finish==='engrave'?'Tasarımın tabanın içine işlensin.':'Tasarımın tabanın üzerinde yükselsin.';
-    if(keyToggle){keyToggle.disabled=!paths.some(p=>p.tool==='pen')||!!activeStroke||!!transform;keyToggle.setAttribute('aria-pressed',String(keychain.enabled));keyToggle.textContent=keychain.enabled?'PLAKAYA DÖN':'ANAHTARLIĞA ÇEVİR';}
+    if(keyToggle){keyToggle.disabled=(!keychain.enabled&&!paths.some(p=>p.tool==='pen'))||!!activeStroke||!!transform;keyToggle.setAttribute('aria-pressed',String(keychain.enabled));keyToggle.textContent=keychain.enabled?'PLAKAYA DÖN':'ANAHTARLIĞA ÇEVİR';}
+    if(faceControls)faceControls.hidden=!keychain.enabled;if(modelFaces)modelFaces.hidden=!keychain.enabled;
+    dialog.querySelectorAll('[data-sketch-face]').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.sketchFace===face));b.disabled=!!activeStroke||!!transform||building;});
+    dialog.querySelectorAll('[data-sketch-model-face]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sketchModelFace===modelFace)));
+    ink.setAttribute('aria-label',(keychain.enabled?(face==='back'?'Arka':'Ön')+' yüz çizim alanı. ':'Çizim alanı. ')+'Taşı modunda şekli sürükle veya ok tuşlarıyla taşı.');
     if(keyControls)keyControls.hidden=!keychain.enabled;
     if(holeMove)holeMove.setAttribute('aria-pressed',String(tool==='hole'));
-    if(holeX)holeX.value=Math.round(keychain.hole[0]*100);if(holeY)holeY.value=Math.round(keychain.hole[1]*100);
-    if(productLabel)productLabel.textContent=(finish==='engrave'?'OYMA · ':'')+(keychain.enabled?'ANAHTARLIK TASLAĞI':'3B TASLAK');
+    const hole=editingHole();if(holeX)holeX.value=Math.round(hole[0]*100);if(holeY)holeY.value=Math.round(hole[1]*100);
+    const visibleFinish=keychain.enabled?faceFinish(modelFace):finish;
+    if(productLabel)productLabel.textContent=(visibleFinish==='engrave'?'OYMA · ':'')+(keychain.enabled?'ANAHTARLIK · '+(modelFace==='back'?'ARKA YÜZ':'ÖN YÜZ'):'3B TASLAK');
     const ready=!!mesh&&!changed&&!building;
     download.disabled=!ready;quote.setAttribute('aria-disabled',String(!ready));quote.setAttribute('tabindex',ready?'0':'-1');
     if(ready){
-      const text=['Merhaba KATMANYA, kendi çizimimden '+(keychain.enabled?'bir anahtarlık':finish==='engrave'?'oymalı bir plaka':'kabartmalı bir plaka')+' için teklif almak istiyorum.','Renk tercihi: '+usedColors(),'Baskı tarzı: '+(finish==='engrave'?'Oyma':'Kabartma'),'Taslağımı sohbete ekleyeceğim.','Ölçü ve adet bilgisini birlikte netleştirelim.'].join('\n');
+      const styles=keychain.enabled?'Ön yüz: '+finishName(faceFinish('front'))+' · Arka yüz: '+(facePaths('back').length?finishName(faceFinish('back')):'Boş'):finishName(finish);
+      const text=['Merhaba KATMANYA, kendi çizimimden '+(keychain.enabled?(facePaths('back').length?'çift taraflı ':'')+'bir anahtarlık':finish==='engrave'?'oymalı bir plaka':'kabartmalı bir plaka')+' için teklif almak istiyorum.','Renk tercihi: '+usedColors(),'Baskı tarzı: '+styles,'Taslağımı sohbete ekleyeceğim.','Ölçü ve adet bilgisini birlikte netleştirelim.'].join('\n');
       quote.href='https://wa.me/905304815341?text='+encodeURIComponent(text);
     }else quote.removeAttribute('href');
   }
@@ -297,7 +332,7 @@
   function point(event){
     const r=ink.getBoundingClientRect();return [limit((event.clientX-r.left)/r.width,0,1),limit((event.clientY-r.top)/r.height,0,1)];
   }
-  function remember(){history.push({paths:JSON.parse(JSON.stringify(paths)),index:paths.indexOf(selected),keychain:JSON.parse(JSON.stringify(keychain)),finish});if(history.length>100)history.shift();}
+  function remember(){history.push({paths:JSON.parse(JSON.stringify(paths)),otherPaths:JSON.parse(JSON.stringify(otherPaths)),otherFinish,face,index:paths.indexOf(selected),keychain:JSON.parse(JSON.stringify(keychain)),finish});if(history.length>100)history.shift();}
   function bounds(path){const xs=path.points.map(p=>p[0]),ys=path.points.map(p=>p[1]);return {x:Math.min(...xs),y:Math.min(...ys),w:Math.max(...xs)-Math.min(...xs),h:Math.max(...ys)-Math.min(...ys)};}
   function syncSelection(){
     if(selected&&!paths.includes(selected))selected=null;
@@ -318,9 +353,17 @@
     dialog.querySelectorAll('[data-sketch-tool]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sketchTool===tool)));
     if(holeMove)holeMove.setAttribute('aria-pressed',String(tool==='hole'));syncSelection();inkDirty=true;requestPaint();
   }
-  function moveHole(p){keychain.hole=[limit(p[0],.07,.93),limit(p[1],.1,.9)];markChanged();}
+  function moveHole(p){keychain.hole=[limit(face==='back'?1-p[0]:p[0],.07,.93),limit(p[1],.1,.9)];markChanged();}
+  function swapFace(next){
+    if(next===face)return;[paths,otherPaths]=[otherPaths,paths];[finish,otherFinish]=[otherFinish,finish];face=next;
+    selected=null;sizeGesture=false;holeGesture=false;if(tool==='hole')chooseTool('move');inkDirty=true;
+  }
+  function switchFace(next){
+    if(!keychain.enabled||activeStroke||transform||building||!['front','back'].includes(next))return;
+    swapFace(next);modelFace=next;updateActions();setView('draw');requestPaint();
+  }
   function toggleKeychain(){
-    if(activeStroke||transform||!paths.some(p=>p.tool==='pen'))return;remember();keychain.enabled=!keychain.enabled;
+    if(activeStroke||transform||(!keychain.enabled&&!paths.some(p=>p.tool==='pen')))return;remember();swapFace('front');modelFace='front';keychain.enabled=!keychain.enabled;
     if(keychain.enabled){
       const {bits}=drawingRaster();let top=ROWS,x=0,count=0;
       for(let i=0;i<bits.length;i++)if(bits[i]){const y=Math.floor(i/COLS);if(y<top){top=y;x=0;count=0;}if(y===top){x+=i%COLS+.5;count++;}}
@@ -328,7 +371,8 @@
     }else if(tool==='hole')chooseTool('move');
     markChanged();setView('draw');
   }
-  function usedColors(){return [...new Set(paths.filter(p=>p.tool!=='eraser').map(p=>p.color||'Yeşil'))].join(' / ')||color;}
+  function finishName(value){return value==='engrave'?'Oyma':'Kabartma';}
+  function usedColors(){return [...new Set((keychain.enabled?[...paths,...otherPaths]:paths).filter(p=>p.tool!=='eraser').map(p=>p.color||'Yeşil'))].join(' / ')||color;}
   function removeSelected(){
     if(!selected||activeStroke||transform)return;const index=paths.indexOf(selected);if(index<0)return;
     remember();paths.splice(index,1);selected=null;sizeGesture=false;markChanged();
@@ -407,18 +451,21 @@
   }
   function build(){
     if(activeStroke||transform||building)return;
-    const {bits,tones}=drawingRaster();let backing=null,backingBits=null;
+    let {bits,tones}=drawingRaster();let backing=null,backingBits=null,rear=null;
     if(keychain.enabled){
-      backingBits=keychainBacking(bits,COLS,ROWS,keychain.hole);for(let i=0;i<bits.length;i++)if(!backingBits[i])bits[i]=0;backing=reliefGeometry(backingBits,COLS,ROWS);
+      const raster=keyringRaster();bits=raster.front.bits;tones=raster.front.tones;backingBits=raster.backingBits;
+      for(const side of [raster.front,raster.back])for(let i=0;i<side.bits.length;i++)if(!backingBits[i])side.bits[i]=0;
+      backing=reliefGeometry(backingBits,COLS,ROWS);rear=reliefGeometry(raster.back.bits,COLS,ROWS,raster.back.tones);
+      rear.finish=faceFinish('back');if(rear.finish==='engrave')rear.engraving=engravingGeometry(raster.back.bits,backingBits,COLS,ROWS);
       if(backing.cells){const xs=backing.tops.flatMap(r=>[r[0],r[2]]),ys=backing.tops.flatMap(r=>[r[1],r[3]]),left=Math.min(...xs),right=Math.max(...xs),front=Math.min(...ys),back=Math.max(...ys);
         backing.frame={x:((left+right)/2/COLS-.5)*3.2,z:((front+back)/2/ROWS-.5)*2,w:(right-left)/COLS*3.2,h:(back-front)/ROWS*2};}
     }
     const result=reliefGeometry(bits,COLS,ROWS,tones);
-    if(!result.cells){mesh=null;changed=true;status.textContent='Çizim boş · bir şekil çiz';updateActions();requestPaint();return;}
+    if(!result.cells&&!rear?.cells){mesh=null;changed=true;status.textContent='Çizim boş · bir şekil çiz';updateActions();requestPaint();return;}
     result.reliefHeight=keychain.enabled||paths.some(p=>p.shape==='text')?.12:.38;
-    if(backing)result.backing=backing;
-    result.finish=finish;
-    if(finish==='engrave')result.engraving=backingBits?engravingGeometry(bits,backingBits,COLS,ROWS):engravingGeometry(bits,new Uint8Array((COLS+24)*(ROWS+16)).fill(1),COLS+24,ROWS+16,COLS,ROWS,-12,-8);
+    if(backing){result.backing=backing;result.backingBits=backingBits;}
+    result.finish=keychain.enabled?faceFinish('front'):finish;result.back=rear;
+    if(result.finish==='engrave')result.engraving=backingBits?engravingGeometry(bits,backingBits,COLS,ROWS):engravingGeometry(bits,new Uint8Array((COLS+24)*(ROWS+16)).fill(1),COLS+24,ROWS+16,COLS,ROWS,-12,-8);
     mesh=result;changed=false;building=true;progress=0;started=performance.now();updateActions();setView('preview');requestPaint();
     if(window.innerWidth<=800)preview.focus({preventScroll:true});
   }
@@ -438,8 +485,21 @@
     const sheet=document.createElement('canvas');sheet.width=1600;sheet.height=1000;const c=sheet.getContext('2d');
     c.fillStyle='#111713';c.fillRect(0,0,1600,1000);
     c.font='800 37px Manrope, sans-serif';c.fillStyle='#c7fa5f';c.fillText('KATMANYA',64,73);
-    c.font='13px monospace';c.fillStyle='#a9b69e';c.fillText('SENİN ÇİZGİN / '+(finish==='engrave'?'OYMA ':'')+(keychain.enabled?'ANAHTARLIK':finish==='engrave'?'PLAKA':'KABARTMALI PLAKA')+' TASLAĞI',64,112);
+    c.font='13px monospace';c.fillStyle='#a9b69e';c.fillText('SENİN ÇİZGİN / '+(keychain.enabled?'ANAHTARLIK · ÖN / ARKA':(finish==='engrave'?'OYMA PLAKA':'KABARTMALI PLAKA'))+' TASLAĞI',64,112);
     c.strokeStyle='#c7fa5f35';c.beginPath();c.moveTo(64,143);c.lineTo(1536,143);c.stroke();
+    if(keychain.enabled){
+      c.font='17px Manrope, sans-serif';c.fillStyle='#a9b69e';c.fillText('Renk tercihi: '+usedColors(),64,184);
+      for(const [side,y] of [['front',244],['back',558]]){
+        const items=facePaths(side),hole=[side==='back'?1-keychain.hole[0]:keychain.hole[0],keychain.hole[1]];
+        c.font='14px monospace';c.fillStyle='#c7fa5f';c.fillText((side==='front'?'01 / ÖN YÜZ':'02 / ARKA YÜZ')+' · '+(items.length?finishName(faceFinish(side)):'Boş'),64,y-22);
+        const flat=document.createElement('canvas');flat.width=640;flat.height=400;const fc=flat.getContext('2d');drawGrid(fc,640,400);
+        paintBacking(fc,640,400,side==='back'?mirrorBits(mesh.backingBits):mesh.backingBits);
+        const art=document.createElement('canvas');art.width=640;art.height=400;paintPaths(art.getContext('2d'),640,400,items);fc.drawImage(art,0,0);
+        fc.fillStyle='#0d130f';fc.beginPath();fc.arc(hole[0]*640,hole[1]*400,20,0,Math.PI*2);fc.fill();
+        c.drawImage(flat,64,y,384,240);c.strokeStyle='#c7fa5f35';c.strokeRect(64,y,384,240);
+        c.save();c.translate(590,y-28);renderModel(c,916,310,1,false,side);c.restore();
+      }
+    }else{
     c.font='13px monospace';c.fillStyle='#c7fa5f';c.fillText('01 / ÇİZİMİN',64,197);c.fillText('02 / 3B TASLAĞIN',800,197);
     const flat=document.createElement('canvas');flat.width=640;flat.height=400;const flatCtx=flat.getContext('2d');drawGrid(flatCtx,640,400);
     if(mesh.backing){const {bits}=drawingRaster();paintBacking(flatCtx,640,400,keychainBacking(bits,COLS,ROWS,keychain.hole));}
@@ -449,12 +509,13 @@
     c.save();c.translate(780,220);renderModel(c,756,560,1,false);c.restore();
     c.fillStyle='#a9b69e';c.font='17px Manrope, sans-serif';c.fillText('Renk tercihi: '+usedColors(),64,716);
     c.font='14px Manrope, sans-serif';c.fillText('Baskı tarzı: '+(finish==='engrave'?'Oyma':'Kabartma'),64,753);c.fillText('Baskı için ölçü ve adedi birlikte netleştirelim.',64,790);
+    }
     c.strokeStyle='#c7fa5f35';c.beginPath();c.moveTo(64,863);c.lineTo(1536,863);c.stroke();
     c.fillStyle='#c7fa5f';c.font='18px monospace';c.fillText('katmanya.com',64,921);
     const blob=await new Promise(resolve=>sheet.toBlob(resolve,'image/png'));if(!blob)return;
     const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='katmanya-cizim-taslagi.png';
-    if(keychain.enabled)link.download='katmanya-anahtarlik-taslagi.png';
-    if(finish==='engrave')link.download='katmanya-oyma-'+(keychain.enabled?'anahtarlik':'plaka')+'-taslagi.png';
+    if(keychain.enabled)link.download=facePaths('back').length?'katmanya-cift-tarafli-anahtarlik-taslagi.png':faceFinish('front')==='engrave'?'katmanya-oyma-anahtarlik-taslagi.png':'katmanya-anahtarlik-taslagi.png';
+    else if(finish==='engrave')link.download='katmanya-oyma-plaka-taslagi.png';
     document.body.append(link);link.click();link.remove();window.setTimeout(()=>URL.revokeObjectURL(url),30000);
   }
   function open(){
@@ -472,7 +533,7 @@
   ['pointerup','pointercancel','lostpointercapture'].forEach(type=>ink.addEventListener(type,endStroke));
   ink.addEventListener('keydown',event=>{
     if(tool==='hole'&&keychain.enabled&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key)){
-      event.preventDefault();remember();const step=event.shiftKey?.04:.01,p=[...keychain.hole];p[0]+=event.key==='ArrowLeft'?-step:event.key==='ArrowRight'?step:0;p[1]+=event.key==='ArrowUp'?-step:event.key==='ArrowDown'?step:0;moveHole(p);return;
+      event.preventDefault();remember();const step=event.shiftKey?.04:.01,p=editingHole();p[0]+=event.key==='ArrowLeft'?-step:event.key==='ArrowRight'?step:0;p[1]+=event.key==='ArrowUp'?-step:event.key==='ArrowDown'?step:0;moveHole(p);return;
     }
     if(tool!=='hole'&&selected&&['Delete','Backspace'].includes(event.key)){event.preventDefault();removeSelected();return;}
     if(tool!=='move'||!selected||transform||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key))return;
@@ -505,9 +566,13 @@
     const redraw=!!mesh&&!changed;remember();finish=next;markChanged();if(redraw)build();
   }));
   keyToggle?.addEventListener('click',toggleKeychain);
+  dialog.querySelectorAll('[data-sketch-face]').forEach(button=>button.addEventListener('click',()=>switchFace(button.dataset.sketchFace)));
+  dialog.querySelectorAll('[data-sketch-model-face]').forEach(button=>button.addEventListener('click',()=>{
+    const next=button.dataset.sketchModelFace;if(!keychain.enabled||!['front','back'].includes(next))return;modelFace=next;updateActions();requestPaint();
+  }));
   holeMove?.addEventListener('click',()=>{if(keychain.enabled)chooseTool('hole');});
   for(const [input,axis] of [[holeX,0],[holeY,1]]){
-    input?.addEventListener('input',()=>{if(!keychain.enabled||activeStroke||transform)return;if(!holeGesture){remember();holeGesture=true;}const p=[...keychain.hole];p[axis]=Number(input.value)/100;moveHole(p);});
+    input?.addEventListener('input',()=>{if(!keychain.enabled||activeStroke||transform)return;if(!holeGesture){remember();holeGesture=true;}const p=editingHole();p[axis]=Number(input.value)/100;moveHole(p);});
     input?.addEventListener('change',()=>{holeGesture=false;});
   }
   dialog.querySelectorAll('[data-sketch-preset]').forEach(button=>button.addEventListener('click',()=>preset(button.dataset.sketchPreset)));
@@ -519,8 +584,8 @@
     if(selected&&tool==='move'&&(selected.color||'Yeşil')!==next){remember();selected.color=next;color=next;markChanged();}
     else{color=next;updateActions();requestPaint();}
   }));
-  undo.addEventListener('click',()=>{if(activeStroke||transform||!history.length)return;const old=history.pop();paths=old.paths;keychain=old.keychain;finish=old.finish||'raised';selected=paths[old.index]||null;sizeGesture=false;holeGesture=false;if(tool==='hole'&&!keychain.enabled)chooseTool('move');markChanged();});
-  clear.addEventListener('click',()=>{if(activeStroke||transform)return;remember();paths=[];selected=null;mesh=null;keychain.enabled=false;finish='raised';if(tool==='hole')chooseTool('pen');markChanged();});
+  undo.addEventListener('click',()=>{if(activeStroke||transform||!history.length)return;const old=history.pop();paths=old.paths;otherPaths=old.otherPaths||[];otherFinish=old.otherFinish||'raised';face=old.face||'front';modelFace=face;keychain=old.keychain;finish=old.finish||'raised';selected=paths[old.index]||null;sizeGesture=false;holeGesture=false;if(tool==='hole'&&!keychain.enabled)chooseTool('move');markChanged();});
+  clear.addEventListener('click',()=>{if(activeStroke||transform)return;remember();paths=[];otherPaths=[];selected=null;mesh=null;keychain.enabled=false;finish='raised';otherFinish='raised';face='front';modelFace='front';if(tool==='hole')chooseTool('pen');markChanged();});
   buildButton.addEventListener('click',build);download.addEventListener('click',exportDraft);
   quote.addEventListener('click',event=>{if(!mesh||changed||building)event.preventDefault();});
   dialog.querySelector('.sketch-close').addEventListener('click',()=>dialog.close());dialog.addEventListener('close',restore);
