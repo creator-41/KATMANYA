@@ -14,6 +14,7 @@
   const shapeSelect=dialog.querySelector('.sketch-shape-select'),shapeSize=dialog.querySelector('.sketch-shape-size'),shapePercent=dialog.querySelector('.sketch-shape-percent');
   const shapeAngle=dialog.querySelector('.sketch-shape-angle'),angleValue=dialog.querySelector('.sketch-angle-value');
   const textInput=dialog.querySelector('.sketch-text-input'),textAdd=dialog.querySelector('.sketch-text-add');
+  const deleteSelected=dialog.querySelector('.sketch-delete');
   const motion=matchMedia('(prefers-reduced-motion: reduce)'),COLS=160,ROWS=100,DURATION=2400;
   const colors={Yeşil:'#c7fa5f',Beyaz:'#f3f1ec',Mavi:'#5795ef',Siyah:'#454e48'};
   const limit=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -181,6 +182,7 @@
   function bounds(path){const xs=path.points.map(p=>p[0]),ys=path.points.map(p=>p[1]);return {x:Math.min(...xs),y:Math.min(...ys),w:Math.max(...xs)-Math.min(...xs),h:Math.max(...ys)-Math.min(...ys)};}
   function syncSelection(){
     if(selected&&!paths.includes(selected))selected=null;
+    if(deleteSelected)deleteSelected.disabled=!selected||!!activeStroke||!!transform;
     if(shapeSelect){
       shapeSelect.innerHTML='<option value="">Şekil seç</option>'+paths.map((p,i)=>p.shape?'<option value="'+i+'">'+shapeNames[p.shape]+' · '+(i+1)+'</option>':'').join('');
       shapeSelect.value=selected?String(paths.indexOf(selected)):'';shapeSelect.disabled=!paths.some(p=>p.shape);
@@ -194,6 +196,10 @@
     tool=value;ink.classList.toggle('is-eraser',tool==='eraser');ink.classList.toggle('is-moving',tool==='move');
     dialog.querySelectorAll('[data-sketch-tool]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sketchTool===tool)));
     inkDirty=true;requestPaint();
+  }
+  function removeSelected(){
+    if(!selected||activeStroke||transform)return;const index=paths.indexOf(selected);if(index<0)return;
+    remember();paths.splice(index,1);selected=null;sizeGesture=false;markChanged();
   }
   function fitShape(path,scale=path.scale){
     const radians=(path.angle||0)*Math.PI/180,c=Math.cos(radians),s=Math.sin(radians);
@@ -310,6 +316,7 @@
   ink.addEventListener('pointerdown',beginStroke);ink.addEventListener('pointermove',moveStroke);
   ['pointerup','pointercancel','lostpointercapture'].forEach(type=>ink.addEventListener(type,endStroke));
   ink.addEventListener('keydown',event=>{
+    if(selected&&['Delete','Backspace'].includes(event.key)){event.preventDefault();removeSelected();return;}
     if(tool!=='move'||!selected||transform||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key))return;
     event.preventDefault();remember();const step=event.shiftKey?.04:.01;
     selected.center[0]+=event.key==='ArrowLeft'?-step:event.key==='ArrowRight'?step:0;
@@ -334,6 +341,7 @@
   textInput?.addEventListener('input',()=>{if(textAdd)textAdd.disabled=!textInput.value.trim();});
   textInput?.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();addText();}});
   textAdd?.addEventListener('click',addText);
+  deleteSelected?.addEventListener('click',removeSelected);
   dialog.querySelectorAll('[data-sketch-preset]').forEach(button=>button.addEventListener('click',()=>preset(button.dataset.sketchPreset)));
   dialog.querySelectorAll('[data-sketch-view]').forEach(button=>button.addEventListener('click',()=>setView(button.dataset.sketchView)));
   dialog.querySelectorAll('[data-sketch-rotate]').forEach(button=>button.addEventListener('click',()=>rotate(button.dataset.sketchRotate)));
