@@ -99,7 +99,8 @@
   function renderModel(context,w,h,value=progress,clearCanvas=true){
     if(clearCanvas)context.clearRect(0,0,w,h);
     const unit=Math.min(w/4.9,h/3.65),cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);
-    const baseH=Math.min(.15,(.15+.38)*value),raised=Math.max(0,(.15+.38)*value-.15);
+    const relief=mesh?.reliefHeight??.38;
+    const baseH=Math.min(.15,(.15+relief)*value),raised=Math.max(0,(.15+relief)*value-.15);
     const project=v=>{
       const x=v[0]*cy+v[2]*sy,z=-v[0]*sy+v[2]*cy,y=v[1]-.18,depth=z*cp+y*sp,f=7/(7-depth);
       return {x:w/2+x*f*unit,y:h/2+(-y*cp+z*sp)*f*unit,depth};
@@ -260,6 +261,7 @@
     for(let i=0;i<bits.length;i++)bits[i]=data[i*4+3]>=128?1:0;
     const result=reliefGeometry(bits,COLS,ROWS);
     if(!result.cells){mesh=null;changed=true;status.textContent='Çizim boş · bir şekil çiz';updateActions();requestPaint();return;}
+    result.reliefHeight=paths.some(p=>p.shape==='text')?.12:.38;
     mesh=result;changed=false;building=true;progress=0;started=performance.now();updateActions();setView('preview');requestPaint();
     if(window.innerWidth<=800)preview.focus({preventScroll:true});
   }
