@@ -257,7 +257,23 @@
         const face=polygon(vertices,normal,toneColor(tone),true);if(face)faces.push(face);
       }
     }
-    if(engraved){
+    function flushLayer(){faces.filter(Boolean).sort((a,b)=>a.depth-b.depth).forEach(paint);faces.length=0;}
+    if(mesh.backing){
+      // Each visible face has parallel surface planes. Paint by physical layer,
+      // so merged long walls cannot incorrectly stripe across lettering.
+      const bodyHeight=engraved?.27*value:baseH;
+      layer(engraved?mesh.engraving.body:mesh.backing,0,bodyHeight,base,{tops:false});flushLayer();
+      if(!underside){
+        if(engraved){
+          layer(mesh,.10*value,.10*value,null,{walls:false,tint:.72});flushLayer();
+          layer(mesh.engraving.cavity,.10*value,bodyHeight,base,{tint:.72});flushLayer();
+          layer(mesh.engraving.surface,bodyHeight,bodyHeight,base,{walls:false});flushLayer();
+        }else{
+          layer(mesh.backing,baseH,baseH,base,{walls:false});flushLayer();
+          if(raised>0){layer(mesh,.15,top,null,{tops:false});flushLayer();layer(mesh,top,top,null,{walls:false});flushLayer();}
+        }
+      }
+    }else if(engraved){
       const floor=.10*value,surface=.27*value;
       layer(mesh.engraving.body,0,surface,base,{tops:false});
       if(!underside){
@@ -273,12 +289,12 @@
       const rear=mesh.back,bodyHeight=engraved?.27*value:baseH;
       if(rear?.finish==='engrave'){
         const floor=Math.min(.10,bodyHeight*.38),surface=bodyHeight;
-        layer(rear.engraving.surface,surface,surface,base,{walls:false,flip:true,origin:bodyHeight});
-        layer(rear.engraving.cavity,floor,surface,base,{tint:.72,flip:true,origin:bodyHeight});
-        layer(rear,floor,floor,null,{walls:false,tint:.72,flip:true,origin:bodyHeight});
+        layer(rear,floor,floor,null,{walls:false,tint:.72,flip:true,origin:bodyHeight});flushLayer();
+        layer(rear.engraving.cavity,floor,surface,base,{tint:.72,flip:true,origin:bodyHeight});flushLayer();
+        layer(rear.engraving.surface,surface,surface,base,{walls:false,flip:true,origin:bodyHeight});flushLayer();
       }else{
-        layer(mesh.backing,0,0,base,{walls:false,flip:true});
-        if(rear?.cells&&value>0)layer(rear,0,.12*value,null,{flip:true});
+        layer(mesh.backing,0,0,base,{walls:false,flip:true});flushLayer();
+        if(rear?.cells&&value>0){layer(rear,0,.12*value,null,{flip:true,tops:false});flushLayer();layer(rear,.12*value,.12*value,null,{flip:true,walls:false});flushLayer();}
       }
     }
     faces.filter(Boolean).sort((a,b)=>a.depth-b.depth).forEach(paint);
