@@ -1,12 +1,12 @@
-const CACHE_NAME = "katmanya-shell-v17";
+const CACHE_NAME = "katmanya-shell-v18";
 const BASE = self.registration.scope;
 const CORE_ASSETS = [
   "./",
   "./index.html",
   "./manifest.webmanifest?v=katmanya-1",
-  "./styles.css?v=74",
+  "./styles.css?v=75",
   "./desk-set.js?v=1",
-  "./sketch-studio.js?v=10",
+  "./sketch-studio.js?v=11",
   "./main.js?v=44",
   "./chatbot.js?v=19",
   "./assets/chat-notification.wav",
