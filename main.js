@@ -4,6 +4,12 @@
   const story = document.querySelector('.print-story');
   const copyContainer = document.querySelector('.story-copies');
   const topbar = document.querySelector('.topbar');
+  const sceneWrap = document.querySelector('.scene-wrap');
+  const exploreTrigger = document.querySelector('.printer-explore-trigger');
+  const exploreDialog = document.querySelector('.printer-explore-dialog');
+  const exploreStage = exploreDialog?.querySelector('.printer-explore-stage');
+  const exploreClose = exploreDialog?.querySelector('.printer-explore-close');
+  let exploreOpen=false,exploreClosing=false,exploreAmount=0,exploreTarget=0,rendererAvailable=true;
   const chapters = [...document.querySelectorAll('.chapter')];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const bar = document.querySelector('#print-bar');
@@ -13,6 +19,9 @@
   const year=document.querySelector('#year'); if(year)year.textContent=new Date().getFullYear();
   const gl = canvas.getContext('webgl', { alpha: true, antialias: true, powerPreference: 'low-power' });
   function fallback() {
+    rendererAvailable=false;
+    if(exploreTrigger)exploreTrigger.disabled=true;
+    if(exploreDialog?.open)exploreDialog.close();
     document.querySelector('.scene-fallback').hidden = false;
     canvas.hidden = true;
     story.style.height = '110svh';
@@ -133,7 +142,23 @@
   const gridData=[];for(let i=-8;i<=8;i++){const n=i*.12;gridData.push(-.96,0,n,0,1,0,.96,0,n,0,1,0,n,0,-.96,0,1,0,n,0,.96,0,1,0);}const grid=mesh(gridData,LINES);
   function updateMesh(m,data){if(!gl){m.data=data;m.count=data.length/6;return;}gl.bindBuffer(gl.ARRAY_BUFFER,m.buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(data),gl.DYNAMIC_DRAW);m.count=data.length/6;}
   const colors={frame:[.14,.17,.15],dark:[.055,.068,.06],edge:[.29,.33,.28],silver:[.51,.57,.49],acid:[.69,.94,.29],brass:[.66,.42,.15],helmet:[.78,.82,.84],visor:[.018,.035,.052],blue:[.10,.20,.92],green:[.08,.65,.26]};
+  const exploreParts={
+    filament:{offset:[.48,.12,0],step:'01 / MALZEME',name:'Filament makarası',description:'Fikrinin ham maddesi burada. Makara, ince plastik filamenti baskı kafasına besler.'},
+    head:{offset:[-.42,.50,.62],step:'02 / ŞEKİL VERME',name:'Baskı kafası',description:'Filament burada ısınıp erir. Nozul, eriyen malzemeyi ince bir iz halinde bırakarak her katmanı oluşturur.'},
+    bed:{offset:[-.12,-.28,.70],step:'03 / KATMANLAR',name:'Baskı tablası',description:'Ürün bu yüzeyde yükselir. Bu yazıcıda tabla, yeni katmanlara yer açmak için baskı ilerledikçe aşağı iner.'}
+  };
+  let drawingPart='',selectedPart='filament',exploreSaved=null;
+  const partOffset=id=>exploreParts[id].offset.map(v=>v*exploreAmount);
   function draw(m,p,s,color,rot=[0,0,0],clip=99,ribs=0,glow=0,matrix=null){
+    if(exploreAmount>0&&drawingPart){
+      const offset=partOffset(drawingPart);
+      matrix=new Float32Array(matrix||transform(p,s,rot));
+      offset.forEach((v,i)=>matrix[12+i]+=v);
+      if(drawingPart===selectedPart){
+        color=color.map((v,i)=>v+(colors.acid[i]-v)*exploreAmount*.72);
+        glow=Math.max(glow,exploreAmount*.22);
+      }
+    }
     if(!gl){softDraw(m,matrix||transform(p,s,rot),color,clip,glow);return;}
     gl.bindBuffer(gl.ARRAY_BUFFER,m.buffer);gl.vertexAttribPointer(loc.pos,3,gl.FLOAT,false,24,0);gl.vertexAttribPointer(loc.normal,3,gl.FLOAT,false,24,12);
     gl.uniformMatrix4fv(loc.uModel,false,matrix||transform(p,s,rot));gl.uniform3fv(loc.uColor,color);gl.uniform1f(loc.uClip,clip);gl.uniform1f(loc.uRibs,ribs);gl.uniform1f(loc.uGlow,glow);gl.drawArrays(m.mode,0,m.count);
@@ -196,9 +221,12 @@
     ctx.putImageData(softImage,0,0);
   }
   const badge=document.querySelector('.printer-badge');
+  function projectScene(v){
+    const q=[0,0,0,0],a=[...v,1];for(let r=0;r<4;r++)for(let c=0;c<4;c++)q[r]+=softVP[c*4+r]*a[c];
+    return [(q[0]/q[3]+1)*w/2,(1-q[1]/q[3])*h/2];
+  }
   function placeBadge(){
-    const project=v=>{const q=[0,0,0,0],a=[...v,1];for(let r=0;r<4;r++)for(let c=0;c<4;c++)q[r]+=softVP[c*4+r]*a[c];return [(q[0]/q[3]+1)*w/2,(1-q[1]/q[3])*h/2];};
-    const a=project([-.85,2.85,1.143]),b=project([.24,2.85,1.143]),d=project([-.85,2.66,1.143]);
+    const a=projectScene([-.85,2.85,1.143]),b=projectScene([.24,2.85,1.143]),d=projectScene([-.85,2.66,1.143]);
     badge.style.transform='matrix('+[(b[0]-a[0])/200,(b[1]-a[1])/200,(d[0]-a[0])/40,(d[1]-a[1])/40,a[0],a[1]].join(',')+')';
     badge.style.visibility='visible';
   }
@@ -213,7 +241,7 @@
     const rect=canvas.getBoundingClientRect();w=rect.width;h=rect.height;
     const dpr=gl?Math.min(devicePixelRatio||1,1.65):Math.min(devicePixelRatio||1,800/Math.max(w,h));
     canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);if(gl)gl.viewport(0,0,canvas.width,canvas.height);
-    if(copyContainer&&topbar&&window.innerWidth>800){
+    if(!exploreOpen&&copyContainer&&topbar&&window.innerWidth>800){
       const safeTop=topbar.getBoundingClientRect().height+18;
       const safeBottom=window.innerHeight-56;
       const anchor=copyContainer.offsetTop;
@@ -231,19 +259,21 @@
     navLinks.forEach((link,index)=>{if(index===active){link.classList.add('is-active');link.setAttribute('aria-current','location');}else{link.classList.remove('is-active');link.removeAttribute('aria-current');}});
     mobileNav?.classList.toggle('is-active',active===1);
   }
-  function scroll(){const rect=story.getBoundingClientRect();target=clamp(-rect.top/Math.max(1,story.offsetHeight-window.innerHeight));setActiveNav(target);dirty=true;start();}
+  function scroll(){if(exploreOpen)return;const rect=story.getBoundingClientRect();target=clamp(-rect.top/Math.max(1,story.offsetHeight-window.innerHeight));setActiveNav(target);dirty=true;start();}
   function setCopy(p){
     chapters.forEach((el,i)=>{let opacity=1;if(i>0)opacity*=smooth(chaptersAt[i]-.025,chaptersAt[i]+.020,p);if(i<chapters.length-1)opacity*=1-smooth(chaptersAt[i+1]-.07,chaptersAt[i+1]-.025,p);
       el.style.opacity=opacity;el.style.visibility=opacity>.002?'visible':'hidden';el.style.pointerEvents=opacity>.6?'auto':'none';el.setAttribute('aria-hidden',opacity>.5?'false':'true');el.style.transform=window.innerWidth>800?'translateY(clamp(var(--chapter-top-limit), calc(-50% + '+((1-opacity)*18)+'px), calc(var(--chapter-bottom-limit) - 100%)))':'translateY('+((1-opacity)*12)+'px)';});
   }
   function render(p){
+    drawingPart='';
     if(gl)gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);else{ctx.clearRect(0,0,canvas.width,canvas.height);faces=[];}
     const progress=reduced.matches?1:clamp(p),finished=smooth(.92,1,p);setActiveNav(clamp(p));
     const yaw=.36+Math.sin(p*Math.PI)*.12+finished*.06;
     const mobile=window.innerWidth<=800;
-    const dist=mobile?7.5:7.1;
-    const eye=[Math.sin(yaw)*dist,3.3+finished*.15,Math.cos(yaw)*dist];
-    softVP=camera(eye,[.25,1.43+finished*.08,0],w/h);
+    const dist=exploreOpen?7.6*Math.max(1,1.02/(w/h)):(mobile?7.5:7.1);
+    const viewYaw=exploreOpen ? .42 : yaw;
+    const eye=[Math.sin(viewYaw)*dist,exploreOpen?3.5:3.3+finished*.15,Math.cos(viewYaw)*dist];
+    softVP=camera(eye,exploreOpen?[.45,1.56,.1]:[.25,1.43+finished*.08,0],w/h);
     if(gl){gl.uniform3fv(loc.uEye,eye);gl.uniformMatrix4fv(loc.uVP,false,softVP);}
     // Ender-5 Max inspired square frame, front badge, moving Z bed and top CoreXY gantry.
     const homeY=1.98,bedY=homeY-progress*H;
@@ -271,12 +301,14 @@
       draw(cyl,[x+.095,1.02,z],[.018,1.68,.018],colors.edge);
     }
     // The broad plate descends as each layer is added, like the real Ender-5 Max.
+    drawingPart='bed';
     box([0,bedY-.12,0],[2.17,.16,1.92],colors.dark);
     box([0,bedY-.025,0],[2.07,.06,1.82],[.21,.235,.195]);
     box([0,bedY+.012,0],[1.99,.014,1.74],[.12,.15,.12]);
     draw(grid,[0,bedY+.02,0],[.96,1,.86],[.22,.28,.16],[0,0,0],99,0,.25);
     box([0,bedY-.09,.969],[1.92,.012,.014],colors.acid);
     // Four individual reels in an external two-level material rack.
+    drawingPart='filament';
     const reelColors=[porcelain,black,blue,green],spin=progress*TAU*2.5;
     const reels=[[1.57,2.24,.48],[1.57,2.24,-.46],[1.57,1.32,.48],[1.57,1.32,-.46]];
     box([1.38,1.79,-.02],[.06,1.86,1.68],colors.dark);
@@ -292,9 +324,13 @@
         for(let i=0;i<5;i++){const a=spin+i*TAU/5;rod([x+.03,ry+Math.cos(a)*.09,rz+Math.sin(a)*.09],[x+.03,ry+Math.cos(a)*.31,rz+Math.sin(a)*.31],.013,colors.edge);}
       }
       const feed=[];
-      for(let i=0;i<=24;i++){const t=i/24,u=1-t;feed.push(rx*u+1.18*t,ry+.30+(3.10-ry-.30)*Math.sin(t*Math.PI/2),rz*u+(-.67+ri*.10)*t,0,1,0);}
+      const ro=partOffset('filament');
+      for(let i=0;i<=24;i++){const t=i/24,u=1-t;feed.push((rx+ro[0])*u+1.18*t,ry+ro[1]+.30+(3.10-ry-ro[1]-.30)*Math.sin(t*Math.PI/2),(rz+ro[2])*u+(-.67+ri*.10)*t,0,1,0);}
+      drawingPart='';
       updateMesh(filament,feed);draw(filament,[0,0,0],[1,1,1],rc,[0,0,0],99,0,.4);
+      drawingPart='filament';
     }
+    drawingPart='';
     box([1.16,3.12,-.51],[.15,.12,.51],colors.dark);
     const height=progress*H,angle=progress*TAU*28;
     const intro=1-smooth(0,.10,p),park=finished;
@@ -302,14 +338,17 @@
     const nz=(.42*Math.sin(angle))*(1-intro)*(1-park)-.25*(intro+park);
     const tipY=homeY+.012+intro*.25+park*.36;
     // Top-mounted XY carriage moves the nozzle while the build plate lowers.
+    drawingPart='head';
     box([0,2.54,nz],[2.07,.085,.10],colors.silver);
     box([0,2.59,nz],[2.08,.024,.024],colors.dark);
     box([nx,2.45,nz],[.23,.23,.22],colors.frame);
     box([nx,2.35,nz+.13],[.18,.18,.018],colors.dark);
     // All detailed armor surfaces grow continuously through the same horizontal layer.
+    drawingPart='bed';
     if(height>.001)for(const part of helmetParts)
       draw(part.mesh,[0,bedY+.027,0],[1,1,1],part.color,[0,0,0],height,1);
     // Hot end, heatsink, fan housing and brass nozzle follow the deposition path.
+    drawingPart='head';
     box([nx,tipY+.22,nz],[.22,.25,.2],colors.dark);
     box([nx,tipY+.22,nz+.106],[.18,.18,.013],colors.frame);
     draw(cyl,[nx,tipY+.22,nz+.12],[.063,.022,.063],colors.dark,[Math.PI/2,0,0]);
@@ -320,27 +359,77 @@
     draw(cone,[nx,tipY+.023,nz],[.028,.042,.028],colors.brass);
     if(progress>.001&&progress<.999)draw(cyl,[nx,tipY+.047,nz],[.016,.003,.016],[.91,1,.64],[0,0,0],99,0,1);
     // Flexible feed line arches from the spool to the print head.
-    const curve=[];for(let i=0;i<=48;i++){const t=i/48,u=1-t;const a=[1.16,3.18,-.51],b=[.65,3.40,-.4],c=[nx,2.95,nz],d=[nx,tipY+.45,nz];const v=a.map((_,k)=>u*u*u*a[k]+3*u*u*t*b[k]+3*u*t*t*c[k]+t*t*t*d[k]);curve.push(...v,0,1,0);}
+    drawingPart='';
+    const ho=partOffset('head');
+    const curve=[];for(let i=0;i<=48;i++){const t=i/48,u=1-t;const a=[1.16,3.18,-.51],b=[.65,3.40,-.4],c=[nx+ho[0],2.95+ho[1],nz+ho[2]],d=[nx+ho[0],tipY+.45+ho[1],nz+ho[2]];const v=a.map((_,k)=>u*u*u*a[k]+3*u*u*t*b[k]+3*u*t*t*c[k]+t*t*t*d[k]);curve.push(...v,0,1,0);}
     updateMesh(filament,curve);draw(filament,[0,0,0],[1,1,1],colors.acid,[0,0,0],99,0,.65);
     // Front control panel and two indicator buttons.
     box([.72,2.77,1.13],[.34,.32,.07],colors.dark);box([.72,2.77,1.17],[.27,.23,.012],[.12,.16,.12]);
     box([.72,2.60,1.178],[.24,.018,.008],colors.acid);
+    if(exploreOpen)placeExploreHotspots({filament:[1.57,2.24,.48],head:[nx,tipY+.22,nz+.14],bed:[0,bedY+.03,.969]});
     if(!gl)softFlush();
     const pct=Math.round(progress*100);bar.style.width=pct+'%';percent.innerHTML=pct+'<span>%</span>';layer.textContent='KATMAN '+String(Math.round(progress*120)).padStart(3,'0')+' / 120';
     status.textContent=progress===0?'ÜRETİME HAZIR':progress>=1?'BASKI TAMAMLANDI':'KATMANLAR ŞEKİL ALIYOR';setCopy(p);
   }
-  function frame(time){raf=0;if(!visible||document.hidden)return;const dt=Math.min((time-last)||16,60);last=time;const diff=target-current;current+=diff*(1-Math.exp(-dt/65));if(Math.abs(diff)<.00003)current=target;
-    if(dirty||Math.abs(diff)>.00003){render(current);dirty=false;}
-    if(Math.abs(target-current)>.00003)raf=requestAnimationFrame(frame);
+  function frame(time){raf=0;if((!visible&&!exploreOpen)||document.hidden||!rendererAvailable)return;const elapsed=(time-last)||16,dt=Math.min(elapsed,60);last=time;const diff=exploreOpen?0:target-current;current+=diff*(1-Math.exp(-dt/65));if(!exploreOpen&&Math.abs(diff)<.00003)current=target;
+    const opening=exploreTarget-exploreAmount;
+    exploreAmount=reduced.matches?exploreTarget:exploreAmount+opening*(1-Math.exp(-Math.min(elapsed,250)/170));
+    if(Math.abs(exploreTarget-exploreAmount)<.001)exploreAmount=exploreTarget;
+    if(dirty||Math.abs(diff)>.00003||opening!==0){render(current);dirty=false;}
+    if(exploreClosing&&exploreAmount===0){exploreDialog.close();return;}
+    if(Math.abs(target-current)>.00003&&!exploreOpen||exploreAmount!==exploreTarget)raf=requestAnimationFrame(frame);
   }
-  function start(){if(!raf&&visible&&!document.hidden){last=performance.now();raf=requestAnimationFrame(frame);}}
+  function start(){if(!raf&&(visible||exploreOpen)&&!document.hidden&&rendererAvailable){last=performance.now();raf=requestAnimationFrame(frame);}}
+  function placeExploreHotspots(anchors){
+    exploreDialog.querySelectorAll('.printer-explore-hotspot').forEach(button=>{
+      const id=button.dataset.printerPart,offset=partOffset(id),point=projectScene(anchors[id].map((v,i)=>v+offset[i]));
+      button.style.left=clamp(point[0],24,w-24)+'px';button.style.top=clamp(point[1],24,h-24)+'px';
+    });
+  }
+  function selectExplorePart(id){
+    if(!exploreParts[id])return;
+    selectedPart=id;const part=exploreParts[id];
+    exploreDialog.querySelectorAll('[data-printer-part]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.printerPart===id)));
+    exploreDialog.querySelector('.printer-explore-step').textContent=part.step;
+    exploreDialog.querySelector('h3').textContent=part.name;
+    exploreDialog.querySelector('.printer-explore-description').textContent=part.description;
+    dirty=true;start();
+  }
+  function openExplorer(){
+    if(exploreOpen||!rendererAvailable)return;
+    exploreSaved={parent:sceneWrap.parentNode,next:sceneWrap.nextSibling,scrollY:window.scrollY,label:canvas.getAttribute('aria-label'),body:{position:document.body.style.position,top:document.body.style.top,width:document.body.style.width}};
+    exploreOpen=true;exploreClosing=false;exploreAmount=0;exploreTarget=1;
+    document.body.style.position='fixed';document.body.style.top=-exploreSaved.scrollY+'px';document.body.style.width='100%';
+    exploreStage.prepend(sceneWrap);canvas.setAttribute('aria-label','Yazıcı parçalarını keşfet: filament makarası, baskı kafası ve baskı tablası');
+    exploreDialog.showModal();exploreClose.disabled=false;
+    selectExplorePart('filament');measure();exploreClose.focus({preventScroll:true});
+  }
+  function closeExplorer(){
+    if(!exploreOpen||exploreClosing)return;
+    exploreClosing=true;exploreTarget=0;exploreClose.disabled=true;dirty=true;start();
+    if(document.hidden||!rendererAvailable)exploreDialog.close();
+  }
+  function restoreExplorer(){
+    if(!exploreSaved)return;
+    const saved=exploreSaved;exploreSaved=null;exploreOpen=false;exploreClosing=false;exploreAmount=0;exploreTarget=0;drawingPart='';
+    saved.parent.insertBefore(sceneWrap,saved.next);canvas.setAttribute('aria-label',saved.label);
+    Object.assign(document.body.style,saved.body);window.scrollTo({top:saved.scrollY,left:0,behavior:'instant'});
+    exploreClose.disabled=false;measure();if(rendererAvailable)render(current);exploreTrigger.focus({preventScroll:true});
+  }
+  if(exploreDialog&&exploreStage&&typeof exploreDialog.showModal==='function'){
+    exploreTrigger.addEventListener('click',openExplorer);exploreClose.addEventListener('click',closeExplorer);
+    exploreDialog.addEventListener('cancel',event=>{event.preventDefault();closeExplorer();});
+    exploreDialog.addEventListener('close',restoreExplorer);
+    exploreDialog.querySelectorAll('[data-printer-part]').forEach(button=>button.addEventListener('click',()=>selectExplorePart(button.dataset.printerPart)));
+    exploreTrigger.disabled=false;
+  }
   window.addEventListener('scroll',scroll,{passive:true});window.addEventListener('resize',measure,{passive:true});
   if('ResizeObserver'in window)new ResizeObserver(measure).observe(canvas);
   if('IntersectionObserver'in window)new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){dirty=true;start();}},{rootMargin:'100px'}).observe(story);
   document.addEventListener('visibilitychange',()=>{if(!document.hidden){dirty=true;start();}});
   reduced.addEventListener('change',()=>{measure();});
   canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();cancelAnimationFrame(raf);fallback();});
-  window.addEventListener('pageshow',()=>{current=0;target=0;window.scrollTo({top:0,left:0,behavior:'instant'});measure();render(0);});
+  window.addEventListener('pageshow',()=>{if(exploreDialog?.open)exploreDialog.close();current=0;target=0;window.scrollTo({top:0,left:0,behavior:'instant'});measure();render(0);});
   window.scrollTo({top:0,left:0,behavior:'instant'});
   measure();render(0);
   const briefCopy=document.querySelector("#brief-copy");

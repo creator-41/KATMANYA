@@ -35,7 +35,7 @@
   <link rel="icon" type="image/svg+xml" href="./assets/katmanya-icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/katmanya-192.png">
   <link rel="apple-touch-icon" href="./assets/katmanya-180.png">
-  <link rel="stylesheet" href="styles.css?v=68">
+  <link rel="stylesheet" href="styles.css?v=69">
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#top" aria-label="KATMANYA ana sayfa"><img class="katmanya-brand" src="./assets/katmanya-logo.svg" width="631" height="128" alt="KATMANYA"></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a><a href="#sss">Sık sorulanlar</a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="KATMANYA uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
@@ -68,6 +68,7 @@
       <div class="print-sticky">
         <div class="ambient" aria-hidden="true"></div>
         <div class="scene-wrap"><canvas id="printer" aria-label="Kaydırdıkça hareket eden KATMANYA yazıcısı ve katman katman basılan robot kaskı"></canvas><div class="printer-badge" aria-hidden="true">KATMANYA</div><div class="scene-fallback" hidden><p>Aklındaki fikri üretelim.</p><small>Bu cihazda 3D görünüm açılamadı. Ürünleri kaydırarak inceleyebilirsin.</small></div></div>
+        <button class="printer-explore-trigger" type="button" aria-haspopup="dialog" aria-controls="printer-explorer" disabled>YAZICIYI KEŞFET <span aria-hidden="true">↗</span></button>
         <div class="story-copies">
           <article class="chapter active" data-chapter="0"><p class="eyebrow"><span class="live-dot"></span> KATMANYA · İLK ÜRETİMLER İÇİN TEKLİF ALIYORUZ</p><h1>Fikrini anlat, <br><em>üretelim.</em></h1><p class="chapter-desc">İlk ürünler için teklif topluyoruz. Fikrini ve ölçünü gönder; fiyatı ve teslim süresini birlikte netleştirelim.</p><a class="scroll-invite" href="#baski-baslangici"><span class="scroll-line"></span> KEŞFETMEK İÇİN KAYDIR <b>↓</b></a></article>
           <article class="chapter product-slide" data-chapter="1" data-desk-set aria-hidden="true">
@@ -123,6 +124,37 @@
         </div>
       </div>
     </section>
+  <dialog class="printer-explore-dialog" id="printer-explorer" aria-labelledby="printer-explore-title" aria-describedby="printer-explore-help">
+    <div class="printer-explore-shell">
+      <header class="printer-explore-head">
+        <div><p class="printer-explore-eyebrow">KATMANYA / ÜRETİMİN İÇİ</p><h2 id="printer-explore-title">Yazıcıyı keşfet.</h2></div>
+        <button class="printer-explore-close" type="button">Üretime dön <span aria-hidden="true">↙</span></button>
+      </header>
+      <div class="printer-explore-layout">
+        <div class="printer-explore-stage">
+          <div class="printer-explore-hotspots">
+            <button class="printer-explore-hotspot" type="button" data-printer-part="filament" aria-label="Modelde filament makarasını keşfet" aria-pressed="true">01</button>
+            <button class="printer-explore-hotspot" type="button" data-printer-part="head" aria-label="Modelde baskı kafasını keşfet" aria-pressed="false">02</button>
+            <button class="printer-explore-hotspot" type="button" data-printer-part="bed" aria-label="Modelde baskı tablasını keşfet" aria-pressed="false">03</button>
+          </div>
+        </div>
+        <section class="printer-explore-info" aria-label="Yazıcı parçaları">
+          <p class="printer-explore-kicker">ÜÇ PARÇA, BİR FİKİR.</p>
+          <div class="printer-explore-parts" role="group" aria-label="Keşfedilecek parçayı seç">
+            <button type="button" data-printer-part="filament" aria-pressed="true"><span>01</span> Filament makarası <b aria-hidden="true">↗</b></button>
+            <button type="button" data-printer-part="head" aria-pressed="false"><span>02</span> Baskı kafası <b aria-hidden="true">↗</b></button>
+            <button type="button" data-printer-part="bed" aria-pressed="false"><span>03</span> Baskı tablası <b aria-hidden="true">↗</b></button>
+          </div>
+          <div class="printer-explore-detail" aria-live="polite" aria-atomic="true">
+            <p class="printer-explore-step">01 / MALZEME</p>
+            <h3>Filament makarası</h3>
+            <p class="printer-explore-description">Fikrinin ham maddesi burada. Makara, ince plastik filamenti baskı kafasına besler.</p>
+          </div>
+          <p id="printer-explore-help">Model üzerindeki numaralara da dokunabilirsin.</p>
+        </section>
+      </div>
+    </div>
+  </dialog>
   <dialog class="nameplate-logo-dialog" aria-labelledby="nameplate-logo-title" aria-describedby="nameplate-logo-help">
     <section class="nameplate-logo-shell">
       <header class="nameplate-logo-head">
@@ -193,7 +225,7 @@
   </dialog>
   </main>
   <script src="desk-set.js?v=1" defer></script>
-  <script src="main.js?v=41" defer></script>
+  <script src="main.js?v=42" defer></script>
 
   <aside id="quote-chat" aria-label="KATMANYA teklif asistanı">
     <section id="quote-chat-panel" class="quote-chat-panel" role="dialog" aria-modal="false" aria-labelledby="quote-chat-title" hidden>
