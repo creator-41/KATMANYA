@@ -394,6 +394,12 @@ body{max-width:100%;touch-action:pan-y}
 }
 @media(prefers-reduced-motion:reduce){.desk-piece,.desk-part-button{transition:none}}
 
+/* Center desktop copy within the visible space beneath the fixed header. */
+@media(min-width:801px){
+  .story-copies{--chapter-top-limit:calc(96px - 50svh);--chapter-bottom-limit:calc(50svh - 56px);--chapter-available-height:calc(100svh - 152px)}
+  .chapter{max-height:var(--chapter-available-height);padding-block:10px;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#c7fa5f60 #ffffff08;scroll-padding-block:10px}
+}
+
 /* Keep the desktop preview compact, with its label and actions on either side. */
 @media(min-width:801px){
   .chapter[data-chapter="2"] .product-action-row{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;align-items:start}
