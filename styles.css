@@ -138,6 +138,16 @@ body{max-width:100%;touch-action:pan-y}
 
 
 /* Compact, accessible FAQ section for product and quote questions. */
+.site-footer{padding:36px 7vw 104px;background:var(--ink);border-top:1px solid #ffffff18}
+.site-footer-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:32px}
+.site-footer-brand{display:block;width:180px;max-width:100%;height:auto}
+.instagram-link{display:flex;align-items:center;gap:15px;min-height:64px;padding:14px 18px;border:1px solid #c7fa5f45;border-radius:12px;transition:border-color .2s,background .2s}
+.instagram-link:hover{border-color:var(--acid);background:#c7fa5f0a}
+.instagram-icon{flex:none;color:var(--acid)}
+.instagram-link strong{display:block;font:500 13px var(--mono);color:var(--paper)}
+.instagram-caption{display:block;margin-top:5px;font-size:12px;line-height:1.5;color:#a5b09b}
+.instagram-arrow{margin-left:16px;color:var(--acid);font-size:22px}
+@media(max-width:800px){.site-footer{padding:30px 6vw 108px}.site-footer-inner{align-items:flex-start;flex-direction:column;gap:24px}.site-footer-brand{width:156px}.instagram-link{width:100%;gap:12px;padding:14px}.instagram-link>span:nth-child(2){min-width:0}.instagram-arrow{margin-left:auto}.instagram-caption{font-size:11px}}
 .faq-section{background:var(--paper);color:var(--ink);padding:clamp(64px,9vw,120px) 7vw}
 .faq-inner{max-width:1080px;margin:0 auto}
 .faq-heading{display:grid;grid-template-columns:1fr 1fr;align-items:end;gap:8vw;margin-bottom:42px}
