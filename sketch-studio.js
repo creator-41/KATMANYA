@@ -513,9 +513,22 @@
     requestPaint();
   }
   // Self-contained UTF-8 LZSS links. No upload or browser-local ID is needed.
-  // Both encoded and expanded sizes are bounded before accepting external data.
+  // V2 stores point-to-point deltas as fixed-point coordinates, preserving
+  // subpixel drawing detail while making freehand and eraser paths much smaller.
+  // Existing V1 links remain readable.
   function packDraft(json){
-    if(json.length>256000)throw Error('draft-size');validateDraft(JSON.parse(json));
+    if(json.length>256000)throw Error('draft-size');const data=validateDraft(JSON.parse(json));
+    const wire={...data,v:2,p:data.p.map(packDraftPath),b:data.b.map(packDraftPath)};
+    return compressDraft(JSON.stringify(wire),'2.');
+  }
+  function packDraftPath(path){
+    const encode=points=>{let x=0,y=0;return points.map(point=>{const nx=Math.round(point[0]*65536),ny=Math.round(point[1]*65536),delta=[nx-x,ny-y];x=nx;y=ny;return delta;});};
+    const packed={...path,d:encode(path.points)};delete packed.points;
+    if(path.cuts)packed.cuts=path.cuts.map(cut=>({width:cut.width,d:encode(cut.points)}));
+    return packed;
+  }
+  function compressDraft(json,prefix){
+    if(json.length>256000)throw Error('draft-size');
     const bytes=new TextEncoder().encode(json);if(bytes.length>256000)throw Error('draft-size');
     const out=[],positions=new Map();let at=0;
     const key=i=>(bytes[i]<<16)|(bytes[i+1]<<8)|bytes[i+2];
@@ -536,11 +549,12 @@
       out[flagAt]=flags;if(out.length>12000)throw Error('link-size');
     }
     let binary='';for(let i=0;i<out.length;i+=8192)binary+=String.fromCharCode(...out.slice(i,i+8192));
-    const token='1.'+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+    const token=prefix+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
     if(token.length>12000)throw Error('link-size');return token;
   }
   function unpackDraft(token){
-    if(typeof token!=='string'||token.length>12000||!/^1\.[A-Za-z0-9_-]+$/.test(token))throw Error('link-format');
+    if(typeof token!=='string'||token.length>12000||!/^([12])\.[A-Za-z0-9_-]+$/.test(token))throw Error('link-format');
+    const version=token[0];
     const binary=atob(token.slice(2).replace(/-/g,'+').replace(/_/g,'/')),out=new Uint8Array(256000);let at=0,size=0;
     while(at<binary.length){
       const flags=binary.charCodeAt(at++);
@@ -552,7 +566,25 @@
         }else{if(size>=out.length)throw Error('draft-size');out[size++]=binary.charCodeAt(at++);}
       }
     }
-    return validateDraft(JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(out.subarray(0,size))));
+    const data=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(out.subarray(0,size)));
+    if(version==='1'){if(data.v!==1)throw Error('link-version');return validateDraft(data);}
+    if(data?.v!==2||!Array.isArray(data.p)||!Array.isArray(data.b)||data.p.length+data.b.length>200)throw Error('link-version');
+    let pointCount=0;
+    const decode=(packed,min,max)=>{
+      if(!Array.isArray(packed)||!packed.length||packed.length>8000||(pointCount+=packed.length)>20000)throw Error('draft-points');
+      let x=0,y=0;
+      return packed.map(delta=>{
+        if(!Array.isArray(delta)||delta.length!==2||!Number.isSafeInteger(delta[0])||!Number.isSafeInteger(delta[1])||Math.abs(delta[0])>1048576||Math.abs(delta[1])>1048576)throw Error('draft-point');
+        x+=delta[0];y+=delta[1];const point=[x/65536,y/65536];
+        if(point[0]<min||point[0]>max||point[1]<min||point[1]>max)throw Error('draft-point');return point;
+      });
+    };
+    const decodePath=path=>{
+      if(!path||!Array.isArray(path.d))throw Error('draft-path');const result={...path,points:decode(path.d,0,1)};delete result.d;
+      if(path.cuts!==undefined){if(!Array.isArray(path.cuts))throw Error('draft-cuts');result.cuts=path.cuts.map(cut=>{if(!cut||!Array.isArray(cut.d))throw Error('draft-cuts');return {width:cut.width,points:decode(cut.d,-8,8)};});}
+      return result;
+    };
+    data.v=1;data.p=data.p.map(decodePath);data.b=data.b.map(decodePath);return validateDraft(data);
   }
   function validateDraft(data){
     if(!data||data.v!==1||!Array.isArray(data.p)||!Array.isArray(data.b)||data.p.length+data.b.length>200)throw Error('draft-format');
