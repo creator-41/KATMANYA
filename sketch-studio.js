@@ -13,12 +13,13 @@
   const brush=dialog.querySelector('.sketch-brush input'),empty=dialog.querySelector('.sketch-empty'),status=dialog.querySelector('.sketch-build-status');
   const shapeSelect=dialog.querySelector('.sketch-shape-select'),shapeSize=dialog.querySelector('.sketch-shape-size'),shapePercent=dialog.querySelector('.sketch-shape-percent');
   const shapeAngle=dialog.querySelector('.sketch-shape-angle'),angleValue=dialog.querySelector('.sketch-angle-value');
+  const textInput=dialog.querySelector('.sketch-text-input'),textAdd=dialog.querySelector('.sketch-text-add');
   const motion=matchMedia('(prefers-reduced-motion: reduce)'),COLS=160,ROWS=100,DURATION=2400;
   const colors={Yeşil:'#c7fa5f',Beyaz:'#f3f1ec',Mavi:'#5795ef',Siyah:'#454e48'};
   const limit=(v,a,b)=>Math.max(a,Math.min(b,v));
   let paths=[],activeStroke=null,tool='pen',color='Yeşil',mesh=null,changed=true,building=false,progress=1;
   let selected=null,transform=null,sizeGesture=false;const history=[];
-  const shapeNames={bolt:'Şimşek',heart:'Kalp',star:'Yıldız',triangle:'Üçgen',circle:'Daire',rectangle:'Dikdörtgen'};
+  const shapeNames={bolt:'Şimşek',heart:'Kalp',star:'Yıldız',triangle:'Üçgen',circle:'Daire',rectangle:'Dikdörtgen',text:'Metin'};
   let yaw=-.48,pitch=.72,rotation=null,frameId=0,started=0,saved=null,inkDirty=true,inkSize={w:800,h:500},modelSize={w:800,h:600};
   // Merge occupied raster cells into flat top rectangles and exposed boundary runs.
   // Empty cells remain holes; interior edges never generate side walls.
@@ -56,6 +57,11 @@
     for(const path of paths){
       context.globalCompositeOperation=path.tool==='eraser'?'destination-out':'source-over';
       context.strokeStyle='#c7fa5f';context.fillStyle='#c7fa5f';context.lineWidth=path.width*w;
+      if(path.shape==='text'){
+        context.save();context.translate(path.center[0]*w,path.center[1]*h);context.scale(w/800,h/500);
+        context.rotate((path.angle||0)*Math.PI/180);context.scale(path.scale,path.scale);
+        context.font='700 '+path.fontPx+'px Arial, sans-serif';context.textAlign='center';context.textBaseline='middle';context.fillText(path.text,0,0);context.restore();continue;
+      }
       const first=path.points[0];if(!first)continue;
       if(path.points.length===1){context.beginPath();context.arc(first[0]*w,first[1]*h,path.width*w/2,0,Math.PI*2);context.fill();continue;}
       context.beginPath();context.moveTo(first[0]*w,first[1]*h);
@@ -257,6 +263,13 @@
     mesh=result;changed=false;building=true;progress=0;started=performance.now();updateActions();setView('preview');requestPaint();
     if(window.innerWidth<=800)preview.focus({preventScroll:true});
   }
+  function addText(){
+    const text=textInput?.value.trim().slice(0,32);if(!text||activeStroke||transform)return;
+    strokeCtx.font='700 64px Arial, sans-serif';const measured=strokeCtx.measureText(text).width;
+    const fontPx=Math.min(64,560/Math.max(measured,1)*64),bw=measured*fontPx/64/800,bh=fontPx/500;
+    remember();selected={tool:'pen',width:.024,shape:'text',text,fontPx,center:[.5,.5],scale:1,angle:0,base:[[-bw/2,-bh/2],[bw/2,-bh/2],[bw/2,bh/2],[-bw/2,bh/2]],points:[]};
+    fitShape(selected);paths.push(selected);chooseTool('move');markChanged();setView('draw');textInput.blur?.();
+  }
   function rotate(direction){
     if(direction==='reset'){yaw=-.48;pitch=.72;}else yaw+=direction==='left'?-.25:.25;
     requestPaint();
@@ -316,6 +329,9 @@
   shapeSize?.addEventListener('change',()=>{sizeGesture=false;});
   shapeAngle?.addEventListener('input',()=>{if(!selected||activeStroke||transform)return;if(!sizeGesture){remember();sizeGesture=true;}selected.angle=limit(Number(shapeAngle.value)||0,-180,180);fitShape(selected);markChanged();});
   shapeAngle?.addEventListener('change',()=>{sizeGesture=false;});
+  textInput?.addEventListener('input',()=>{if(textAdd)textAdd.disabled=!textInput.value.trim();});
+  textInput?.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();addText();}});
+  textAdd?.addEventListener('click',addText);
   dialog.querySelectorAll('[data-sketch-preset]').forEach(button=>button.addEventListener('click',()=>preset(button.dataset.sketchPreset)));
   dialog.querySelectorAll('[data-sketch-view]').forEach(button=>button.addEventListener('click',()=>setView(button.dataset.sketchView)));
   dialog.querySelectorAll('[data-sketch-rotate]').forEach(button=>button.addEventListener('click',()=>rotate(button.dataset.sketchRotate)));
