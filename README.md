@@ -42,6 +42,19 @@ azaltma tercihi desteklenir, boşta çizim yapılmaz. İki açılı 1600×1200
 PNG ve doğrudan WhatsApp teklif bağlantısı vardır. Bu bir üretim
 dosyası değildir; ölçü, malzeme ve okunma açısı ayrıca netleştirilir.
 
+## Labirentin cebinde
+
+Yuvarlak/kare anahtarlıkta 5, 7 ve 9 hücre genişliğinde labirentler oluşturulur.
+Tohumla tekrarlanabilen DFS ağacı, tüm hücreleri bağlar; hedef başlangıca en
+uzak hücredir. Oyun hareketleri, modeldeki gerçek açık koridorlarla aynı
+bağlantı tablosunu kullanır. Kapalı duvara hareket edilemez. Yön tuşları,
+dokunmatik yön düğmeleri, ipucu yolu, hamle sayısı ve kazanma durumu vardır.
+Baş harfler isteğe bağlıdır ve alan boş açılır. Modelde gerçek halka deliği,
+baskı animasyonu, renkler ve PNG taslak bulunur. Top/kapak/ölçü için üretim
+kararları teklif sırasında netleşir. `maze-model.js` geometri ve yolları,
+`maze-studio.js` arayüz ve oyunun yaşam döngüsünü yönetir. Hareket azaltma
+tercihi desteklenir ve boşta sürekli çizim yapılmaz.
+
 ## Marka
 
 Katmanlı küp amblemi `assets/katmanya-mark.svg`, yatay logo

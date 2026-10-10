@@ -35,7 +35,7 @@
   <link rel="icon" type="image/svg+xml" href="./assets/katmanya-icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/katmanya-192.png">
   <link rel="apple-touch-icon" href="./assets/katmanya-180.png">
-  <link rel="stylesheet" href="styles.css?v=84">
+  <link rel="stylesheet" href="styles.css?v=85">
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#top" aria-label="KATMANYA ana sayfa"><img class="katmanya-brand" src="./assets/katmanya-logo.svg" width="631" height="128" alt="KATMANYA"></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a><a href="#sss">Sık sorulanlar</a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="KATMANYA uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
@@ -70,7 +70,7 @@
         <div class="scene-wrap"><canvas id="printer" aria-label="Kaydırdıkça hareket eden KATMANYA yazıcısı ve katman katman basılan robot kaskı"></canvas><div class="printer-badge" aria-hidden="true">KATMANYA</div><div class="scene-fallback" hidden><p>Aklındaki fikri üretelim.</p><small>Bu cihazda 3D görünüm açılamadı. Ürünleri kaydırarak inceleyebilirsin.</small></div></div>
         <button class="printer-explore-trigger" type="button" aria-haspopup="dialog" aria-controls="printer-explorer" disabled>YAZICIYI KEŞFET <span aria-hidden="true">↗</span></button>
         <div class="story-copies">
-          <article class="chapter active" data-chapter="0"><p class="eyebrow"><span class="live-dot"></span> KATMANYA · İLK ÜRETİMLER İÇİN TEKLİF ALIYORUZ</p><h1>Fikrini anlat, <br><em>üretelim.</em></h1><p class="chapter-desc">İlk ürünler için teklif topluyoruz. Fikrini ve ölçünü gönder; fiyatı ve teslim süresini birlikte netleştirelim.</p><a class="scroll-invite" href="#baski-baslangici"><span class="scroll-line"></span> KEŞFETMEK İÇİN KAYDIR <b>↓</b></a><button class="sketch-trigger" type="button" aria-haspopup="dialog" aria-controls="sketch-studio" disabled>ÇİZ, KATMANA DÖNÜŞSÜN <span aria-hidden="true">↗</span></button><button class="sketch-trigger photo-trigger" type="button" aria-haspopup="dialog" aria-controls="photo-studio" disabled>FOTOĞRAFTAN KABARTMA <span aria-hidden="true">↗</span></button><button class="sketch-trigger puzzle-trigger" type="button" aria-haspopup="dialog" aria-controls="puzzle-studio" disabled>İKİ PARÇA, BİR HİKÂYE <span aria-hidden="true">↗</span></button><button class="sketch-trigger angle-trigger" type="button" aria-haspopup="dialog" aria-controls="angle-studio" disabled>BİR PLAKA, İKİ BAKIŞ <span aria-hidden="true">↗</span></button></article>
+          <article class="chapter active" data-chapter="0"><p class="eyebrow"><span class="live-dot"></span> KATMANYA · İLK ÜRETİMLER İÇİN TEKLİF ALIYORUZ</p><h1>Fikrini anlat, <br><em>üretelim.</em></h1><p class="chapter-desc">İlk ürünler için teklif topluyoruz. Fikrini ve ölçünü gönder; fiyatı ve teslim süresini birlikte netleştirelim.</p><a class="scroll-invite" href="#baski-baslangici"><span class="scroll-line"></span> KEŞFETMEK İÇİN KAYDIR <b>↓</b></a><button class="sketch-trigger" type="button" aria-haspopup="dialog" aria-controls="sketch-studio" disabled>ÇİZ, KATMANA DÖNÜŞSÜN <span aria-hidden="true">↗</span></button><button class="sketch-trigger photo-trigger" type="button" aria-haspopup="dialog" aria-controls="photo-studio" disabled>FOTOĞRAFTAN KABARTMA <span aria-hidden="true">↗</span></button><button class="sketch-trigger puzzle-trigger" type="button" aria-haspopup="dialog" aria-controls="puzzle-studio" disabled>İKİ PARÇA, BİR HİKÂYE <span aria-hidden="true">↗</span></button><button class="sketch-trigger angle-trigger" type="button" aria-haspopup="dialog" aria-controls="angle-studio" disabled>BİR PLAKA, İKİ BAKIŞ <span aria-hidden="true">↗</span></button><button class="sketch-trigger maze-trigger" type="button" aria-haspopup="dialog" aria-controls="maze-studio" disabled>LABİRENTİN CEBİNDE <span aria-hidden="true">↗</span></button></article>
           <article class="chapter product-slide" data-chapter="1" data-desk-set aria-hidden="true">
             <h2>Modüler <br><em>masaüstü seti</em></h2>
             <p class="chapter-desc product-desc">Telefon standı, kulaklık askısı, oyun kolu standı. Setini ihtiyacına göre kur.</p>
@@ -259,6 +259,34 @@
     </div>
   </dialog>
 
+
+  <dialog class="maze-dialog" id="maze-studio" aria-labelledby="maze-title" aria-describedby="maze-help">
+    <div class="maze-shell">
+      <header class="sketch-head"><div><p class="sketch-eyebrow">KATMANYA / TASARLA, OYNA, YANINDA TAŞI</p><h2 id="maze-title">Labirentin <em>cebinde.</em></h2><p id="maze-help">Kendi labirent anahtarlığını tasarla. Topu hedefe götür, ürünü burada dene.</p></div><button class="sketch-close maze-close" type="button" aria-label="Labirent stüdyosunu kapat">×</button></header>
+      <div class="maze-tabs" role="group" aria-label="Labirent stüdyosu görünümü"><button type="button" data-maze-tab="edit" aria-pressed="false">01 · TASARLA</button><button type="button" data-maze-tab="preview" aria-pressed="true">02 · OYNA</button></div>
+      <div class="maze-workspace">
+        <section class="maze-edit" aria-label="Labirent anahtarlık ayarları">
+          <div class="sketch-pane-top"><span>01 / SENİN OYUNUN</span><span class="sketch-local-note">Tasarımın cihazında kalır</span></div>
+          <div class="maze-setting"><span>ŞEKİL</span><div class="maze-options" role="group" aria-label="Labirent şekli"><button type="button" data-maze-shape="circle" aria-pressed="true">Yuvarlak ○</button><button type="button" data-maze-shape="square" aria-pressed="false">Kare □</button></div></div>
+          <div class="maze-setting"><span>ZORLUK</span><div class="maze-options" role="group" aria-label="Labirent zorluğu"><button type="button" data-maze-level="easy" aria-pressed="true">Kolay</button><button type="button" data-maze-level="medium" aria-pressed="false">Dengeli</button><button type="button" data-maze-level="hard" aria-pressed="false">Zor</button></div></div>
+          <div class="maze-setting"><span>RENK</span><div class="maze-colors" role="group" aria-label="Labirent rengi"><button type="button" data-maze-color="Yeşil" aria-label="Yeşil labirent" aria-pressed="true" style="--maze-color:#c7fa5f"></button><button type="button" data-maze-color="Mavi" aria-label="Mavi labirent" aria-pressed="false" style="--maze-color:#5795ef"></button><button type="button" data-maze-color="Beyaz" aria-label="Beyaz labirent" aria-pressed="false" style="--maze-color:#f3f1ec"></button><button type="button" data-maze-color="Siyah" aria-label="Siyah labirent" aria-pressed="false" style="--maze-color:#454e48"></button></div></div>
+          <label class="maze-initials-label" for="maze-initials">BAŞ HARFLERİNİZ <span>İSTEĞE BAĞLI · EN FAZLA 3 HARF</span></label><input id="maze-initials" class="maze-initials" type="text" maxlength="3" placeholder="Baş harflerinizi yazın" autocomplete="off">
+          <button class="maze-shuffle" type="button">YENİ LABİRENT ↻</button><button class="maze-build" type="button">BASKIYI İZLE <span aria-hidden="true">↗</span></button>
+          <p class="maze-note">Her labirentin bir çözümü var. Yeni labirentle başka bir rota dene; baş harflerin anahtarlığa kabartma olarak eklensin.</p>
+        </section>
+        <section class="maze-result" aria-label="Oynanabilir labirent önizlemesi">
+          <div class="sketch-pane-top"><span>02 / TOP SENDE</span><span class="maze-status" role="status" aria-live="polite">Labirentin hazır · Dene</span></div>
+          <div class="maze-model"><canvas class="maze-preview" width="800" height="650" tabindex="0" aria-label="3B labirent anahtarlık önizlemesi"></canvas><span class="maze-code"></span><span class="maze-win" aria-hidden="true">HEDEFTE! 🎉</span></div>
+          <div class="maze-game-bar"><button class="maze-play" type="button">DENE 🎯</button><output class="maze-moves" aria-label="Hamle sayısı">0 hamle</output></div>
+          <div class="maze-controls"><div class="maze-dpad" role="group" aria-label="Topu hareket ettir"><button type="button" data-maze-move="up" aria-label="Topu yukarı hareket ettir" disabled>↑</button><button type="button" data-maze-move="left" aria-label="Topu sola hareket ettir" disabled>←</button><span aria-hidden="true">●</span><button type="button" data-maze-move="right" aria-label="Topu sağa hareket ettir" disabled>→</button><button type="button" data-maze-move="down" aria-label="Topu aşağı hareket ettir" disabled>↓</button></div><div class="maze-game-tools"><button class="maze-hint" type="button" aria-pressed="false">İPUCU</button><button class="maze-reset" type="button" disabled>BAŞTAN BAŞLA ↻</button><span>BİLGİSAYARDA OK TUŞLARI</span></div></div>
+          <p class="maze-guide">S: başlangıç · ★: hedef. Dene’ye bas, yön tuşlarıyla ilerle.</p>
+          <div class="maze-actions"><button class="maze-download" type="button">TASLAĞI İNDİR ↓</button><a class="maze-quote" target="_blank" rel="noopener noreferrer">WhatsApp’tan fiyat iste ↗</a></div>
+          <p class="maze-note">Oynanabilir tasarım önizlemesi. Üretim ölçüsü, top ve kapak ayrıntıları teklif sırasında netleşir. İndirdiğin taslağı sohbete ekleyebilirsin.</p>
+        </section>
+      </div>
+    </div>
+  </dialog>
+
   <dialog class="sketch-story-dialog" aria-labelledby="sketch-story-title" aria-describedby="sketch-story-help">
     <div class="sketch-story-head"><div><p class="sketch-eyebrow">KATMANYA / SENİN TASARIMIN</p><h2 id="sketch-story-title">Vitrine çıkar.</h2></div><button class="sketch-story-close" type="button" aria-label="Görseli kapat">×</button></div>
     <p id="sketch-story-help">1080 × 1920 · Hikâyende paylaş. QR koddan tasarımın açılsın.</p>
@@ -378,6 +406,8 @@
   <script src="puzzle-studio.js?v=2" defer></script>
   <script src="angle-model.js?v=1" defer></script>
   <script src="angle-studio.js?v=2" defer></script>
+  <script src="maze-model.js?v=1" defer></script>
+  <script src="maze-studio.js?v=1" defer></script>
   <script src="main.js?v=44" defer></script>
 
   <aside id="quote-chat" aria-label="KATMANYA teklif asistanı">
