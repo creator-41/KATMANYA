@@ -1,4 +1,4 @@
-const CACHE_NAME = "katmanya-shell-v36";
+const CACHE_NAME = "katmanya-shell-v37";
 const BASE = self.registration.scope;
 const CORE_ASSETS = [
   "./",
@@ -20,7 +20,7 @@ const CORE_ASSETS = [
   "./maze-model.js?v=1",
   "./maze-studio.js?v=1",
   "./voice-model.js?v=1",
-  "./voice-studio.js?v=1",
+  "./voice-studio.js?v=2",
   "./main.js?v=44",
   "./chatbot.js?v=19",
   "./assets/chat-notification.wav",
