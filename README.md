@@ -67,3 +67,20 @@ sosyal bağlantı görseli aynı amblemden hazırlanmıştır.
 `CNAME` dosyası `katmanya.com` alan adını tanımlar. Kök alan adı için A
 kayıtları GitHub Pages IP adreslerine; `www` CNAME kaydı
 `creator-41.github.io` adresine yönelir. Site içi dosya yolları görecelidir.
+
+## Sesin katmanlarda
+
+Ses dalgası anahtarlığı: kullanıcı mikrofonla en fazla 8 saniye kaydeder veya
+20 MB'a kadar bir ses dosyası seçer (en fazla 2 dakika, ilk 8 saniye işlenir).
+Web Audio kanalların RMS enerjisini 64 aralığa indirger; sessiz kayıtları
+reddeder. Örnek dalga gerçek bir yerel WAV sinyalinden üretilir. Mikrofon
+yalnızca kullanıcının kayıt düğmesiyle istenir; kapanışta ve sayfa arka plana
+geçince durur. Kayıt biçimi tarayıcının desteklediği MIME türünden seçilir.
+Ses cihazda çözülür; sunucu, veritabanı veya ses yüklemesi yoktur.
+
+Model yuvarlatılmış bir taban, gerçek halka deliği, kabartmalı dalga ve
+isteğe bağlı kısa not içerir. Renk, sürükleyerek açı değiştirme, katman
+animasyonu ve 1400×1400 PNG taslağı bulunur. WhatsApp doğrudan işletme
+numarasına açılır; dalganın 64 örneğini taşıyan v1 hex koduyla renk, süre ve
+not hazırlanır. Sesin kendisi gönderilmez. Bu görsel bir izdir; fiziksel
+anahtarlık ses çalmaz. Ölçü ve üretim ayrıntıları teklif aşamasında netleşir.
