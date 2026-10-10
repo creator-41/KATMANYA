@@ -20,6 +20,16 @@ hazırlar. Fotoğraf ve taslak sohbete kullanıcı tarafından eklenir. Fotoğra
 yüklemesi bir sunucuya aktarılmaz. `photo-relief.js` dönüşüm ve yüzey
 çizimini, `photo-studio.js` arayüz ve dosya yaşam döngüsünü yönetir.
 
+## İki parça, bir hikâye
+
+Puzzle anahtarlık stüdyosu iki isim, kalp/puzzle şekli ve her parça için
+ayrı renk seçimi sunar. İki parça aynı alanın birbirini tamamlayan
+bölümleridir; ayrı gerçek halka delikleri ve kabartma yazıları vardır.
+Birleşme animasyonu, mesafe ayarı, ayrı parça inceleme, 3B döndürme ve
+PNG taslak indirme cihazda çalışır. WhatsApp set teklifine isim ve renkler
+eklenir. Bu bir önizlemedir; üretim ölçüsü ve birleşme toleransı ayrıca
+netleştirilir. `puzzle-model.js` geometriyi, `puzzle-studio.js` arayüzü yönetir.
+
 ## Marka
 
 Katmanlı küp amblemi `assets/katmanya-mark.svg`, yatay logo

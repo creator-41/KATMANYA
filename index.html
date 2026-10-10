@@ -35,7 +35,7 @@
   <link rel="icon" type="image/svg+xml" href="./assets/katmanya-icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/katmanya-192.png">
   <link rel="apple-touch-icon" href="./assets/katmanya-180.png">
-  <link rel="stylesheet" href="styles.css?v=82">
+  <link rel="stylesheet" href="styles.css?v=83">
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#top" aria-label="KATMANYA ana sayfa"><img class="katmanya-brand" src="./assets/katmanya-logo.svg" width="631" height="128" alt="KATMANYA"></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a><a href="#sss">Sık sorulanlar</a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="KATMANYA uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
@@ -70,7 +70,7 @@
         <div class="scene-wrap"><canvas id="printer" aria-label="Kaydırdıkça hareket eden KATMANYA yazıcısı ve katman katman basılan robot kaskı"></canvas><div class="printer-badge" aria-hidden="true">KATMANYA</div><div class="scene-fallback" hidden><p>Aklındaki fikri üretelim.</p><small>Bu cihazda 3D görünüm açılamadı. Ürünleri kaydırarak inceleyebilirsin.</small></div></div>
         <button class="printer-explore-trigger" type="button" aria-haspopup="dialog" aria-controls="printer-explorer" disabled>YAZICIYI KEŞFET <span aria-hidden="true">↗</span></button>
         <div class="story-copies">
-          <article class="chapter active" data-chapter="0"><p class="eyebrow"><span class="live-dot"></span> KATMANYA · İLK ÜRETİMLER İÇİN TEKLİF ALIYORUZ</p><h1>Fikrini anlat, <br><em>üretelim.</em></h1><p class="chapter-desc">İlk ürünler için teklif topluyoruz. Fikrini ve ölçünü gönder; fiyatı ve teslim süresini birlikte netleştirelim.</p><a class="scroll-invite" href="#baski-baslangici"><span class="scroll-line"></span> KEŞFETMEK İÇİN KAYDIR <b>↓</b></a><button class="sketch-trigger" type="button" aria-haspopup="dialog" aria-controls="sketch-studio" disabled>ÇİZ, KATMANA DÖNÜŞSÜN <span aria-hidden="true">↗</span></button><button class="sketch-trigger photo-trigger" type="button" aria-haspopup="dialog" aria-controls="photo-studio" disabled>FOTOĞRAFTAN KABARTMA <span aria-hidden="true">↗</span></button></article>
+          <article class="chapter active" data-chapter="0"><p class="eyebrow"><span class="live-dot"></span> KATMANYA · İLK ÜRETİMLER İÇİN TEKLİF ALIYORUZ</p><h1>Fikrini anlat, <br><em>üretelim.</em></h1><p class="chapter-desc">İlk ürünler için teklif topluyoruz. Fikrini ve ölçünü gönder; fiyatı ve teslim süresini birlikte netleştirelim.</p><a class="scroll-invite" href="#baski-baslangici"><span class="scroll-line"></span> KEŞFETMEK İÇİN KAYDIR <b>↓</b></a><button class="sketch-trigger" type="button" aria-haspopup="dialog" aria-controls="sketch-studio" disabled>ÇİZ, KATMANA DÖNÜŞSÜN <span aria-hidden="true">↗</span></button><button class="sketch-trigger photo-trigger" type="button" aria-haspopup="dialog" aria-controls="photo-studio" disabled>FOTOĞRAFTAN KABARTMA <span aria-hidden="true">↗</span></button><button class="sketch-trigger puzzle-trigger" type="button" aria-haspopup="dialog" aria-controls="puzzle-studio" disabled>İKİ PARÇA, BİR HİKÂYE <span aria-hidden="true">↗</span></button></article>
           <article class="chapter product-slide" data-chapter="1" data-desk-set aria-hidden="true">
             <h2>Modüler <br><em>masaüstü seti</em></h2>
             <p class="chapter-desc product-desc">Telefon standı, kulaklık askısı, oyun kolu standı. Setini ihtiyacına göre kur.</p>
@@ -207,6 +207,33 @@
     </div>
   </dialog>
 
+  <dialog class="puzzle-dialog" id="puzzle-studio" aria-labelledby="puzzle-title" aria-describedby="puzzle-help">
+    <div class="puzzle-shell">
+      <header class="sketch-head"><div><p class="sketch-eyebrow">KATMANYA / BİRLİKTE TAMAMLANIYORUZ</p><h2 id="puzzle-title">İki parça, <em>bir hikâye.</em></h2><p id="puzzle-help">Bir yarısı sende, diğer yarısı sevdiğinde. İsimlerinizi yaz, anahtarlıklarınız birleşsin.</p></div><button class="sketch-close puzzle-close" type="button" aria-label="Puzzle anahtarlık stüdyosunu kapat">×</button></header>
+      <div class="puzzle-tabs" role="group" aria-label="Puzzle stüdyosu görünümü"><button type="button" data-puzzle-tab="edit" aria-pressed="true">01 · TASARLA</button><button type="button" data-puzzle-tab="preview" aria-pressed="false">02 · BİRLEŞTİR</button></div>
+      <div class="puzzle-workspace">
+        <section class="puzzle-edit" aria-label="İki parçalı anahtarlık ayarları">
+          <div class="sketch-pane-top"><span>01 / İKİNİZİN İZİ</span><span class="sketch-local-note">Tasarımın cihazında kalır</span></div>
+          <div class="puzzle-shapes" role="group" aria-label="Anahtarlık şekli"><button type="button" data-puzzle-shape="heart" aria-pressed="true">Kalp ♡</button><button type="button" data-puzzle-shape="puzzle" aria-pressed="false">Puzzle 🧩</button></div>
+          <div class="puzzle-name-card"><span class="puzzle-piece-caption">01 / SENİN PARÇAN</span><label for="puzzle-name-a">BİRİNCİ İSİM</label><input id="puzzle-name-a" class="puzzle-name-a" type="text" maxlength="18" placeholder="Örn. Yusuf" autocomplete="off"><div class="puzzle-colors" role="group" aria-label="Birinci parçanın rengi"><button type="button" data-puzzle-color-a="Yeşil" aria-label="Birinci parça yeşil" aria-pressed="true" style="--puzzle-color:#c7fa5f"></button><button type="button" data-puzzle-color-a="Beyaz" aria-label="Birinci parça beyaz" aria-pressed="false" style="--puzzle-color:#f3f1ec"></button><button type="button" data-puzzle-color-a="Mavi" aria-label="Birinci parça mavi" aria-pressed="false" style="--puzzle-color:#5795ef"></button><button type="button" data-puzzle-color-a="Siyah" aria-label="Birinci parça siyah" aria-pressed="false" style="--puzzle-color:#454e48"></button></div></div>
+          <div class="puzzle-name-card"><span class="puzzle-piece-caption">02 / DİĞER YARIN</span><label for="puzzle-name-b">İKİNCİ İSİM</label><input id="puzzle-name-b" class="puzzle-name-b" type="text" maxlength="18" placeholder="Örn. Tuğba" autocomplete="off"><div class="puzzle-colors" role="group" aria-label="İkinci parçanın rengi"><button type="button" data-puzzle-color-b="Yeşil" aria-label="İkinci parça yeşil" aria-pressed="false" style="--puzzle-color:#c7fa5f"></button><button type="button" data-puzzle-color-b="Beyaz" aria-label="İkinci parça beyaz" aria-pressed="false" style="--puzzle-color:#f3f1ec"></button><button type="button" data-puzzle-color-b="Mavi" aria-label="İkinci parça mavi" aria-pressed="true" style="--puzzle-color:#5795ef"></button><button type="button" data-puzzle-color-b="Siyah" aria-label="İkinci parça siyah" aria-pressed="false" style="--puzzle-color:#454e48"></button></div></div>
+          <button class="puzzle-build" type="button" disabled>TASARIMI OLUŞTUR <span aria-hidden="true">↗</span></button>
+          <p class="puzzle-note">İsimler parçanın içine sığacak şekilde küçülür. Uzun isimlerde kısa bir ad veya baş harflerini deneyebilirsin.</p>
+        </section>
+        <section class="puzzle-result" aria-label="Puzzle anahtarlık önizlemesi">
+          <div class="sketch-pane-top"><span>02 / BİRLİKTE TAMAMLANIN</span><span class="puzzle-status" role="status" aria-live="polite">İsimlerinizi bekliyor</span></div>
+          <div class="puzzle-model"><canvas class="puzzle-preview" width="800" height="650" tabindex="0" aria-label="İki parçalı 3B anahtarlık önizlemesi. Döndürmek için sürükle veya ok tuşlarını kullan."></canvas><span class="puzzle-model-label">İKİ PARÇA · BİR KALP</span></div>
+          <div class="puzzle-parts" role="group" aria-label="İncelenecek anahtarlık parçası"><button type="button" data-puzzle-part="both" aria-pressed="true">İkisi birlikte</button><button type="button" data-puzzle-part="a" aria-pressed="false">1. parça</button><button type="button" data-puzzle-part="b" aria-pressed="false">2. parça</button></div>
+          <label class="puzzle-separation">BİRLEŞTİR <input type="range" min="0" max="100" value="100" aria-label="Parçaların ayrılma mesafesi"> AYIR</label>
+          <div class="sketch-rotation" role="group" aria-label="Puzzle anahtarlığı döndür"><button type="button" data-puzzle-rotate="left" aria-label="Anahtarlığı sola döndür">←</button><span>SÜRÜKLE, DÖNDÜR</span><button type="button" data-puzzle-rotate="reset" aria-label="Anahtarlığı ilk açıya döndür">↻</button><button type="button" data-puzzle-rotate="right" aria-label="Anahtarlığı sağa döndür">→</button></div>
+          <button class="puzzle-join" type="button">BİRLEŞMEYİ İZLE 🧩</button>
+          <div class="puzzle-actions"><button class="puzzle-download" type="button" disabled>TASLAĞI İNDİR ↓</button><a class="puzzle-quote" aria-disabled="true" tabindex="-1" target="_blank" rel="noopener noreferrer">İkiniz için fiyat iste ↗</a></div>
+          <p class="puzzle-note">İki parçalı set için önizleme. Ölçü, malzeme ve birleşme toleransı teklif sırasında netleşir. İndirdiğin taslağı WhatsApp sohbetine ekleyebilirsin.</p>
+        </section>
+      </div>
+    </div>
+  </dialog>
+
   <dialog class="sketch-story-dialog" aria-labelledby="sketch-story-title" aria-describedby="sketch-story-help">
     <div class="sketch-story-head"><div><p class="sketch-eyebrow">KATMANYA / SENİN TASARIMIN</p><h2 id="sketch-story-title">Vitrine çıkar.</h2></div><button class="sketch-story-close" type="button" aria-label="Görseli kapat">×</button></div>
     <p id="sketch-story-help">1080 × 1920 · Hikâyende paylaş. QR koddan tasarımın açılsın.</p>
@@ -322,6 +349,8 @@
   <script src="sketch-studio.js?v=21" defer></script>
   <script src="photo-relief.js?v=1" defer></script>
   <script src="photo-studio.js?v=1" defer></script>
+  <script src="puzzle-model.js?v=1" defer></script>
+  <script src="puzzle-studio.js?v=1" defer></script>
   <script src="main.js?v=44" defer></script>
 
   <aside id="quote-chat" aria-label="KATMANYA teklif asistanı">

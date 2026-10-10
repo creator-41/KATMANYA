@@ -1,10 +1,10 @@
-const CACHE_NAME = "katmanya-shell-v31";
+const CACHE_NAME = "katmanya-shell-v32";
 const BASE = self.registration.scope;
 const CORE_ASSETS = [
   "./",
   "./index.html",
   "./manifest.webmanifest?v=katmanya-1",
-  "./styles.css?v=82",
+  "./styles.css?v=83",
   "./desk-set.js?v=1",
   "./vendor/qrcodegen.js?v=1",
   "./story-card.js?v=1",
@@ -13,6 +13,8 @@ const CORE_ASSETS = [
   "./sketch-studio.js?v=21",
   "./photo-relief.js?v=1",
   "./photo-studio.js?v=1",
+  "./puzzle-model.js?v=1",
+  "./puzzle-studio.js?v=1",
   "./main.js?v=44",
   "./chatbot.js?v=19",
   "./assets/chat-notification.wav",
