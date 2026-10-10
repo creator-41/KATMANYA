@@ -7,12 +7,12 @@
   const motion=matchMedia('(prefers-reduced-motion: reduce)'),clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),colors={'Yeşil':'#779b36','Mavi':'#376b9c','Beyaz':'#c9d2c0','Siyah':'#343e36'};
   let selected=['Yeşil','Mavi'],model=null,yaw=core.ANGLE,pitch=.12,progress=1,animation=null,frame=0,size={w:800,h:600,dpr:1},drag=null,saved=null,revision=0,exporting=false;
   function names(){return inputs.map(i=>i.value.trim().normalize('NFC').slice(0,18));}
-  function texture(name,color){
+  function texture(name,color,fallback){
     const c=document.createElement('canvas');c.width=1400;c.height=440;const g=c.getContext('2d');g.fillStyle=colors[color];g.fillRect(0,0,c.width,c.height);
     g.fillStyle='#ffffff10';for(let y=0;y<c.height;y+=5)g.fillRect(0,y,c.width,1);
-    const text=name||'İSMİN';g.font='800 230px Arial, sans-serif';const font=Math.min(230,230*1180/Math.max(1,g.measureText(text).width));g.font='800 '+font+'px Arial, sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillStyle=color==='Beyaz'?'#243020':'#f6f6ec';g.fillText(text,700,225,1180);return c;
+    const text=name||fallback;g.font='800 230px Arial, sans-serif';const font=Math.min(230,230*1180/Math.max(1,g.measureText(text).width));g.font='800 '+font+'px Arial, sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillStyle=color==='Beyaz'?'#243020':'#f6f6ec';g.fillText(text,700,225,1180);return c;
   }
-  function rebuild(){stop();revision++;const n=names();model=core.build(n.map((s,i)=>texture(s,selected[i])));status.textContent=n.every(Boolean)?'İki isim · tek plaka':'İki ismi de yaz';actions();requestPaint();}
+  function rebuild(){stop();revision++;const n=names();model=core.build(n.map((s,i)=>texture(s,selected[i],i?'PARTNERİNİZ':'SİZ')));status.textContent=n.every(Boolean)?'İki isim · tek plaka':'İki ismi de yaz';actions();requestPaint();}
   function actions(){
     const n=names(),valid=n.every(Boolean),busy=!!animation;build.disabled=!valid;download.disabled=!valid||busy||exporting;
     quote.setAttribute('aria-disabled',String(!valid||busy));quote.setAttribute('tabindex',valid&&!busy?'0':'-1');
@@ -22,7 +22,7 @@
   }
   function syncAngle(){
     slider.value=String(Math.round((core.ANGLE-yaw)/(2*core.ANGLE)*100));
-    const side=yaw>.65?'left':yaw<-.65?'right':'front',n=names();badge.textContent=side==='left'?'SOLDAN · '+(n[0]||'İSMİN'):side==='right'?'SAĞDAN · '+(n[1]||'İSMİN'):'ORTADAN · İKİ YÜZ';
+    const side=yaw>.65?'left':yaw<-.65?'right':'front',n=names();badge.textContent=side==='left'?'SOLDAN · '+(n[0]||'SİZ'):side==='right'?'SAĞDAN · '+(n[1]||'PARTNERİNİZ'):'ORTADAN · İKİ YÜZ';
     qa('[data-angle-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.angleView===side)));
     canvas.setAttribute('aria-label','İki yüzlü plaka. '+badge.textContent+'. Çevirmek için sürükle veya sol ve sağ ok tuşlarını kullan.');
   }
@@ -30,7 +30,7 @@
   function measure(){const r=canvas.getBoundingClientRect();if(r.width>0&&r.height>0){const dpr=Math.min(window.devicePixelRatio||1,2);size={w:r.width,h:r.height,dpr};canvas.width=Math.round(r.width*dpr);canvas.height=Math.round(r.height*dpr);}requestPaint();}
   function stop(){animation=null;progress=1;}
   function print(){if(!names().every(Boolean))return;drag=null;pitch=.12;view('preview');animation={type:'print',start:performance.now()};yaw=.12;progress=0;status.textContent='Katmanlar yükseliyor…';actions();requestPaint();}
-  function tour(){if(!names().every(Boolean))return;stop();pitch=.12;view('preview');animation={type:'tour',start:performance.now()};yaw=core.ANGLE;status.textContent='Çevir, diğer ismi keşfet';actions();requestPaint();}
+  function tour(){stop();pitch=.12;view('preview');animation={type:'tour',start:performance.now()};yaw=core.ANGLE;status.textContent='Çevir, diğer ismi keşfet';actions();requestPaint();}
   function paint(time){
     frame=0;if(!dialog.open||document.hidden)return;
     if(animation){let t=(time-animation.start)/(animation.type==='print'?2800:3400);if(motion.matches)t=1;t=clamp(t,0,1);

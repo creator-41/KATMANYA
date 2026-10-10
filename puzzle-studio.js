@@ -15,7 +15,7 @@
     const p=rc.getImageData(0,0,core.COLS,core.ROWS).data,bits=new Uint8Array(core.COLS*core.ROWS);for(let i=0;i<bits.length;i++)bits[i]=p[i*4+3]>=90?1:0;return bits;
   }
   function rebuild(){
-    const [a,b]=names();design=core.build({shape,colorA,colorB,textA:textMask(a||'SEN',0),textB:textMask(b||'BEN',1)});dirty=true;joining=false;revision++;status.textContent=a&&b?'Tasarım değişti · yeniden oluştur':'İsimlerinizi bekliyor';actions();requestPaint();
+    const [a,b]=names();design=core.build({shape,colorA,colorB,textA:textMask(a||'SİZ',0),textB:textMask(b||'PARTNERİNİZ',1)});dirty=true;joining=false;revision++;status.textContent=a&&b?'Tasarım değişti · yeniden oluştur':'İsimlerinizi bekliyor';actions();requestPaint();
   }
   function actions(){
     const [a,b]=names(),ready=!!design&&!dirty&&!joining;build.disabled=!a||!b||joining;download.disabled=!ready||exporting;
@@ -24,7 +24,7 @@
     qa('[data-puzzle-shape]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.puzzleShape===shape)));
     qa('[data-puzzle-color-a]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.puzzleColorA===colorA)));
     qa('[data-puzzle-color-b]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.puzzleColorB===colorB)));
-    q('.puzzle-model-label').textContent=(part==='a'?'01 / '+(a||'SEN'):part==='b'?'02 / '+(b||'BEN'):'İKİ PARÇA · '+(shape==='heart'?'BİR KALP':'BİR PUZZLE'));
+    q('.puzzle-model-label').textContent=(part==='a'?'01 / '+(a||'SİZ'):part==='b'?'02 / '+(b||'PARTNERİNİZ'):'İKİ PARÇA · '+(shape==='heart'?'BİR KALP':'BİR PUZZLE'));
     if(ready){const text=['Merhaba KATMANYA, iki parçalı '+(shape==='heart'?'kalp':'puzzle')+' anahtarlık seti için fiyat almak istiyorum.','1. parça: '+a+' · Renk: '+colorA,'2. parça: '+b+' · Renk: '+colorB,'İki ayrı halka deliği ve kabartma isimlerle.','İndirdiğim taslağı sohbete ekleyeceğim.','Set adedi, ölçü ve birleşme toleransını birlikte netleştirelim.'].join('\n');quote.href='https://wa.me/905304815341?text='+encodeURIComponent(text);}else quote.removeAttribute('href');
   }
   function view(value){dialog.dataset.puzzleTab=value;qa('[data-puzzle-tab]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.puzzleTab===value)));measure();}
