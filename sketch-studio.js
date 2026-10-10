@@ -14,7 +14,9 @@
   const share=dialog.querySelector('.sketch-share'),shareStatus=dialog.querySelector('.sketch-share-status'),shareInput=dialog.querySelector('.sketch-share-link');
   const story=dialog.querySelector('.sketch-story'),storyDialog=document.querySelector('.sketch-story-dialog');
   const storyImage=storyDialog?.querySelector('.sketch-story-image'),storyStatus=storyDialog?.querySelector('.sketch-story-status'),storyDownload=storyDialog?.querySelector('.sketch-story-download');
-  let storyRevision=0,storyObjectUrl='';
+  const videoButton=dialog.querySelector('.sketch-video'),storyVideo=storyDialog?.querySelector('.sketch-story-video'),videoHelp=dialog.querySelector('.sketch-video-help');
+  const storyTitle=storyDialog?.querySelector('#sketch-story-title'),storyHelp=storyDialog?.querySelector('#sketch-story-help');
+  let storyRevision=0,storyObjectUrl='',storyFilename='katmanya-ben-tasarladim-hikaye.png',videoController=null,storyTrigger=story;
   const brush=dialog.querySelector('.sketch-brush input'),empty=dialog.querySelector('.sketch-empty'),status=dialog.querySelector('.sketch-build-status');
   const shapeSelect=dialog.querySelector('.sketch-shape-select'),shapeSize=dialog.querySelector('.sketch-shape-size'),shapePercent=dialog.querySelector('.sketch-shape-percent');
   const shapeAngle=dialog.querySelector('.sketch-shape-angle'),angleValue=dialog.querySelector('.sketch-angle-value');
@@ -210,10 +212,11 @@
   }
   function rgb(hex){return [1,3,5].map(n=>parseInt(hex.slice(n,n+2),16));}
   function shade(base,amount){return 'rgb('+base.map(v=>Math.round(limit(v*amount,0,255))).join(',')+')';}
-  function renderModel(context,w,h,value=progress,clearCanvas=true,side=modelFace){
+  function renderModel(context,w,h,value=progress,clearCanvas=true,side=modelFace,camera=null){
     if(clearCanvas)context.clearRect(0,0,w,h);
-    const engraved=mesh?.finish==='engrave',frame=mesh?.backing?.frame,viewPitch=frame?limit(pitch+.4,.32,1.35):engraved?limit(pitch+.22,.32,1.35):pitch;
-    const underside=!!mesh?.backing&&side==='back',angle=yaw+(underside?Math.PI:0);
+    const cameraPitch=camera?.pitch??pitch,cameraYaw=camera?.yaw??yaw;
+    const engraved=mesh?.finish==='engrave',frame=mesh?.backing?.frame,viewPitch=frame?limit(cameraPitch+.4,.32,1.35):engraved?limit(cameraPitch+.22,.32,1.35):cameraPitch;
+    const underside=!!mesh?.backing&&side==='back',angle=cameraYaw+(underside?Math.PI:0);
     const unit=Math.min(w/4.9,h/3.65)*(frame?limit(3/Math.hypot(frame.w,frame.h),.85,1.7):1),cy=Math.cos(angle),sy=Math.sin(angle),cp=Math.cos(viewPitch),sp=Math.sin(viewPitch)*(underside?-1:1);
     const relief=mesh?.reliefHeight??.38;
     const baseH=Math.min(.15,(.15+relief)*value),raised=Math.max(0,(.15+relief)*value-.15);
@@ -345,6 +348,8 @@
     }else{shareUrl='';shareSnapshot='';}
     if(share)share.disabled=!ready||!shareUrl;
     if(story)story.disabled=!ready||!window.KatmanyaStory;
+    const canRecord=!!window.KatmanyaVideo?.supported();if(videoButton)videoButton.disabled=!ready||!canRecord;
+    if(videoHelp)videoHelp.hidden=canRecord;
     if(ready){
       const styles=keychain.enabled?'Ön yüz: '+finishName(faceFinish('front'))+' · Arka yüz: '+(facePaths('back').length?finishName(faceFinish('back')):'Boş'):finishName(finish);
       const text=['Merhaba KATMANYA, kendi çizimimden '+(keychain.enabled?(facePaths('back').length?'çift taraflı ':'')+'bir anahtarlık':finish==='engrave'?'oymalı bir plaka':'kabartmalı bir plaka')+' için teklif almak istiyorum.','Renk tercihi: '+usedColors(),'Baskı tarzı: '+styles,shareUrl?'Tasarım bağlantısı: '+shareUrl:'Taslağımı sohbete ekleyeceğim.','Ölçü ve adet bilgisini birlikte netleştirelim.'].join('\n');
@@ -667,15 +672,23 @@
     document.body.append(link);link.click();link.remove();window.setTimeout(()=>URL.revokeObjectURL(url),30000);
   }
   function releaseStory(){
+    videoController?.abort();videoController=null;
     storyRevision++;if(storyObjectUrl){const url=storyObjectUrl;storyObjectUrl='';window.setTimeout(()=>URL.revokeObjectURL(url),30000);}
     if(storyImage){storyImage.hidden=true;storyImage.removeAttribute('src');}if(storyDownload)storyDownload.disabled=true;
+    if(storyVideo){storyVideo.pause();storyVideo.hidden=true;storyVideo.removeAttribute('src');storyVideo.load();}
+  }
+  function storyDetails(){
+    return {product:keychain.enabled?'ANAHTARLIK':'PLAKA',side:keychain.enabled?(modelFace==='back'?'ARKA YÜZ':'ÖN YÜZ'):'',finish:finishName(keychain.enabled?faceFinish(modelFace):finish).toLocaleUpperCase('tr-TR')};
   }
   async function prepareStory(){
     if(!mesh||changed||building||!storyDialog||!window.KatmanyaStory)return;
     releaseStory();const revision=storyRevision;
+    storyTrigger=story;storyFilename='katmanya-ben-tasarladim-hikaye.png';storyDownload.textContent='PNG İNDİR ↓';
+    if(storyTitle)storyTitle.textContent='Vitrine çıkar.';if(storyHelp)storyHelp.textContent='1080 × 1920 · Hikâyende paylaş. QR koddan tasarımın açılsın.';
+    storyDialog.querySelector('.sketch-story-close').setAttribute('aria-label','Görseli kapat');
     // Freeze the displayed face and camera before any fonts or logo finish loading.
     const model=document.createElement('canvas');model.width=980;model.height=700;renderModel(model.getContext('2d'),980,700,1);
-    const details={model,link:shareUrl,product:keychain.enabled?'ANAHTARLIK':'PLAKA',side:keychain.enabled?(modelFace==='back'?'ARKA YÜZ':'ÖN YÜZ'):'',finish:finishName(keychain.enabled?faceFinish(modelFace):finish).toLocaleUpperCase('tr-TR')};
+    const details={model,link:shareUrl,...storyDetails()};
     storyStatus.textContent='Görselin hazırlanıyor…';storyDialog.showModal();storyDialog.querySelector('.sketch-story-close').focus({preventScroll:true});
     try{
       const result=await window.KatmanyaStory.create(details);if(revision!==storyRevision||!storyDialog.open)return;
@@ -685,12 +698,35 @@
       storyStatus.textContent=result.qr?'Hazır ✓ QR kod senin tasarımını açar. PNG’yi indirip hikâyende paylaş.':'Görsel hazır. Tasarım bağlantın QR koda sığmadı; linki ayrıca paylaşabilirsin.';
     }catch{if(revision===storyRevision&&storyDialog.open)storyStatus.textContent='Görsel hazırlanamadı. Kapatıp yeniden deneyebilirsin.';}
   }
+  async function prepareVideo(){
+    if(!mesh||changed||building||!storyDialog||!storyVideo||!window.KatmanyaVideo?.supported())return;
+    releaseStory();const revision=storyRevision,controller=new AbortController();videoController=controller;storyTrigger=videoButton;
+    const side=modelFace,camera={yaw,pitch};
+    if(storyTitle)storyTitle.textContent='Katmanların harekete geçsin.';
+    if(storyHelp)storyHelp.textContent='8 saniye · 720 × 1280 · Video hazırlanırken bu ekranı açık tut.';
+    storyDownload.textContent='VİDEOYU İNDİR ↓';storyStatus.textContent='Videon hazırlanıyor · %0';
+    storyDialog.querySelector('.sketch-story-close').setAttribute('aria-label','Videoyu kapat');
+    storyDialog.showModal();storyDialog.querySelector('.sketch-story-close').focus({preventScroll:true});
+    try{
+      const result=await window.KatmanyaVideo.create({...storyDetails(),signal:controller.signal,
+        render:(c,w,h,value,spin)=>renderModel(c,w,h,value,false,side,{pitch:camera.pitch,yaw:camera.yaw+spin*Math.PI*2}),
+        onProgress:percent=>{if(revision===storyRevision&&storyDialog.open)storyStatus.textContent='Videon hazırlanıyor · %'+percent;}});
+      if(revision!==storyRevision||!storyDialog.open)return;
+      storyFilename='katmanya-ben-tasarladim.'+result.extension;storyObjectUrl=URL.createObjectURL(result.blob);
+      storyVideo.src=storyObjectUrl;storyVideo.hidden=false;storyVideo.play()?.catch(()=>{});
+      storyDownload.textContent=result.extension.toLocaleUpperCase('tr-TR')+' VİDEOYU İNDİR ↓';storyDownload.disabled=false;
+      storyStatus.textContent=result.extension==='mp4'?'Videon hazır ✓ İndirip hikâyende paylaş.':'Videon hazır ✓ Bu tarayıcı WebM oluşturdu. Instagram için MP4’e dönüştürmen gerekebilir.';
+    }catch(error){
+      if(revision===storyRevision&&storyDialog.open)storyStatus.textContent=error.message==='visibility'?'Video hazırlanırken ekranı açık tut. Kapatıp yeniden deneyebilirsin.':'Video hazırlanamadı. Kapatıp yeniden deneyebilirsin.';
+    }finally{if(videoController===controller)videoController=null;}
+  }
   story?.addEventListener('click',prepareStory);
+  videoButton?.addEventListener('click',prepareVideo);
   storyDialog?.querySelector('.sketch-story-close')?.addEventListener('click',()=>storyDialog.close());
-  storyDialog?.addEventListener('close',()=>{releaseStory();if(dialog.open)story?.focus({preventScroll:true});});
+  storyDialog?.addEventListener('close',()=>{releaseStory();if(dialog.open)storyTrigger?.focus({preventScroll:true});});
   storyDownload?.addEventListener('click',()=>{
     if(!storyObjectUrl||storyDownload.disabled)return;
-    const link=document.createElement('a');link.href=storyObjectUrl;link.download='katmanya-ben-tasarladim-hikaye.png';document.body.append(link);link.click();link.remove();
+    const link=document.createElement('a');link.href=storyObjectUrl;link.download=storyFilename;document.body.append(link);link.click();link.remove();
   });
   function open(){
     if(dialog.open)return;
