@@ -9,6 +9,17 @@ Statik HTML, CSS ve JavaScript ile çalışır; GitHub Pages üzerinden yayımla
 baskı simülasyonu ve PNG indirme bulunur. Teklif asistanı bilgileri hazırlayıp
 işletmenin WhatsApp sohbetine yönlendirir. Seçilen dosyalar cihazda kalır.
 
+## Fotoğraftan kabartma
+
+Ana sayfadaki “Fotoğraftan kabartma” aracı fotoğrafı cihazda işler. Kontrast,
+detay, yükseklik, renk ve açık/koyu alan ayarlarıyla ışık-gölge kabartması
+oluşturur; hatıra plakası veya gerçek halka delikli anahtarlık önizlemesi
+sunar. Model sürüklenerek döndürülür ve katman katman baskı animasyonu
+izlenir. PNG taslağı indirilebilir; WhatsApp teklifi ayarları metin olarak
+hazırlar. Fotoğraf ve taslak sohbete kullanıcı tarafından eklenir. Fotoğraf
+yüklemesi bir sunucuya aktarılmaz. `photo-relief.js` dönüşüm ve yüzey
+çizimini, `photo-studio.js` arayüz ve dosya yaşam döngüsünü yönetir.
+
 ## Marka
 
 Katmanlı küp amblemi `assets/katmanya-mark.svg`, yatay logo

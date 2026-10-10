@@ -35,7 +35,7 @@
   <link rel="icon" type="image/svg+xml" href="./assets/katmanya-icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/katmanya-192.png">
   <link rel="apple-touch-icon" href="./assets/katmanya-180.png">
-  <link rel="stylesheet" href="styles.css?v=81">
+  <link rel="stylesheet" href="styles.css?v=82">
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#top" aria-label="KATMANYA ana sayfa"><img class="katmanya-brand" src="./assets/katmanya-logo.svg" width="631" height="128" alt="KATMANYA"></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a><a href="#sss">Sık sorulanlar</a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="KATMANYA uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
@@ -70,7 +70,7 @@
         <div class="scene-wrap"><canvas id="printer" aria-label="Kaydırdıkça hareket eden KATMANYA yazıcısı ve katman katman basılan robot kaskı"></canvas><div class="printer-badge" aria-hidden="true">KATMANYA</div><div class="scene-fallback" hidden><p>Aklındaki fikri üretelim.</p><small>Bu cihazda 3D görünüm açılamadı. Ürünleri kaydırarak inceleyebilirsin.</small></div></div>
         <button class="printer-explore-trigger" type="button" aria-haspopup="dialog" aria-controls="printer-explorer" disabled>YAZICIYI KEŞFET <span aria-hidden="true">↗</span></button>
         <div class="story-copies">
-          <article class="chapter active" data-chapter="0"><p class="eyebrow"><span class="live-dot"></span> KATMANYA · İLK ÜRETİMLER İÇİN TEKLİF ALIYORUZ</p><h1>Fikrini anlat, <br><em>üretelim.</em></h1><p class="chapter-desc">İlk ürünler için teklif topluyoruz. Fikrini ve ölçünü gönder; fiyatı ve teslim süresini birlikte netleştirelim.</p><a class="scroll-invite" href="#baski-baslangici"><span class="scroll-line"></span> KEŞFETMEK İÇİN KAYDIR <b>↓</b></a><button class="sketch-trigger" type="button" aria-haspopup="dialog" aria-controls="sketch-studio" disabled>ÇİZ, KATMANA DÖNÜŞSÜN <span aria-hidden="true">↗</span></button></article>
+          <article class="chapter active" data-chapter="0"><p class="eyebrow"><span class="live-dot"></span> KATMANYA · İLK ÜRETİMLER İÇİN TEKLİF ALIYORUZ</p><h1>Fikrini anlat, <br><em>üretelim.</em></h1><p class="chapter-desc">İlk ürünler için teklif topluyoruz. Fikrini ve ölçünü gönder; fiyatı ve teslim süresini birlikte netleştirelim.</p><a class="scroll-invite" href="#baski-baslangici"><span class="scroll-line"></span> KEŞFETMEK İÇİN KAYDIR <b>↓</b></a><button class="sketch-trigger" type="button" aria-haspopup="dialog" aria-controls="sketch-studio" disabled>ÇİZ, KATMANA DÖNÜŞSÜN <span aria-hidden="true">↗</span></button><button class="sketch-trigger photo-trigger" type="button" aria-haspopup="dialog" aria-controls="photo-studio" disabled>FOTOĞRAFTAN KABARTMA <span aria-hidden="true">↗</span></button></article>
           <article class="chapter product-slide" data-chapter="1" data-desk-set aria-hidden="true">
             <h2>Modüler <br><em>masaüstü seti</em></h2>
             <p class="chapter-desc product-desc">Telefon standı, kulaklık askısı, oyun kolu standı. Setini ihtiyacına göre kur.</p>
@@ -174,6 +174,39 @@
       </div>
     </div>
   </dialog>
+  <dialog class="photo-dialog" id="photo-studio" aria-labelledby="photo-title" aria-describedby="photo-help">
+    <div class="photo-shell">
+      <header class="sketch-head"><div><p class="sketch-eyebrow">KATMANYA / FOTOĞRAFINDAN ÜRÜNE</p><h2 id="photo-title">Anını seç, <em>katmana dönüştür.</em></h2><p id="photo-help">Fotoğrafın ışık ve gölgelerini kabartmaya çevir. Bir fotoğrafla dene.</p></div><button class="sketch-close photo-close" type="button" aria-label="Fotoğraf stüdyosunu kapat">×</button></header>
+      <div class="photo-tabs" role="group" aria-label="Fotoğraf stüdyosu görünümü"><button type="button" data-photo-tab="edit" aria-pressed="true">01 · FOTOĞRAF</button><button type="button" data-photo-tab="preview" aria-pressed="false">02 · KABARTMA</button></div>
+      <div class="photo-workspace">
+        <section class="photo-edit" aria-label="Fotoğraf ve kabartma ayarları">
+          <div class="sketch-pane-top"><span>01 / ANINI SEÇ</span><span class="sketch-local-note">Fotoğrafın cihazında kalır</span></div>
+          <div class="photo-upload-row"><button class="photo-upload" type="button">FOTOĞRAF YÜKLE +</button><button class="photo-demo" type="button">Örnekle dene ↗</button><input class="photo-file" type="file" accept="image/*" aria-label="Kabartmaya dönüştürülecek fotoğraf" hidden></div>
+          <p class="photo-file-note">JPG, PNG veya WebP · En fazla 20 MB</p>
+          <div class="photo-source"><img class="photo-original" alt="Yüklediğin fotoğraf" hidden><div class="photo-empty"><span aria-hidden="true">＋</span><strong>Bir anın ürüne dönüşsün.</strong><p>Evcil hayvanın, sevdiğin bir fotoğraf veya kendi logon.</p></div></div>
+          <fieldset class="photo-settings" disabled><legend>KABARTMA AYARLARI</legend>
+            <label>KONTRAST <output class="photo-contrast-value">100%</output><input class="photo-contrast" type="range" min="40" max="220" step="5" value="100" aria-label="Fotoğraf kontrastı"></label>
+            <label>DETAY <output class="photo-detail-value">Dengeli</output><input class="photo-detail" type="range" min="0" max="2" step="1" value="1" aria-label="Fotoğraf detay seviyesi"></label>
+            <label>KABARTMA YÜKSEKLİĞİ <output class="photo-height-value">Dengeli</output><input class="photo-height" type="range" min="1" max="3" step="1" value="2" aria-label="Fotoğraf kabartma yüksekliği"></label>
+            <label class="photo-invert-label"><input class="photo-invert" type="checkbox">Açık alanlar yükselsin</label>
+            <div class="photo-product" role="group" aria-label="Fotoğraf ürünü"><button type="button" data-photo-product="plaque" aria-pressed="true">Hatıra plakası</button><button type="button" data-photo-product="keychain" aria-pressed="false">Anahtarlık</button></div>
+            <div class="photo-colors" role="group" aria-label="Kabartma rengi"><button type="button" data-photo-color="Yeşil" aria-label="Yeşil kabartma" aria-pressed="true" style="--photo-color:#c7fa5f"></button><button type="button" data-photo-color="Beyaz" aria-label="Beyaz kabartma" aria-pressed="false" style="--photo-color:#f3f1ec"></button><button type="button" data-photo-color="Mavi" aria-label="Mavi kabartma" aria-pressed="false" style="--photo-color:#5795ef"></button><button type="button" data-photo-color="Siyah" aria-label="Siyah kabartma" aria-pressed="false" style="--photo-color:#454e48"></button></div>
+          </fieldset>
+          <button class="photo-build" type="button" disabled>KABARTMAYI OLUŞTUR <span aria-hidden="true">↗</span></button>
+          <p class="photo-note">Yüzün veya ana objenin net olduğu, sade arka planlı fotoğraflar daha iyi görünür.</p>
+        </section>
+        <section class="photo-result" aria-label="Fotoğrafın üç boyutlu kabartması">
+          <div class="sketch-pane-top"><span>02 / ANIN KATMAN OLSUN</span><span class="photo-status" role="status" aria-live="polite">Fotoğrafını bekliyor</span></div>
+          <div class="photo-model"><canvas class="photo-preview" width="800" height="650" tabindex="0" aria-label="Fotoğrafın 3B kabartması. Döndürmek için sürükle veya ok tuşlarını kullan."></canvas><span class="photo-model-label">FOTOĞRAFTAN KABARTMA</span><div class="photo-model-empty">Fotoğrafını yükle.<br><span>Işık ve gölgeler katmana dönüşsün.</span></div></div>
+          <div class="sketch-rotation" role="group" aria-label="Fotoğraf kabartmasını döndür"><button type="button" data-photo-rotate="left" aria-label="Kabartmayı sola döndür">←</button><span>SÜRÜKLE, DÖNDÜR</span><button type="button" data-photo-rotate="reset" aria-label="Kabartmayı ilk açıya döndür">↻</button><button type="button" data-photo-rotate="right" aria-label="Kabartmayı sağa döndür">→</button></div>
+          <button class="photo-replay" type="button" disabled>BASKIYI YENİDEN İZLE ↻</button>
+          <div class="photo-actions"><button class="photo-download" type="button" disabled>TASLAĞI İNDİR ↓</button><a class="photo-quote" aria-disabled="true" tabindex="-1" target="_blank" rel="noopener noreferrer">WhatsApp’tan fiyat iste ↗</a></div>
+          <p class="photo-note">Bu bir kabartma önizlemesidir. Ölçü ve üretim detaylarını birlikte netleştiririz. İndirdiğin taslağı ve orijinal fotoğrafı WhatsApp sohbetine ekleyebilirsin.</p>
+        </section>
+      </div>
+    </div>
+  </dialog>
+
   <dialog class="sketch-story-dialog" aria-labelledby="sketch-story-title" aria-describedby="sketch-story-help">
     <div class="sketch-story-head"><div><p class="sketch-eyebrow">KATMANYA / SENİN TASARIMIN</p><h2 id="sketch-story-title">Vitrine çıkar.</h2></div><button class="sketch-story-close" type="button" aria-label="Görseli kapat">×</button></div>
     <p id="sketch-story-help">1080 × 1920 · Hikâyende paylaş. QR koddan tasarımın açılsın.</p>
@@ -287,6 +320,8 @@
   <script src="vendor/mp4-muxer.js?v=1" defer></script>
   <script src="story-video.js?v=2" defer></script>
   <script src="sketch-studio.js?v=21" defer></script>
+  <script src="photo-relief.js?v=1" defer></script>
+  <script src="photo-studio.js?v=1" defer></script>
   <script src="main.js?v=44" defer></script>
 
   <aside id="quote-chat" aria-label="KATMANYA teklif asistanı">
