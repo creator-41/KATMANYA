@@ -35,7 +35,7 @@
   <link rel="icon" type="image/svg+xml" href="./assets/katmanya-icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/katmanya-192.png">
   <link rel="apple-touch-icon" href="./assets/katmanya-180.png">
-  <link rel="stylesheet" href="styles.css?v=86">
+  <link rel="stylesheet" href="styles.css?v=87">
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#top" aria-label="KATMANYA ana sayfa"><img class="katmanya-brand" src="./assets/katmanya-logo.svg" width="631" height="128" alt="KATMANYA"></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a><a href="#sss">Sık sorulanlar</a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="KATMANYA uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
@@ -70,7 +70,7 @@
         <div class="scene-wrap"><canvas id="printer" aria-label="Kaydırdıkça hareket eden KATMANYA yazıcısı ve katman katman basılan robot kaskı"></canvas><div class="printer-badge" aria-hidden="true">KATMANYA</div><div class="scene-fallback" hidden><p>Aklındaki fikri üretelim.</p><small>Bu cihazda 3D görünüm açılamadı. Ürünleri kaydırarak inceleyebilirsin.</small></div></div>
         <button class="printer-explore-trigger" type="button" aria-haspopup="dialog" aria-controls="printer-explorer" disabled>YAZICIYI KEŞFET <span aria-hidden="true">↗</span></button>
         <div class="story-copies">
-          <article class="chapter active" data-chapter="0"><p class="eyebrow"><span class="live-dot"></span> KATMANYA · İLK ÜRETİMLER İÇİN TEKLİF ALIYORUZ</p><h1>Fikrini anlat, <br><em>üretelim.</em></h1><p class="chapter-desc">İlk ürünler için teklif topluyoruz. Fikrini ve ölçünü gönder; fiyatı ve teslim süresini birlikte netleştirelim.</p><a class="scroll-invite" href="#baski-baslangici"><span class="scroll-line"></span> KEŞFETMEK İÇİN KAYDIR <b>↓</b></a><button class="sketch-trigger" type="button" aria-haspopup="dialog" aria-controls="sketch-studio" disabled>ÇİZ, KATMANA DÖNÜŞSÜN <span aria-hidden="true">↗</span></button><button class="sketch-trigger photo-trigger" type="button" aria-haspopup="dialog" aria-controls="photo-studio" disabled>FOTOĞRAFTAN KABARTMA <span aria-hidden="true">↗</span></button><button class="sketch-trigger puzzle-trigger" type="button" aria-haspopup="dialog" aria-controls="puzzle-studio" disabled>İKİ PARÇA, BİR HİKÂYE <span aria-hidden="true">↗</span></button><button class="sketch-trigger angle-trigger" type="button" aria-haspopup="dialog" aria-controls="angle-studio" disabled>BİR PLAKA, İKİ BAKIŞ <span aria-hidden="true">↗</span></button><button class="sketch-trigger maze-trigger" type="button" aria-haspopup="dialog" aria-controls="maze-studio" disabled>LABİRENTİN CEBİNDE <span aria-hidden="true">↗</span></button><button class="sketch-trigger voice-trigger" type="button" aria-haspopup="dialog" aria-controls="voice-studio" disabled>SESİN KATMANLARDA <span aria-hidden="true">↗</span></button></article>
+          <article class="chapter active" data-chapter="0"><p class="eyebrow"><span class="live-dot"></span> KATMANYA · İLK ÜRETİMLER İÇİN TEKLİF ALIYORUZ</p><h1>Fikrini anlat, <br><em>üretelim.</em></h1><p class="chapter-desc">İlk ürünler için teklif topluyoruz. Fikrini ve ölçünü gönder; fiyatı ve teslim süresini birlikte netleştirelim.</p><a class="scroll-invite" href="#baski-baslangici"><span class="scroll-line"></span> KEŞFETMEK İÇİN KAYDIR <b>↓</b></a><button class="sketch-trigger" type="button" aria-haspopup="dialog" aria-controls="sketch-studio" disabled>ÇİZ, KATMANA DÖNÜŞSÜN <span aria-hidden="true">↗</span></button><button class="sketch-trigger photo-trigger" type="button" aria-haspopup="dialog" aria-controls="photo-studio" disabled>FOTOĞRAFTAN KABARTMA <span aria-hidden="true">↗</span></button><button class="sketch-trigger puzzle-trigger" type="button" aria-haspopup="dialog" aria-controls="puzzle-studio" disabled>İKİ PARÇA, BİR HİKÂYE <span aria-hidden="true">↗</span></button><button class="sketch-trigger angle-trigger" type="button" aria-haspopup="dialog" aria-controls="angle-studio" disabled>BİR PLAKA, İKİ BAKIŞ <span aria-hidden="true">↗</span></button><button class="sketch-trigger maze-trigger" type="button" aria-haspopup="dialog" aria-controls="maze-studio" disabled>LABİRENTİN CEBİNDE <span aria-hidden="true">↗</span></button><button class="sketch-trigger voice-trigger" type="button" aria-haspopup="dialog" aria-controls="voice-studio" disabled>SESİN KATMANLARDA <span aria-hidden="true">↗</span></button><button class="sketch-trigger lamp-trigger" type="button" aria-haspopup="dialog" aria-controls="lamp-studio" disabled>IŞIKTA BİR HATIRA <span aria-hidden="true">↗</span></button></article>
           <article class="chapter product-slide" data-chapter="1" data-desk-set aria-hidden="true">
             <h2>Modüler <br><em>masaüstü seti</em></h2>
             <p class="chapter-desc product-desc">Telefon standı, kulaklık askısı, oyun kolu standı. Setini ihtiyacına göre kur.</p>
@@ -260,6 +260,32 @@
   </dialog>
 
 
+  <dialog class="lamp-dialog" id="lamp-studio" aria-labelledby="lamp-title" aria-describedby="lamp-help">
+    <section class="lamp-shell">
+      <header class="sketch-head"><div><p class="sketch-eyebrow">KATMANYA / FOTOĞRAFIN IŞIKLA CANLANSIN</p><h2 id="lamp-title">Işıkta <em>bir hatıra.</em></h2><p id="lamp-help">Fotoğrafın beyaz bir panele dönüşsün. Işığı aç, hatıran ortaya çıksın.</p></div><button class="sketch-close lamp-close" type="button" aria-label="Fotoğraf lambası stüdyosunu kapat">×</button></header>
+      <nav class="lamp-tabs" aria-label="Lamba stüdyosu görünümü"><button type="button" data-lamp-tab="edit" aria-pressed="true">01 / FOTOĞRAFIN</button><button type="button" data-lamp-tab="preview" aria-pressed="false">02 / LAMBAN</button></nav>
+      <div class="lamp-workspace">
+        <div class="lamp-edit">
+          <p class="lamp-caption">01 / BİR HATIRA SEÇ</p>
+          <div class="lamp-source"><label class="lamp-file-label">FOTOĞRAF SEÇ ↑<input class="lamp-file" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif"></label><button class="lamp-demo" type="button">ÖRNEK GÖRSELİ DENE ↗</button></div>
+          <p class="lamp-file-note" role="status">JPG, PNG veya WebP · En fazla 20 MB</p>
+          <div class="lamp-original-wrap"><img class="lamp-original" alt="Seçtiğin fotoğraf" hidden><span class="lamp-original-empty">HATIRANI BURAYA EKLE</span></div>
+          <p class="lamp-local">Fotoğrafın cihazında işlenir. Sunucuya yüklenmez.</p>
+          <fieldset class="lamp-settings" disabled><legend>02 / SANA ÖZEL</legend><label class="lamp-field" for="lamp-contrast"><span>FOTOĞRAF KONTRASTI <output class="lamp-contrast-value">100%</output></span><input id="lamp-contrast" class="lamp-contrast" type="range" min="60" max="160" step="5" value="100"></label><label class="lamp-text-label" for="lamp-text">TABANDAKİ NOT <span>İSTEĞE BAĞLI · EN FAZLA 24 KARAKTER</span></label><input id="lamp-text" class="lamp-text" type="text" maxlength="24" placeholder="Bir not ekleyin" autocomplete="off"><p class="lamp-thickness-note">Koyu alanlar kalın, açık alanlar ince. Fotoğrafın tonları ışık geçişiyle oluşur.</p></fieldset>
+          <button class="lamp-build" type="button" disabled>BASKIYI İZLE <span aria-hidden="true">↗</span></button>
+        </div>
+        <div class="lamp-result">
+          <div class="lamp-topline"><span class="lamp-caption">03 / IŞIKLA ORTAYA ÇIKSIN</span><span class="lamp-status" role="status">Bir fotoğraf ekleyerek başla</span></div>
+          <div class="lamp-model"><canvas class="lamp-preview" role="img" tabindex="0" aria-label="Fotoğraf lambasının 3B önizlemesi"></canvas><p class="lamp-empty">BİR FOTOĞRAF, BİR IŞIK<br><span>Hatıran burada şekillensin.</span></p><span class="lamp-model-tag">FOTOĞRAF LAMBASI / IŞIK KAPALI</span><span class="lamp-drag-hint">SÜRÜKLE · FARKLI AÇILARDAN GÖR</span></div>
+          <div class="lamp-light-bar"><button class="lamp-light" type="button" aria-pressed="false" disabled>💡 IŞIĞI AÇ</button><div class="lamp-temperatures" role="group" aria-label="Işığın tonu"><button type="button" data-lamp-temperature="warm" aria-pressed="true" disabled>Sıcak ışık</button><button type="button" data-lamp-temperature="cool" aria-pressed="false" disabled>Beyaz ışık</button></div></div>
+          <label class="lamp-field lamp-brightness-field" for="lamp-brightness"><span>PARLAKLIK <output class="lamp-brightness-value">80%</output></span><input id="lamp-brightness" class="lamp-brightness" type="range" min="20" max="100" step="5" value="80" disabled></label>
+          <div class="lamp-views" role="group" aria-label="Lambanın bakış açısı"><button type="button" data-lamp-view="left">↶ SOL</button><button type="button" data-lamp-view="front">ÖNDEN</button><button type="button" data-lamp-view="right">SAĞ ↷</button></div>
+          <div class="lamp-actions"><button class="lamp-download" type="button" disabled>TASLAĞI İNDİR ↓</button><a class="lamp-quote" target="_blank" rel="noopener noreferrer" aria-disabled="true" tabindex="-1">WhatsApp’tan fiyat iste ↗</a></div>
+          <p class="lamp-note">Görsel bir ışık önizlemesidir. Sonuç malzemeye ve LED ışığa göre değişir; ölçü, taban ve aydınlatma detayları teklif sırasında netleşir. Fotoğrafını ve PNG taslağını sohbete ekleyebilirsin.</p>
+        </div>
+      </div>
+    </section>
+  </dialog>
   <dialog class="voice-dialog" id="voice-studio" aria-labelledby="voice-title" aria-describedby="voice-help">
     <section class="voice-shell">
       <header class="sketch-head"><div><p class="sketch-eyebrow">KATMANYA / BİR SES, BİR HATIRA</p><h2 id="voice-title">Sesin <em>katmanlarda.</em></h2><p id="voice-help">Bir cümle, bir kahkaha… Sesinin dalgasını kabartmalı anahtarlığa dönüştür.</p></div><button class="sketch-close voice-close" type="button" aria-label="Ses anahtarlığı stüdyosunu kapat">×</button></header>
@@ -435,6 +461,8 @@
   <script src="maze-studio.js?v=1" defer></script>
   <script src="voice-model.js?v=1" defer></script>
   <script src="voice-studio.js?v=2" defer></script>
+  <script src="lamp-model.js?v=1" defer></script>
+  <script src="lamp-studio.js?v=1" defer></script>
   <script src="main.js?v=44" defer></script>
 
   <aside id="quote-chat" aria-label="KATMANYA teklif asistanı">

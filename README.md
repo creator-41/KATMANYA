@@ -84,3 +84,18 @@ animasyonu ve 1400×1400 PNG taslağı bulunur. WhatsApp doğrudan işletme
 numarasına açılır; dalganın 64 örneğini taşıyan v1 hex koduyla renk, süre ve
 not hazırlanır. Sesin kendisi gönderilmez. Bu görsel bir izdir; fiziksel
 anahtarlık ses çalmaz. Ölçü ve üretim ayrıntıları teklif aşamasında netleşir.
+
+## Işıkta bir hatıra
+
+Yerel fotoğraftan beyaz ışık geçiren panel ve masa tabanı önizlemesi üretir.
+Fotoğrafın alfa kanalı beyazla birleşir; luminans ve kontrast kalınlığa
+dönüşür. Koyu bölgeler daha kalındır. LED açık görünümü kalınlıktan hesaplanan
+ışık geçirgenliğini kullanır; kapalı görünüm beyaz yüzey ve rölyef gölgesidir.
+Işık aç/kapat, sıcak/beyaz ton, parlaklık, açı, kısa taban notu ve alttan
+yükselen baskı animasyonu vardır. PNG açık/kapalı görünümü birlikte içerir.
+
+Dosya 20 MB, çözünürlük 40 megapiksel sınırında; tarayıcıda en fazla 1280 px'e
+küçültülür. Doku en uzun kenarı 128 örnekle oluşturulur. Çok dar/uzun kadrajlar
+uyarı alır. Fotoğraf hiçbir sunucuya aktarılmaz. WhatsApp yalnızca ayarları
+hazırlar; orijinal fotoğraf ve PNG kullanıcı tarafından eklenir. Önizleme
+üretim garantisi değildir; malzeme, ölçü, taban ve LED teklifte netleşir.
