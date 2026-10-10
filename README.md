@@ -30,6 +30,18 @@ PNG taslak indirme cihazda çalışır. WhatsApp set teklifine isim ve renkler
 eklenir. Bu bir önizlemedir; üretim ölçüsü ve birleşme toleransı ayrıca
 netleştirilir. `puzzle-model.js` geometriyi, `puzzle-studio.js` arayüzü yönetir.
 
+## Bir plaka, iki bakış
+
+`angle-model.js` iki görüntüyü kapalı, üçgen oluklu plakanın karşıt
+yüzeylerine yerleştirir. Görünürlük yüzey normalleri ve gerçek 3B açıdan
+hesaplanır; yazılar arasında opaklık geçişi kullanılmaz. Yüzey dokuları
+±55 derece için önceden çarpıtılır, böylece her isim kendi açısından
+okunur. `angle-studio.js` isim/renk ayarlarını, sürükleme ve klavye
+kontrollerini, aşağıdan yukarı baskı ve açı turunu yönetir. Hareket
+azaltma tercihi desteklenir, boşta çizim yapılmaz. İki açılı 1600×1200
+PNG ve doğrudan WhatsApp teklif bağlantısı vardır. Bu bir üretim
+dosyası değildir; ölçü, malzeme ve okunma açısı ayrıca netleştirilir.
+
 ## Marka
 
 Katmanlı küp amblemi `assets/katmanya-mark.svg`, yatay logo

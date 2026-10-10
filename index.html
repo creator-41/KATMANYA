@@ -35,7 +35,7 @@
   <link rel="icon" type="image/svg+xml" href="./assets/katmanya-icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/katmanya-192.png">
   <link rel="apple-touch-icon" href="./assets/katmanya-180.png">
-  <link rel="stylesheet" href="styles.css?v=83">
+  <link rel="stylesheet" href="styles.css?v=84">
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#top" aria-label="KATMANYA ana sayfa"><img class="katmanya-brand" src="./assets/katmanya-logo.svg" width="631" height="128" alt="KATMANYA"></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a><a href="#sss">Sık sorulanlar</a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="KATMANYA uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
@@ -70,7 +70,7 @@
         <div class="scene-wrap"><canvas id="printer" aria-label="Kaydırdıkça hareket eden KATMANYA yazıcısı ve katman katman basılan robot kaskı"></canvas><div class="printer-badge" aria-hidden="true">KATMANYA</div><div class="scene-fallback" hidden><p>Aklındaki fikri üretelim.</p><small>Bu cihazda 3D görünüm açılamadı. Ürünleri kaydırarak inceleyebilirsin.</small></div></div>
         <button class="printer-explore-trigger" type="button" aria-haspopup="dialog" aria-controls="printer-explorer" disabled>YAZICIYI KEŞFET <span aria-hidden="true">↗</span></button>
         <div class="story-copies">
-          <article class="chapter active" data-chapter="0"><p class="eyebrow"><span class="live-dot"></span> KATMANYA · İLK ÜRETİMLER İÇİN TEKLİF ALIYORUZ</p><h1>Fikrini anlat, <br><em>üretelim.</em></h1><p class="chapter-desc">İlk ürünler için teklif topluyoruz. Fikrini ve ölçünü gönder; fiyatı ve teslim süresini birlikte netleştirelim.</p><a class="scroll-invite" href="#baski-baslangici"><span class="scroll-line"></span> KEŞFETMEK İÇİN KAYDIR <b>↓</b></a><button class="sketch-trigger" type="button" aria-haspopup="dialog" aria-controls="sketch-studio" disabled>ÇİZ, KATMANA DÖNÜŞSÜN <span aria-hidden="true">↗</span></button><button class="sketch-trigger photo-trigger" type="button" aria-haspopup="dialog" aria-controls="photo-studio" disabled>FOTOĞRAFTAN KABARTMA <span aria-hidden="true">↗</span></button><button class="sketch-trigger puzzle-trigger" type="button" aria-haspopup="dialog" aria-controls="puzzle-studio" disabled>İKİ PARÇA, BİR HİKÂYE <span aria-hidden="true">↗</span></button></article>
+          <article class="chapter active" data-chapter="0"><p class="eyebrow"><span class="live-dot"></span> KATMANYA · İLK ÜRETİMLER İÇİN TEKLİF ALIYORUZ</p><h1>Fikrini anlat, <br><em>üretelim.</em></h1><p class="chapter-desc">İlk ürünler için teklif topluyoruz. Fikrini ve ölçünü gönder; fiyatı ve teslim süresini birlikte netleştirelim.</p><a class="scroll-invite" href="#baski-baslangici"><span class="scroll-line"></span> KEŞFETMEK İÇİN KAYDIR <b>↓</b></a><button class="sketch-trigger" type="button" aria-haspopup="dialog" aria-controls="sketch-studio" disabled>ÇİZ, KATMANA DÖNÜŞSÜN <span aria-hidden="true">↗</span></button><button class="sketch-trigger photo-trigger" type="button" aria-haspopup="dialog" aria-controls="photo-studio" disabled>FOTOĞRAFTAN KABARTMA <span aria-hidden="true">↗</span></button><button class="sketch-trigger puzzle-trigger" type="button" aria-haspopup="dialog" aria-controls="puzzle-studio" disabled>İKİ PARÇA, BİR HİKÂYE <span aria-hidden="true">↗</span></button><button class="sketch-trigger angle-trigger" type="button" aria-haspopup="dialog" aria-controls="angle-studio" disabled>BİR PLAKA, İKİ BAKIŞ <span aria-hidden="true">↗</span></button></article>
           <article class="chapter product-slide" data-chapter="1" data-desk-set aria-hidden="true">
             <h2>Modüler <br><em>masaüstü seti</em></h2>
             <p class="chapter-desc product-desc">Telefon standı, kulaklık askısı, oyun kolu standı. Setini ihtiyacına göre kur.</p>
@@ -234,6 +234,31 @@
     </div>
   </dialog>
 
+
+  <dialog class="angle-dialog" id="angle-studio" aria-labelledby="angle-title" aria-describedby="angle-help">
+    <div class="angle-shell">
+      <header class="sketch-head"><div><p class="sketch-eyebrow">KATMANYA / BAKIŞINI DEĞİŞTİR</p><h2 id="angle-title">Bir plaka, <em>iki bakış.</em></h2><p id="angle-help">Soldan başka, sağdan başka. Çevir, diğer taraftaki ismi keşfet.</p></div><button class="sketch-close angle-close" type="button" aria-label="İki bakış stüdyosunu kapat">×</button></header>
+      <div class="angle-tabs" role="group" aria-label="İki bakış stüdyosu görünümü"><button type="button" data-angle-tab="edit" aria-pressed="false">01 · İSİMLERİ YAZ</button><button type="button" data-angle-tab="preview" aria-pressed="true">02 · ÇEVİR, KEŞFET</button></div>
+      <div class="angle-workspace">
+        <section class="angle-edit" aria-label="İki yüzlü plaka ayarları">
+          <div class="sketch-pane-top"><span>01 / İKİ İSİM, TEK PLAKA</span><span class="sketch-local-note">Tasarımın cihazında kalır</span></div>
+          <div class="angle-name-card"><span class="angle-caption">01 / SOLDAN GÖRÜNEN</span><label for="angle-name-a">SOLDAN GÖRÜNEN İSİM</label><input id="angle-name-a" class="angle-name-a" type="text" maxlength="18" value="YUSUF" autocomplete="off"><div class="angle-colors" role="group" aria-label="Sol yüzeyin rengi"><button type="button" data-angle-color-a="Yeşil" aria-label="Sol yüzey yeşil" aria-pressed="true" style="--angle-color:#779b36"></button><button type="button" data-angle-color-a="Mavi" aria-label="Sol yüzey mavi" aria-pressed="false" style="--angle-color:#376b9c"></button><button type="button" data-angle-color-a="Beyaz" aria-label="Sol yüzey beyaz" aria-pressed="false" style="--angle-color:#c9d2c0"></button><button type="button" data-angle-color-a="Siyah" aria-label="Sol yüzey siyah" aria-pressed="false" style="--angle-color:#343e36"></button></div></div><div class="angle-name-card"><span class="angle-caption">02 / SAĞDAN GÖRÜNEN</span><label for="angle-name-b">SAĞDAN GÖRÜNEN İSİM</label><input id="angle-name-b" class="angle-name-b" type="text" maxlength="18" value="HÜMEYRA" autocomplete="off"><div class="angle-colors" role="group" aria-label="Sağ yüzeyin rengi"><button type="button" data-angle-color-b="Yeşil" aria-label="Sağ yüzey yeşil" aria-pressed="false" style="--angle-color:#779b36"></button><button type="button" data-angle-color-b="Mavi" aria-label="Sağ yüzey mavi" aria-pressed="true" style="--angle-color:#376b9c"></button><button type="button" data-angle-color-b="Beyaz" aria-label="Sağ yüzey beyaz" aria-pressed="false" style="--angle-color:#c9d2c0"></button><button type="button" data-angle-color-b="Siyah" aria-label="Sağ yüzey siyah" aria-pressed="false" style="--angle-color:#343e36"></button></div></div>
+          <button class="angle-build" type="button">BASKIYI İZLE <span aria-hidden="true">↗</span></button>
+          <p class="angle-note">İki ismi yaz, her yüze bir renk seç. Uzun isimler plakaya sığacak şekilde küçülür.</p>
+        </section>
+        <section class="angle-result" aria-label="Açıya göre değişen plaka önizlemesi">
+          <div class="sketch-pane-top"><span>02 / DİĞER TARAFTA KİM VAR?</span><span class="angle-status" role="status" aria-live="polite">İki isim · tek plaka</span></div>
+          <div class="angle-model"><canvas class="angle-preview" width="800" height="600" tabindex="0" aria-label="İki yüzlü plaka. Çevirmek için sürükle veya ok tuşlarını kullan."></canvas><span class="angle-view-label">SOLDAN · YUSUF</span><span class="angle-drag-hint">↔ SÜRÜKLE, DİĞER İSMİ BUL</span></div>
+          <div class="angle-views" role="group" aria-label="Plakaya bakış açısı"><button type="button" data-angle-view="left" aria-pressed="true">Soldan ↖</button><button type="button" data-angle-view="front" aria-pressed="false">Ortadan</button><button type="button" data-angle-view="right" aria-pressed="false">Sağdan ↗</button></div>
+          <label class="angle-slider-label">SOL <input class="angle-view-range" type="range" min="0" max="100" value="0" aria-label="Plakaya bakış açısı"> SAĞ</label>
+          <button class="angle-tour" type="button">İKİ AÇIYI DA GÖR ↔</button>
+          <div class="angle-actions"><button class="angle-download" type="button">İKİ AÇILI TASLAĞI İNDİR ↓</button><a class="angle-quote" target="_blank" rel="noopener noreferrer">WhatsApp’tan fiyat iste ↗</a></div>
+          <p class="angle-note">Ortadan bakınca iki yüz karışır; soldan ve sağdan isimler ayrılır. Bu bir tasarım önizlemesidir. Ölçü, malzeme ve okunma açısını teklif sırasında netleştiririz.</p>
+        </section>
+      </div>
+    </div>
+  </dialog>
+
   <dialog class="sketch-story-dialog" aria-labelledby="sketch-story-title" aria-describedby="sketch-story-help">
     <div class="sketch-story-head"><div><p class="sketch-eyebrow">KATMANYA / SENİN TASARIMIN</p><h2 id="sketch-story-title">Vitrine çıkar.</h2></div><button class="sketch-story-close" type="button" aria-label="Görseli kapat">×</button></div>
     <p id="sketch-story-help">1080 × 1920 · Hikâyende paylaş. QR koddan tasarımın açılsın.</p>
@@ -351,6 +376,8 @@
   <script src="photo-studio.js?v=1" defer></script>
   <script src="puzzle-model.js?v=1" defer></script>
   <script src="puzzle-studio.js?v=1" defer></script>
+  <script src="angle-model.js?v=1" defer></script>
+  <script src="angle-studio.js?v=1" defer></script>
   <script src="main.js?v=44" defer></script>
 
   <aside id="quote-chat" aria-label="KATMANYA teklif asistanı">
