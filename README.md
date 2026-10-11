@@ -290,3 +290,25 @@ azaltılmış hareket ve modal/odak/scroll temizliğini yönetir. Açık taslak
 korunur; renk/metin/simge değişince duruş sıfırlanmaz. 1600 × 1400 PNG üç
 ana görünümle seçimleri içerir. WhatsApp doğrudan işletme sohbetine gider;
 mesaj gönderimi kullanıcıdadır. Sunucu/veritabanı kullanmaz.
+
+
+## Masaüstü penaltı: beş atışlık oyun
+
+“Çek, bırak, gol olsun” atölye kartı Hediye ve Oyun kategorilerindedir.
+Kale/taban/kol renkleri ve isteğe bağlı 10 karakterlik kale yazısı seçilir.
+Toplu kolu aşağı sürüklemek gücü, yatay hareket yönü ayarlar; bırakınca atış
+başlar. Erişilebilir yön/güç kaydırıcıları, Atış yap tuşu, canvas ok tuşları
+ve Enter/boşluk aynı atışı yönetir. Beş atıştan sonra Yeni tur gerekir;
+tasarım ayarları, atışlar ve skor modal kapanıp açılınca korunur.
+
+`penalty-model.js` yön ve güçten deterministik balistik yol üretir. İlk
+zemin teması ya da kale düzlemi geçişi gol/yan direk/üst direk/kısa/dışarı/
+üstten aut sonucunu belirler; çizim ve oyun aynı yolu kullanır. Sonucun
+ardından ağda durma veya geri sekme gösterilir. `penalty-studio.js` tek
+atış kilidi, beş atış sınırı, pointer capture, sonuç duyuruları, azaltılmış
+hareket, modal/odak/scroll restorasyonu ve eski PNG işlerinin iptalini yönetir.
+Arka plana geçiş, tasarla sekmesi veya modal kapanışı uçan topun sonucunu
+bir kez tamamlar; boşta animasyon çalışmaz. 1600 × 1400 PNG tasarımı ve
+varsa deneme turu skorunu içerir; WhatsApp işletme sohbetini taslakla açar.
+Fizik görsel oyun için bir simülasyondur; gerçek yaylı kol, top ve malzeme
+üretimi teklifte netleşir. Sunucu/veritabanı veya skor sıralaması yoktur.
