@@ -253,3 +253,20 @@ içerir. Teklif bağlantısı işletmenin WhatsApp numarasına gerçek satır
 sonlarıyla gider; dosya ayrıca eklenir. Tasarım sekmede kalır, veritabanı
 yoktur. Görsel bir oyuncak önizlemesidir; STL veya üretime hazır eklem
 modeli sunmaz. Eklem uyumu, renk uygulaması ve malzeme teklifte netleşir.
+
+
+## Açılan sürpriz çiçek
+
+Tasarım atölyesindeki “Dokun, çiçeğin açılsın” kartı Hediye ve Masaüstü
+kategorilerinde yer alır. Sekiz yaprak sabit menteşe noktalarından dönerek
+kapalı tomurcuktan açık çiçeğe dönüşür. Parmakla yatay sürükleme, yüzde
+kaydırıcısı, aç/kapat tuşları ve klavye okları/Home/End aynı görünümü yönetir.
+Yaprak, göbek ve taban renkleri bağımsız seçilir; isteğe bağlı 24 karakterlik
+mesaj kapalıyken gizlenir, açılan göbekte görünür. Başlangıç alanı boştur.
+
+`flower-model.js` saf geometri ve canvas çizimini, `flower-studio.js` modal,
+odak/scroll restorasyonu, pointer capture, mobil sekmeler, azaltılmış hareket,
+animasyon temizliği, oturum içi taslak ve doğrudan WhatsApp taslağını yönetir.
+1600 × 1400 PNG kapalı/açık iki görünümü ve seçilen ayrıntıları içerir.
+Fotoğraf, sunucu veya veritabanı gerektirmez. Görsel bir tasarım önizlemesidir;
+açılma mekanizmasının üretimi, malzeme ve renk uygulaması teklifte netleşir.

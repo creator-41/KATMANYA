@@ -1,10 +1,10 @@
-const CACHE_NAME = "katmanya-shell-v50";
+const CACHE_NAME = "katmanya-shell-v51";
 const BASE = self.registration.scope;
 const CORE_ASSETS = [
   "./",
   "./index.html",
   "./manifest.webmanifest?v=katmanya-1",
-  "./styles.css?v=99",
+  "./styles.css?v=100",
   "./desk-set.js?v=1",
   "./vendor/qrcodegen.js?v=1",
   "./story-card.js?v=1",
@@ -35,6 +35,8 @@ const CORE_ASSETS = [
   "./shadow-studio.js?v=1",
   "./dragon-model.js?v=1",
   "./dragon-studio.js?v=1",
+  "./flower-model.js?v=1",
+  "./flower-studio.js?v=1",
   "./workshop.js?v=3",
   "./gift-finder.js?v=1",
   "./assets/workshop/sketch.webp",
@@ -50,6 +52,7 @@ const CORE_ASSETS = [
   "./assets/workshop/gear.webp",
   "./assets/workshop/shadow.webp",
   "./assets/workshop/dragon.webp",
+  "./assets/workshop/flower.webp",
 
   "./main.js?v=44",
   "./chatbot.js?v=19",
