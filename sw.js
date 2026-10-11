@@ -1,4 +1,4 @@
-const CACHE_NAME = "katmanya-shell-v52";
+const CACHE_NAME = "katmanya-shell-v53";
 const BASE = self.registration.scope;
 const CORE_ASSETS = [
   "./",
@@ -37,7 +37,7 @@ const CORE_ASSETS = [
   "./dragon-studio.js?v=1",
   "./flower-model.js?v=1",
   "./flower-studio.js?v=1",
-  "./cube-model.js?v=1",
+  "./cube-model.js?v=2",
   "./cube-studio.js?v=1",
   "./workshop.js?v=3",
   "./gift-finder.js?v=1",
