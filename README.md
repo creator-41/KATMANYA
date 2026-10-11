@@ -154,3 +154,18 @@ kapsüle seçilen şifre, mesaj ve ayarlar gönderilecek taslağa eklenir.
 Veri bu araçtan hiçbir sunucuya kaydedilmez. Bu bir hediye bulmacası ve tasarım
 önizlemesidir; gerçek baskının mekanik payları ve malzemesi teklifte netleşir.
 `capsule-model.js` çizimi, `capsule-studio.js` arayüz ve yaşam döngüsünü yönetir.
+
+### Birini çevir, hepsi hareket etsin
+Üç dişlili stres oyuncağında 16–24–16 dişli zinciri, 96×48×12 / 115×58×14 mm
+ölçüleri, bağımsız taban ve üç çark rengi, boş başlayan isteğe bağlı 12 karakterlik
+orta yazı ve şimşek/kalp/yıldız/daire simgesi vardır. Diş yüzeyleri 20° basınç açılı
+involüt örneğiyle çizilir; bitişik çarklar ters döner, küçükler büyükten 1,5 kat hızlıdır.
+Üç çarktan herhangi biri sürüklenebilir; seçme, bir diş adımı, başa alma ve 8 saniyelik
+oynat/durdur denemesi de vardır. Klavyede sol/sağ seçme, yukarı/aşağı çevirme, Home
+başa alma, boşluk oynatma kullanılır. Hareket azaltmada adımlar anında uygulanır
+ve otomatik oynatma kapanır. Gizlenen sekme, düzenlemeye geçme ve modal kapanışı
+animasyonu ve pointer yakalamayı temizler. Boş yazı tasarımı engellemez; örnek kişi
+adı kullanılmaz. 1600×1200 PNG seçilen yazı, simge, renk ve ölçüleri içerir; WhatsApp
+linki doğrudan işletme numarasına gerçek satır sonlarıyla hazırlanır. Tasarım araçtan
+sunucuya kaydedilmez. Fiziksel baskının mekanik payları ve malzemesi teklifte netleşir.
+`gear-model.js` geometri/bağlı dönüş/çizimi, `gear-studio.js` etkileşimleri yönetir.

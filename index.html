@@ -35,7 +35,7 @@
   <link rel="icon" type="image/svg+xml" href="./assets/katmanya-icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/katmanya-192.png">
   <link rel="apple-touch-icon" href="./assets/katmanya-180.png">
-  <link rel="stylesheet" href="styles.css?v=93">
+  <link rel="stylesheet" href="styles.css?v=94">
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#top" aria-label="KATMANYA ana sayfa"><img class="katmanya-brand" src="./assets/katmanya-logo.svg" width="631" height="128" alt="KATMANYA"></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a><a href="#sss">Sık sorulanlar</a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="KATMANYA uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
@@ -152,6 +152,7 @@
       <button class="workshop-card sketch-trigger phone-trigger" type="button" aria-haspopup="dialog" aria-controls="phone-studio" disabled><svg class="workshop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v14H7zM10 14h4M4 21h16M6 21l2-4m10 4-2-4"/></svg><strong>Telefonun park yeri</strong><small>Telefon standını tasarla, telefonu koy ve çıkar.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
       <button class="workshop-card sketch-trigger ring-trigger" type="button" aria-haspopup="dialog" aria-controls="message-ring-studio" disabled><svg class="workshop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 1-2-5M20 3v6h-6M7 11h10v4H7z"/></svg><strong>Döndür, mesaj değişsin</strong><small>Bir halkayı çevir, kendi mesajlarını keşfet.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
       <button class="workshop-card sketch-trigger capsule-trigger" type="button" aria-haspopup="dialog" aria-controls="capsule-studio" disabled><svg class="workshop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h12v14H6zM6 9h12M6 13h12M6 17h12M10 2h4v3M10 21h4"/></svg><strong>Şifreni çevir, sürprizi aç</strong><small>Üç halkalı kapsülüne bir şifre ve gizli mesaj ekle.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
+      <button class="workshop-card sketch-trigger gear-trigger" type="button" aria-haspopup="dialog" aria-controls="gear-studio" disabled><svg class="workshop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 4 1-2h4l1 2 3 2 2 1v4l-2 1-2 3-1 2h-4l-1-2-3-2-2-1V8l2-1 2-3Z"/><circle cx="12" cy="10" r="3"/><path d="m14 18 2-2 3 1 2 2-1 3h-4l-2-2Z"/></svg><strong>Birini çevir, hepsi hareket etsin</strong><small>Üç dişlini renklendir, birbirine bağlı hareketi dene.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
     </div>
     <p class="workshop-footer">Bir araçtan çıkınca buraya geri dönersin. Kaldığın yerden devam et.</p>
   </dialog>
@@ -286,6 +287,58 @@
     </div>
   </dialog>
 
+
+  <dialog class="ring-dialog gear-dialog" id="gear-studio" aria-labelledby="gear-title" aria-describedby="gear-help">
+    <section class="ring-shell gear-shell">
+      <header class="sketch-head"><div><p class="sketch-eyebrow">KATMANYA / ÜÇ DİŞLİ, TEK HAREKET</p><h2 id="gear-title">Birini çevir, <em>hepsi hareket etsin.</em></h2><p id="gear-help">Renklerini seç, kendi dokunuşunu ekle. Bir dişliyi çevir, üçünün hareketini izle.</p></div><button class="sketch-close gear-close" type="button" aria-label="Dişli oyuncak stüdyosunu kapat">×</button></header>
+      <nav class="ring-tabs gear-tabs" aria-label="Dişli oyuncak stüdyosu görünümü"><button type="button" data-gear-tab="edit" aria-pressed="false">01 / TASARLA</button><button type="button" data-gear-tab="preview" aria-pressed="true">02 / ÇEVİR VE OYNA</button></nav>
+      <div class="ring-workspace gear-workspace">
+        <div class="ring-edit gear-edit">
+          <fieldset class="ring-settings gear-settings"><legend>01 / KENDİ DİŞLİ OYUNCAĞIN</legend>
+            <label class="ring-label" for="gear-caption">ORTADAKİ YAZI · İSTEĞE BAĞLI</label><input id="gear-caption" class="ring-message gear-caption" type="text" maxlength="12" placeholder="Kısa bir yazı ekle" autocomplete="off" spellcheck="false"><p class="gear-length" aria-hidden="true">0 / 12</p>
+            <span class="ring-label">ORTADAKİ SİMGE</span><div class="gear-symbols" role="group" aria-label="Ortadaki dişlinin simgesi"><button type="button" data-gear-symbol="none" aria-pressed="false">YOK</button><button type="button" data-gear-symbol="bolt" aria-label="Şimşek simgesi" aria-pressed="true">ϟ</button><button type="button" data-gear-symbol="heart" aria-label="Kalp simgesi" aria-pressed="false">♥</button><button type="button" data-gear-symbol="star" aria-label="Yıldız simgesi" aria-pressed="false">★</button><button type="button" data-gear-symbol="circle" aria-label="Daire simgesi" aria-pressed="false">●</button></div>
+            <span class="ring-label">OYUNCAK ÖLÇÜSÜ</span><div class="ring-options" role="group" aria-label="Dişli oyuncak ölçüsü"><button type="button" data-gear-format="mini" aria-pressed="true">MİNİ · 96 × 48 MM</button><button type="button" data-gear-format="wide" aria-pressed="false">GENİŞ · 115 × 58 MM</button></div>
+            <span class="ring-label">SABİT TABAN</span><div class="ring-colors" role="group" aria-label="Oyuncak tabanının rengi">
+              <button type="button" data-gear-body="Yeşil" style="--ring-swatch:#c7fa5f" aria-label="Yeşil oyuncak tabanı" aria-pressed="false"></button>
+              <button type="button" data-gear-body="Beyaz" style="--ring-swatch:#f3f1ec" aria-label="Beyaz oyuncak tabanı" aria-pressed="false"></button>
+              <button type="button" data-gear-body="Mavi" style="--ring-swatch:#5795ef" aria-label="Mavi oyuncak tabanı" aria-pressed="false"></button>
+              <button type="button" data-gear-body="Siyah" style="--ring-swatch:#39443c" aria-label="Siyah oyuncak tabanı" aria-pressed="true"></button>
+            </div>
+            <span class="ring-label">01 / SOL DİŞLİ · 16 DİŞ</span><div class="ring-colors" role="group" aria-label="1. dişlinin rengi">
+              <button type="button" data-gear-wheel="0" data-gear-color="Yeşil" style="--ring-swatch:#c7fa5f" aria-label="Yeşil 1. dişli" aria-pressed="true"></button>
+              <button type="button" data-gear-wheel="0" data-gear-color="Beyaz" style="--ring-swatch:#f3f1ec" aria-label="Beyaz 1. dişli" aria-pressed="false"></button>
+              <button type="button" data-gear-wheel="0" data-gear-color="Mavi" style="--ring-swatch:#5795ef" aria-label="Mavi 1. dişli" aria-pressed="false"></button>
+              <button type="button" data-gear-wheel="0" data-gear-color="Siyah" style="--ring-swatch:#39443c" aria-label="Siyah 1. dişli" aria-pressed="false"></button>
+            </div>
+            <span class="ring-label">02 / ORTA DİŞLİ · 24 DİŞ</span><div class="ring-colors" role="group" aria-label="2. dişlinin rengi">
+              <button type="button" data-gear-wheel="1" data-gear-color="Yeşil" style="--ring-swatch:#c7fa5f" aria-label="Yeşil 2. dişli" aria-pressed="false"></button>
+              <button type="button" data-gear-wheel="1" data-gear-color="Beyaz" style="--ring-swatch:#f3f1ec" aria-label="Beyaz 2. dişli" aria-pressed="true"></button>
+              <button type="button" data-gear-wheel="1" data-gear-color="Mavi" style="--ring-swatch:#5795ef" aria-label="Mavi 2. dişli" aria-pressed="false"></button>
+              <button type="button" data-gear-wheel="1" data-gear-color="Siyah" style="--ring-swatch:#39443c" aria-label="Siyah 2. dişli" aria-pressed="false"></button>
+            </div>
+            <span class="ring-label">03 / SAĞ DİŞLİ · 16 DİŞ</span><div class="ring-colors" role="group" aria-label="3. dişlinin rengi">
+              <button type="button" data-gear-wheel="2" data-gear-color="Yeşil" style="--ring-swatch:#c7fa5f" aria-label="Yeşil 3. dişli" aria-pressed="false"></button>
+              <button type="button" data-gear-wheel="2" data-gear-color="Beyaz" style="--ring-swatch:#f3f1ec" aria-label="Beyaz 3. dişli" aria-pressed="false"></button>
+              <button type="button" data-gear-wheel="2" data-gear-color="Mavi" style="--ring-swatch:#5795ef" aria-label="Mavi 3. dişli" aria-pressed="true"></button>
+              <button type="button" data-gear-wheel="2" data-gear-color="Siyah" style="--ring-swatch:#39443c" aria-label="Siyah 3. dişli" aria-pressed="false"></button>
+            </div>
+          </fieldset>
+          <button class="ring-download gear-rehearse" type="button">ÇEVİR VE OYNA ↗</button><p class="ring-field-note gear-local-note">Tasarımın bu ekranda kalır. Fiyat isterken seçtiklerin WhatsApp taslağına eklenir.</p>
+        </div>
+        <div class="ring-result gear-result">
+          <div class="ring-topline"><span class="ring-label">02 / HAREKET SENDE</span><span class="gear-ratio">16 ↔ 24 ↔ 16</span></div>
+          <div class="ring-model gear-model"><canvas class="ring-preview gear-preview" role="img" tabindex="0" aria-label="Üç dişlili stres oyuncağı"></canvas><span class="ring-tag">BİRBİRİNE BAĞLI ÜÇ DİŞLİ</span><span class="ring-drag-hint">İSTEDİĞİN DİŞLİYİ TUT · ÇEVİR</span></div>
+          <p class="ring-dimensions gear-dimensions"></p>
+          <div class="gear-selectors" role="group" aria-label="Çevrilecek dişli"><button type="button" data-gear-select="0" aria-pressed="false">01 / SOL</button><button type="button" data-gear-select="1" aria-pressed="true">02 / ORTA</button><button type="button" data-gear-select="2" aria-pressed="false">03 / SAĞ</button></div>
+          <div class="ring-controls gear-controls"><button class="ring-turn" type="button" data-gear-step="-1" aria-label="Seçili dişliyi sola çevir">↶</button><span class="gear-selected">ORTA DİŞLİ</span><button class="ring-turn" type="button" data-gear-step="1" aria-label="Seçili dişliyi sağa çevir">↷</button></div>
+          <div class="gear-play-row"><button class="ring-download gear-play" type="button">8 SANİYE ÇEVİR ▶</button><button class="gear-home" type="button">BAŞA AL ↺</button></div>
+          <p class="gear-motion-note"></p><p class="ring-status gear-status" role="status" aria-live="polite">Hazır · bir dişliyi çevir</p>
+          <div class="ring-actions"><button class="ring-download gear-download" type="button">TASLAĞI İNDİR ↓</button><a class="ring-quote gear-quote" target="_blank" rel="noopener noreferrer">WhatsApp’tan fiyat iste ↗</a></div>
+          <p class="ring-note">Tasarım önizlemesi. Hareketli parçaların uyumunu ve malzemeyi teklifte netleştiririz. PNG taslağını sohbete ayrıca ekleyebilirsin.</p>
+        </div>
+      </div>
+    </section>
+  </dialog>
 
   <dialog class="ring-dialog capsule-dialog" id="capsule-studio" aria-labelledby="capsule-title" aria-describedby="capsule-help">
     <section class="ring-shell capsule-shell">
@@ -610,6 +663,8 @@
   <script src="message-ring-studio.js?v=1" defer></script>
   <script src="capsule-model.js?v=1" defer></script>
   <script src="capsule-studio.js?v=1" defer></script>
+  <script src="gear-model.js?v=1" defer></script>
+  <script src="gear-studio.js?v=1" defer></script>
   <script src="workshop.js?v=2" defer></script>
   <script src="main.js?v=44" defer></script>
 
