@@ -169,3 +169,16 @@ adı kullanılmaz. 1600×1200 PNG seçilen yazı, simge, renk ve ölçüleri iç
 linki doğrudan işletme numarasına gerçek satır sonlarıyla hazırlanır. Tasarım araçtan
 sunucuya kaydedilmez. Fiziksel baskının mekanik payları ve malzemesi teklifte netleşir.
 `gear-model.js` geometri/bağlı dönüş/çizimi, `gear-studio.js` etkileşimleri yönetir.
+
+### Atölye ürün vitrini
+11 araç Tümü / Hediye / Masaüstü / Oyun filtreleriyle gezilir. Kategoriler çoklu
+üyeliğe izin verir (8 hediye, 5 masaüstü, 3 oyun); sonuç ve kategori adetleri
+kartların veri alanlarından hesaplanır. Düğmeler basılı durumunu ve sonuç sayısını
+bildirir. Kartların 480×300 WebP ürün önizlemeleri mevcut model çizimlerinden
+üretilmiş statik örneklerdir; açılan araçların taslağını değiştirmez veya kişisel isim
+eklemez. Çizim kartı örnek bir yıldızlı plakadır. Küçük ekranlarda iki sütun,
+359 px altında tek sütun kullanılır. Görseller dekoratiftir, kartların erişilebilir
+adları başlık ve açıklamadan oluşur. Yerel görseller servis çalışanında önbelleğe
+alınır. Filtre seçimi araçtan çıkınca korunur; sürpriz tasarım filtre dışında bir
+aracı açarsa, dönüşte kartın görünür olması için Tümü seçilir. Mevcut taslak
+koruması, modal dönüşü ve kaydırma/fokus restorasyonu devam eder.

@@ -24,6 +24,36 @@
     trigger.focus({preventScroll: true});
   });
 
+  // Filtering only changes the catalog; it never alters a tool's draft.
+  let revealCard = () => {};
+  const filters = dialog.querySelector('.workshop-filters');
+  if (filters) {
+    const cards = Array.from(dialog.querySelectorAll('.workshop-card'));
+    const buttons = Array.from(filters.querySelectorAll('[data-workshop-filter]'));
+    const summary = dialog.querySelector('.workshop-filter-status');
+    const labels = {all:'Tümü',gift:'Hediye',desk:'Masaüstü',play:'Oyun'};
+    const belongs = (card,category) => category==='all' || (card.dataset.workshopCategories||'').split(/\s+/).includes(category);
+    function select(category) {
+      if (!Object.hasOwn(labels,category)) return;
+      cards.forEach(card => {card.hidden=!belongs(card,category);});
+      buttons.forEach(button => button.setAttribute('aria-pressed',String(button.dataset.workshopFilter===category)));
+      if (summary) summary.textContent=labels[category]+' · '+cards.filter(card=>!card.hidden).length+' tasarım';
+    }
+    buttons.forEach(button => {
+      const category=button.dataset.workshopFilter;
+      if (!Object.hasOwn(labels,category)) return;
+      const count=button.querySelector('[data-workshop-count]');
+      if (count) count.textContent=String(cards.filter(card=>belongs(card,category)).length);
+      button.disabled=false;
+      button.addEventListener('click',()=>select(category));
+    });
+    revealCard = id => {
+      const card=cards.find(card=>card.getAttribute('aria-controls')===id);
+      if (card?.hidden) select('all');
+    };
+    select('all');
+  }
+
   const random = dialog.querySelector('.workshop-random');
   const notice = dialog.querySelector('.workshop-random-status');
   const confirmation = document.querySelector('#starter-confirm');
@@ -61,6 +91,7 @@
   }
   function launch(item){
     const controller=api(item.tool), tool=tools[item.tool];
+    if (tool) revealCard(tool.id);
     if (!controller || !controller.apply(item)) {
       notice.hidden=false;notice.textContent='Bu tasarım açılamadı. Başka bir seçenek deneyebilirsin.';return;
     }
