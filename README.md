@@ -312,3 +312,26 @@ bir kez tamamlar; boşta animasyon çalışmaz. 1600 × 1400 PNG tasarımı ve
 varsa deneme turu skorunu içerir; WhatsApp işletme sohbetini taslakla açar.
 Fizik görsel oyun için bir simülasyondur; gerçek yaylı kol, top ve malzeme
 üretimi teklifte netleşir. Sunucu/veritabanı veya skor sıralaması yoktur.
+
+
+## Mini bilye parkuru
+
+“Rotanı kur, topu bırak” atölyedeki Hediye ve Oyun filtrelerinde yer alır.
+5×5 düğme ızgarasında boş kareye parça eklenir; dolu kare seçilir. Düz yol,
+90° viraj ve rampa ayrı renklerde değiştirilebilir; döndürme, silme ve son
+30 parça değişikliğini geri alma vardır. Başlangıç ve finiş sabittir.
+Hazır rota ve sıfırdan kurma da geri alınabilir. Yazı başlangıçta boştur.
+
+`marble-model.js` iki ağızlı parçaların bağlantılarını başlangıçtan izler.
+Boş kare, yanlış giriş, taban dışı veya döngü finiş sayılmaz. Bağlı yolun
+uç yükseklikleri eşleşir; rampalar daha fazla düşüş ekler, destekler önizlemede
+bu yüksekliklere göre çizilir. Bilye aynı merkez hattında, eğimden hızlanan
+örneklenmiş yol boyunca ilerler; kopuk uçtan düşer. Bu bir mekanik doğrulama
+veya üretime hazır model değil, deterministik tasarım ve oyun önizlemesidir.
+Bilye boyutu, sürtünme, gerçek eğim, birleşimler ve destekler teklifte netleşir.
+
+`marble-studio.js` oynatma/durdurma/devam/başa alma, azaltılmış hareket,
+sekme gizlenmesi ve modal kapanmasında durma, renkli yerel taslak korunması,
+1600×1400 PNG ve gerçek satır sonlu doğrudan WhatsApp taslağını sağlar.
+Mesaj, tüm parçaların satır/sütun/tür/yön/renk listesini içerir. Veri yalnızca
+bu sekmenin belleğindedir; veritabanına veya puan tablosuna gönderilmez.
