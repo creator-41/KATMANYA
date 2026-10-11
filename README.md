@@ -270,3 +270,23 @@ animasyon temizliği, oturum içi taslak ve doğrudan WhatsApp taslağını yön
 1600 × 1400 PNG kapalı/açık iki görünümü ve seçilen ayrıntıları içerir.
 Fotoğraf, sunucu veya veritabanı gerektirmez. Görsel bir tasarım önizlemesidir;
 açılma mekanizmasının üretimi, malzeme ve renk uygulaması teklifte netleşir.
+
+
+## Sekiz parçalı katlanan küp
+
+“Katla, şekil değişsin” atölye kartı Hediye ve Oyun kategorilerindedir.
+Sekiz sabit boyutlu blok iki yaprak grubu halinde bağlantı kenarından döner:
+kapalı küp → açık iç yüzler → ters küp → açık iç yüzler → başlangıç küpü.
+Dış yüzlere isteğe bağlı dört karakter, iç yüzlere yıldız/şimşek/kalp/daire
+veya simgesiz görünüm seçilir. Dış, iç ve bağlantı renkleri ayrıdır.
+
+`cube-model.js` rijit blok dönüşümlerini, yedi bağlantıyı, yüzlere bağlı
+harf/simge çizimini ve derinliğe göre sıralanan ortografik görünümü üretir.
+Bu katlama senaryosu bir tasarım önizlemesidir; üretime hazır sonsuz küp
+mekanizması veya STL sağlamaz. Menteşe yerleşimi ve üretilebilirlik teklifte
+netleştirilir. `cube-studio.js` dokunma/sürükleme, klavye ve kaydırıcı,
+800 ms katlama adımları, en fazla 8 saniyelik otomatik akış, mobil sekmeler,
+azaltılmış hareket ve modal/odak/scroll temizliğini yönetir. Açık taslak
+korunur; renk/metin/simge değişince duruş sıfırlanmaz. 1600 × 1400 PNG üç
+ana görünümle seçimleri içerir. WhatsApp doğrudan işletme sohbetine gider;
+mesaj gönderimi kullanıcıdadır. Sunucu/veritabanı kullanmaz.
