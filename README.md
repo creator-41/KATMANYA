@@ -182,3 +182,18 @@ adları başlık ve açıklamadan oluşur. Yerel görseller servis çalışanın
 alınır. Filtre seçimi araçtan çıkınca korunur; sürpriz tasarım filtre dışında bir
 aracı açarsa, dönüşte kartın görünür olması için Tümü seçilir. Mevcut taslak
 koruması, modal dönüşü ve kaydırma/fokus restorasyonu devam eder.
+
+### Üç dokunuşta hediyeni bul
+Atölyedeki Hediyeni bul üç adım sunar: Kendime/Partnerime/Arkadaşıma,
+Kullanışlı/Eğlenceli/Anlamlı ve Yazı/Fotoğraf/Ses. Her seçim sonraki adıma
+geçer; geri dönme, seçimleri değiştirme ve sıfırlama vardır. 27 kombinasyon
+iki farklı ürün ve açıklama üretir. Fotoğraf ve ses seçiminde ilk ürün mutlaka
+bu girdiyi destekler. Ses için ikinci öneri yazılı bir alternatif olarak açıkça
+etiketlenir; ses oynatan veya ses dosyası saklayan ürün vaadi verilmez.
+Kişi isimleri kullanılmaz. Öneri kartları mevcut ürünlerin başlık/görselini alır.
+Bunu tasarla bulucuyu kapattıktan sonra normal atölye kartını çalıştırır;
+mevcut düzenleyici taslağını değiştirmez. Filtre dışında kalan bir kart açılırsa
+Tümü seçilir. Kullanılamayan araç pasif kalır. Seçimler yalnızca mevcut sayfa
+oturumunun belleğindedir; sunucuya veya kalıcı depolamaya yazılmaz. Native
+modal, kapatma/Escape, fokus ve body/kaydırma restorasyonu kullanılır.
+`gift-finder.js` eşleştirmeyi ve arayüzü yönetir; sürpriz tasarım düğmesi korunur.

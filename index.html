@@ -35,7 +35,7 @@
   <link rel="icon" type="image/svg+xml" href="./assets/katmanya-icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/katmanya-192.png">
   <link rel="apple-touch-icon" href="./assets/katmanya-180.png">
-  <link rel="stylesheet" href="styles.css?v=96">
+  <link rel="stylesheet" href="styles.css?v=97">
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#top" aria-label="KATMANYA ana sayfa"><img class="katmanya-brand" src="./assets/katmanya-logo.svg" width="631" height="128" alt="KATMANYA"></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a><a href="#sss">Sık sorulanlar</a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="KATMANYA uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
@@ -147,7 +147,7 @@
     </div>
     <section class="workshop-surprise" aria-label="Sürpriz tasarım">
       <div><span class="workshop-eyebrow">NEREDEN BAŞLAYACAĞINI BİLMİYOR MUSUN?</span><strong>Bir fikri sana biz bulalım.</strong><p>Hazır bir tasarımla başla, kendi dokunuşunu ekle.</p></div>
-      <button class="workshop-random" type="button" aria-haspopup="dialog" disabled>Bana bir tasarım bul <span aria-hidden="true">🎲</span></button>
+      <div class="workshop-discovery-actions"><button class="gift-finder-trigger" type="button" aria-haspopup="dialog" aria-controls="gift-finder" disabled>Hediyeni bul <span aria-hidden="true">🎯</span></button><button class="workshop-random" type="button" aria-haspopup="dialog" disabled>Bana bir tasarım bul <span aria-hidden="true">🎲</span></button></div>
     </section>
     <p class="workshop-random-status" role="status" hidden></p>
     <div class="workshop-grid" id="workshop-products">
@@ -164,6 +164,40 @@
       <button class="workshop-card sketch-trigger gear-trigger" data-workshop-categories="play" aria-labelledby="workshop-gear-title workshop-gear-description" type="button" aria-haspopup="dialog" aria-controls="gear-studio" disabled><span class="workshop-preview" aria-hidden="true"><img src="./assets/workshop/gear.webp" width="480" height="300" alt="" loading="lazy" decoding="async"></span><span class="workshop-product-tag" aria-hidden="true">ÜÇ DİŞLİ · TEK HAREKET</span><strong id="workshop-gear-title">Birini çevir, hepsi hareket etsin</strong><small id="workshop-gear-description">Üç dişlini renklendir, birbirine bağlı hareketi dene.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
     </div>
     <p class="workshop-footer">Bir araçtan çıkınca buraya geri dönersin. Kaldığın yerden devam et.</p>
+  </dialog>
+  <dialog class="gift-dialog" id="gift-finder" aria-labelledby="gift-title" aria-describedby="gift-help">
+    <header class="sketch-head"><div><span class="workshop-eyebrow">KATMANYA / SANA GÖRE BİR FİKİR</span><h2 id="gift-title">3 dokunuşta <em>hediyeni bul.</em></h2><p id="gift-help">Üç kısa seçim yap. Sana uygun iki tasarımı birlikte bulalım.</p></div><button class="sketch-close gift-close" type="button" aria-label="Hediye bulucuyu kapat">×</button></header>
+    <div class="gift-body">
+      <div class="gift-progress-row"><p class="gift-progress" role="status" aria-live="polite" aria-atomic="true">ADIM 1 / 3</p><div class="gift-markers" aria-hidden="true"><span data-gift-marker="0" data-state="current">01 / KİME</span><span data-gift-marker="1" data-state="next">02 / TARZ</span><span data-gift-marker="2" data-state="next">03 / DOKUNUŞ</span></div></div>
+        <section class="gift-step" data-gift-step="0"><h3 id="gift-question-0" tabindex="-1">Kime hazırlıyoruz?</h3><p class="gift-question-note">Birini seç; sonraki adıma geçelim.</p><div class="gift-choices" role="group" aria-labelledby="gift-question-0">
+          <button type="button" data-gift-key="recipient" data-gift-choice="self" aria-pressed="false"><strong>Kendime</strong><span>Kendi günlük hayatıma bir dokunuş.</span></button>
+          <button type="button" data-gift-key="recipient" data-gift-choice="partner" aria-pressed="false"><strong>Partnerime</strong><span>İkimize ait bir şey olsun.</span></button>
+          <button type="button" data-gift-key="recipient" data-gift-choice="friend" aria-pressed="false"><strong>Arkadaşıma</strong><span>Ona özel bir sürpriz olsun.</span></button>
+        </div></section>
+        <section class="gift-step" data-gift-step="1" hidden><h3 id="gift-question-1" tabindex="-1">Nasıl bir hediye olsun?</h3><p class="gift-question-note">Birini seç; sonraki adıma geçelim.</p><div class="gift-choices" role="group" aria-labelledby="gift-question-1">
+          <button type="button" data-gift-key="mood" data-gift-choice="practical" aria-pressed="false"><strong>Kullanışlı</strong><span>Her gün kullanabileceği bir şey.</span></button>
+          <button type="button" data-gift-key="mood" data-gift-choice="playful" aria-pressed="false"><strong>Eğlenceli</strong><span>Çevrilsin, oynansın, keşfedilsin.</span></button>
+          <button type="button" data-gift-key="mood" data-gift-choice="meaningful" aria-pressed="false"><strong>Anlamlı</strong><span>Bir mesajı veya anıyı taşısın.</span></button>
+        </div></section>
+        <section class="gift-step" data-gift-step="2" hidden><h3 id="gift-question-2" tabindex="-1">Neyle kişiselleştirelim?</h3><p class="gift-question-note">Birini seç; sonraki adıma geçelim.</p><div class="gift-choices" role="group" aria-labelledby="gift-question-2">
+          <button type="button" data-gift-key="material" data-gift-choice="text" aria-pressed="false"><strong>Yazı</strong><span>Kelimen, kısa mesajın veya ismin.</span></button>
+          <button type="button" data-gift-key="material" data-gift-choice="photo" aria-pressed="false"><strong>Fotoğraf</strong><span>Saklamak istediğin bir kare.</span></button>
+          <button type="button" data-gift-key="material" data-gift-choice="voice" aria-pressed="false"><strong>Ses</strong><span>Bir sesin dalga şekli.</span></button>
+        </div></section>
+
+      <section class="gift-results" hidden aria-labelledby="gift-results-title"><h3 id="gift-results-title" tabindex="-1">Sana göre iki fikir.</h3><p class="gift-summary"></p><div class="gift-results-grid">
+            <article class="gift-result" data-gift-result="0" aria-labelledby="gift-result-title-0">
+              <div class="gift-result-preview"><img width="480" height="300" alt="" decoding="async"></div><span class="gift-alternative" hidden>YAZIYLA HAZIRLANAN ALTERNATİF</span><h3 class="gift-result-title" id="gift-result-title-0"></h3><p class="gift-reason"></p><button class="gift-design" type="button" data-gift-design="0" aria-haspopup="dialog">BUNU TASARLA ↗</button><p class="gift-unavailable" hidden>Bu araç bu tarayıcıda açılamıyor.</p>
+            </article>
+            <article class="gift-result" data-gift-result="1" aria-labelledby="gift-result-title-1">
+              <div class="gift-result-preview"><img width="480" height="300" alt="" decoding="async"></div><span class="gift-alternative" hidden>YAZIYLA HAZIRLANAN ALTERNATİF</span><h3 class="gift-result-title" id="gift-result-title-1"></h3><p class="gift-reason"></p><button class="gift-design" type="button" data-gift-design="1" aria-haspopup="dialog">BUNU TASARLA ↗</button><p class="gift-unavailable" hidden>Bu araç bu tarayıcıda açılamıyor.</p>
+            </article>
+
+      </div><p class="gift-results-note">Öneriyi açınca fotoğrafını, sesini veya yazını tasarım ekranında ekleyebilirsin.</p></section>
+      <p class="gift-error" role="alert" hidden></p>
+      <nav class="gift-navigation" aria-label="Hediye bulucu adımları"><button class="gift-back" type="button" disabled>← Geri</button><button class="gift-change" type="button" hidden>Seçimlerimi değiştir</button><button class="gift-reset" type="button" hidden>Baştan başla ↺</button></nav>
+      <p class="gift-local-note">Seçimlerin yalnızca bu ekranda kalır.</p>
+    </div>
   </dialog>
   <dialog class="starter-confirm" id="starter-confirm" aria-labelledby="starter-confirm-title" aria-describedby="starter-confirm-help">
     <header class="sketch-head"><div><span class="workshop-eyebrow">KATMANYA / YENİ BİR BAŞLANGIÇ</span><h2 id="starter-confirm-title">Tasarımın <em>burada.</em></h2></div><button class="sketch-close starter-confirm-close" type="button" aria-label="Tasarım değiştirmeyi iptal et">×</button></header>
@@ -675,6 +709,7 @@
   <script src="gear-model.js?v=1" defer></script>
   <script src="gear-studio.js?v=1" defer></script>
   <script src="workshop.js?v=3" defer></script>
+  <script src="gift-finder.js?v=1" defer></script>
   <script src="main.js?v=44" defer></script>
 
   <aside id="quote-chat" aria-label="KATMANYA teklif asistanı">
