@@ -171,8 +171,8 @@ sunucuya kaydedilmez. Fiziksel baskının mekanik payları ve malzemesi teklifte
 `gear-model.js` geometri/bağlı dönüş/çizimi, `gear-studio.js` etkileşimleri yönetir.
 
 ### Atölye ürün vitrini
-12 araç Tümü / Hediye / Masaüstü / Oyun filtreleriyle gezilir. Kategoriler çoklu
-üyeliğe izin verir (9 hediye, 6 masaüstü, 3 oyun); sonuç ve kategori adetleri
+13 araç Tümü / Hediye / Masaüstü / Oyun filtreleriyle gezilir. Kategoriler çoklu
+üyeliğe izin verir (10 hediye, 6 masaüstü, 4 oyun); sonuç ve kategori adetleri
 kartların veri alanlarından hesaplanır. Düğmeler basılı durumunu ve sonuç sayısını
 bildirir. Kartların 480×300 WebP ürün önizlemeleri mevcut model çizimlerinden
 üretilmiş statik örneklerdir; açılan araçların taslağını değiştirmez veya kişisel isim
@@ -223,3 +223,33 @@ model sunmaz. Taban, bağlantılar, üretim ve gerçek ışık kurulumu teklifte
 netleştirilir. `shadow-studio.js` etkileşim, modal, odak, animasyon ve dışa
 aktarmayı yönetir; kapatma, sekme gizlenmesi ve azaltılmış hareket tercihi
 animasyonu durdurur.
+
+
+## Eklemli mini ejderha
+
+Tasarım atölyesinin Hediye ve Oyun kategorilerindeki **Kendi mini ejderhanı
+tasarla** kartı bir eklemli karakter önizlemesi açar. Kısa/uzun kuyruk
+14/20 eklem ve yaklaşık 130/180 mm uzunluk sunar. Gövde, diken/boynuz
+ve göz rengi bağımsız seçilir. İsteğe bağlı 10 karakterlik sırt yazısı
+boş başlar; her harf ayrı bir gövde parçasındadır.
+
+`dragon-model.js` sabit 8,4 birim eklem aralığı, sınırlandırılmış komşu
+dönüşü ve kafa/gövde için iki boyutlu çarpışma sınırı kullanır. Uzun
+fare/dokunma sıçramaları kısa alt adımlarla çözülür. Kafayı sürükleyince
+zincir sırayla takip eder; sürükleme kafanın çevresinden başlatılır. Oklar ve
+dört yön düğmesiyle kafa taşınır. C/Kıvrıl halkalı, Home/Düzleş düz duruşa
+geçer; ara duruşlarda eklem aralığı açı interpolasyonuyla korunur.
+Geçiş örnekleri önceden çarpışma testinden geçer; uygun olmayan geçiş
+hazır duruşa anında geçer. Her animasyon karesi de çarpışma kontrolü kullanır.
+
+`dragon-studio.js` iki mobil sekme, modal/odak/scroll restorasyonu ve
+animasyon temizliğini yönetir. Azaltılmış hareket tercihi hazır duruşa
+anında geçer. Kapatma, düzenleme, arka plana geçiş ve dışa aktarma
+animasyonu durdurur. Renk/yazı değişimi mevcut duruşu korur; kuyruk
+uzunluğunu değiştirmek yeni zinciri düz duruştan başlatır.
+
+1600 × 1400 PNG seçili ve kıvrılmış duruşları, renkleri, yazıyı ve ölçüyü
+içerir. Teklif bağlantısı işletmenin WhatsApp numarasına gerçek satır
+sonlarıyla gider; dosya ayrıca eklenir. Tasarım sekmede kalır, veritabanı
+yoktur. Görsel bir oyuncak önizlemesidir; STL veya üretime hazır eklem
+modeli sunmaz. Eklem uyumu, renk uygulaması ve malzeme teklifte netleşir.

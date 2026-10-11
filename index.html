@@ -35,7 +35,7 @@
   <link rel="icon" type="image/svg+xml" href="./assets/katmanya-icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/katmanya-192.png">
   <link rel="apple-touch-icon" href="./assets/katmanya-180.png">
-  <link rel="stylesheet" href="styles.css?v=98">
+  <link rel="stylesheet" href="styles.css?v=99">
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#top" aria-label="KATMANYA ana sayfa"><img class="katmanya-brand" src="./assets/katmanya-logo.svg" width="631" height="128" alt="KATMANYA"></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a><a href="#sss">Sık sorulanlar</a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="KATMANYA uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
@@ -163,6 +163,7 @@
       <button class="workshop-card sketch-trigger capsule-trigger" data-workshop-categories="gift play" aria-labelledby="workshop-capsule-title workshop-capsule-description" type="button" aria-haspopup="dialog" aria-controls="capsule-studio" disabled><span class="workshop-preview" aria-hidden="true"><img src="./assets/workshop/capsule.webp" width="480" height="300" alt="" loading="lazy" decoding="async"></span><span class="workshop-product-tag" aria-hidden="true">ŞİFRE · SÜRPRİZ KAPSÜL</span><strong id="workshop-capsule-title">Şifreni çevir, sürprizi aç</strong><small id="workshop-capsule-description">Üç halkalı kapsülüne bir şifre ve gizli mesaj ekle.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
       <button class="workshop-card sketch-trigger gear-trigger" data-workshop-categories="play" aria-labelledby="workshop-gear-title workshop-gear-description" type="button" aria-haspopup="dialog" aria-controls="gear-studio" disabled><span class="workshop-preview" aria-hidden="true"><img src="./assets/workshop/gear.webp" width="480" height="300" alt="" loading="lazy" decoding="async"></span><span class="workshop-product-tag" aria-hidden="true">ÜÇ DİŞLİ · TEK HAREKET</span><strong id="workshop-gear-title">Birini çevir, hepsi hareket etsin</strong><small id="workshop-gear-description">Üç dişlini renklendir, birbirine bağlı hareketi dene.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
       <button class="workshop-card sketch-trigger shadow-trigger" data-workshop-categories="gift desk" aria-labelledby="workshop-shadow-title workshop-shadow-description" type="button" aria-haspopup="dialog" aria-controls="shadow-studio" disabled><span class="workshop-preview" aria-hidden="true"><img src="./assets/workshop/shadow.webp" width="480" height="300" alt="" loading="lazy" decoding="async"></span><span class="workshop-product-tag" aria-hidden="true">IŞIK · GÖLGEDE GİZLİ MESAJ</span><strong id="workshop-shadow-title">Işığı tut, gizli mesajı gör</strong><small id="workshop-shadow-description">Işığı taşı, gölgede kendi mesajını ortaya çıkar.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
+      <button class="workshop-card sketch-trigger dragon-trigger" data-workshop-categories="gift play" aria-labelledby="workshop-dragon-title workshop-dragon-description" type="button" aria-haspopup="dialog" aria-controls="dragon-studio" disabled><span class="workshop-preview" aria-hidden="true"><img src="./assets/workshop/dragon.webp" width="480" height="300" alt="" loading="lazy" decoding="async"></span><span class="workshop-product-tag" aria-hidden="true">EKLEMLİ MİNİ EJDERHA · TASARLA VE OYNA</span><strong id="workshop-dragon-title">Kendi mini ejderhanı tasarla</strong><small id="workshop-dragon-description">Kafasını taşı, gövdesi ve kuyruğu peşinden kıvrılsın.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
     </div>
     <p class="workshop-footer">Bir araçtan çıkınca buraya geri dönersin. Kaldığın yerden devam et.</p>
   </dialog>
@@ -331,6 +332,38 @@
     </div>
   </dialog>
 
+
+  <dialog class="ring-dialog dragon-dialog" id="dragon-studio" aria-labelledby="dragon-title" aria-describedby="dragon-help">
+    <section class="ring-shell dragon-shell">
+      <header class="sketch-head"><div><p class="sketch-eyebrow">KATMANYA / KATMANLARDAN BİR KARAKTER</p><h2 id="dragon-title">Kendi mini <em>ejderhanı tasarla.</em></h2><p id="dragon-help">Renklerini seç. Kafasını tutup sürükle; gövdesi ve kuyruğu kıvrılarak takip etsin.</p></div><button class="sketch-close dragon-close" type="button" aria-label="Mini ejderha stüdyosunu kapat">×</button></header>
+      <nav class="ring-tabs dragon-tabs" aria-label="Mini ejderha stüdyosu görünümü"><button type="button" data-dragon-tab="edit" aria-pressed="false">01 / TASARLA</button><button type="button" data-dragon-tab="preview" aria-pressed="true">02 / KIVIR VE OYNA</button></nav>
+      <div class="ring-workspace dragon-workspace">
+        <div class="ring-edit dragon-edit">
+          <fieldset class="ring-settings dragon-settings"><legend>01 / SENİN MİNİ EJDERHAN</legend>
+            <label class="ring-label" for="dragon-caption">SIRTINDAKİ YAZI · İSTEĞE BAĞLI</label><input id="dragon-caption" class="ring-message dragon-caption" type="text" maxlength="10" placeholder="Kısa bir yazı ekle" autocomplete="off" spellcheck="false" aria-describedby="dragon-caption-help"><p class="dragon-length" aria-hidden="true">0 / 10</p><p class="ring-field-note" id="dragon-caption-help">En fazla 10 karakter. Her harf bir sırt parçasında görünür.</p>
+            <span class="ring-label">KUYRUK UZUNLUĞU</span><div class="ring-options" role="group" aria-label="Ejderhanın kuyruk uzunluğu"><button type="button" data-dragon-tail="short" aria-pressed="true">KISA · 130 MM</button><button type="button" data-dragon-tail="long" aria-pressed="false">UZUN · 180 MM</button></div>
+            <span class="ring-label">GÖVDE</span><div class="ring-colors" role="group" aria-label="Ejderhanın gövde rengi">
+              <button type="button" data-dragon-body="Yeşil" style="--ring-swatch:#c7fa5f" aria-label="Yeşil ejderha gövdesi" aria-pressed="true"></button><button type="button" data-dragon-body="Beyaz" style="--ring-swatch:#f3f1ec" aria-label="Beyaz ejderha gövdesi" aria-pressed="false"></button><button type="button" data-dragon-body="Mavi" style="--ring-swatch:#5795ef" aria-label="Mavi ejderha gövdesi" aria-pressed="false"></button><button type="button" data-dragon-body="Siyah" style="--ring-swatch:#39443c" aria-label="Siyah ejderha gövdesi" aria-pressed="false"></button>
+            </div><span class="ring-label">SIRT DİKENLERİ VE BOYNUZLAR</span><div class="ring-colors" role="group" aria-label="Ejderhanın diken rengi">
+              <button type="button" data-dragon-spines="Yeşil" style="--ring-swatch:#c7fa5f" aria-label="Yeşil ejderha dikenleri" aria-pressed="false"></button><button type="button" data-dragon-spines="Beyaz" style="--ring-swatch:#f3f1ec" aria-label="Beyaz ejderha dikenleri" aria-pressed="true"></button><button type="button" data-dragon-spines="Mavi" style="--ring-swatch:#5795ef" aria-label="Mavi ejderha dikenleri" aria-pressed="false"></button><button type="button" data-dragon-spines="Siyah" style="--ring-swatch:#39443c" aria-label="Siyah ejderha dikenleri" aria-pressed="false"></button>
+            </div><span class="ring-label">GÖZLER</span><div class="ring-colors" role="group" aria-label="Ejderhanın göz rengi">
+              <button type="button" data-dragon-eyes="Turuncu" style="--ring-swatch:#ffb05a" aria-label="Turuncu ejderha gözleri" aria-pressed="true"></button><button type="button" data-dragon-eyes="Yeşil" style="--ring-swatch:#c7fa5f" aria-label="Yeşil ejderha gözleri" aria-pressed="false"></button><button type="button" data-dragon-eyes="Mavi" style="--ring-swatch:#5795ef" aria-label="Mavi ejderha gözleri" aria-pressed="false"></button><button type="button" data-dragon-eyes="Beyaz" style="--ring-swatch:#f3f1ec" aria-label="Beyaz ejderha gözleri" aria-pressed="false"></button>
+            </div>
+          </fieldset><button class="ring-download dragon-rehearse" type="button">KIVIR VE OYNA ↗</button><p class="ring-field-note">Tasarımın bu ekranda kalır. Fiyat isterken seçtiklerin WhatsApp taslağına eklenir.</p>
+        </div>
+        <div class="ring-result dragon-result">
+          <div class="ring-topline"><span class="ring-label">02 / KAFASINI TUT, YOL GÖSTER</span></div>
+          <div class="ring-model dragon-model"><canvas class="ring-preview dragon-preview" role="img" tabindex="0" aria-label="Eklemli mini ejderha"></canvas><span class="ring-tag">KAFASI SENDE · KUYRUĞU PEŞİNDE</span><span class="ring-drag-hint">KESİK ÇİZGİLİ KAFAYI TUT · SÜRÜKLE</span></div>
+          <p class="ring-dimensions dragon-dimensions"></p>
+          <div class="dragon-movement" role="group" aria-label="Ejderhanın kafasını taşı"><button type="button" data-dragon-move="-8,0" aria-label="Ejderhanın kafasını sola taşı">←</button><button type="button" data-dragon-move="0,-8" aria-label="Ejderhanın kafasını yukarı taşı">↑</button><button type="button" data-dragon-move="0,8" aria-label="Ejderhanın kafasını aşağı taşı">↓</button><button type="button" data-dragon-move="8,0" aria-label="Ejderhanın kafasını sağa taşı">→</button></div>
+          <div class="dragon-pose-actions"><button class="ring-download dragon-coil" type="button">KIVRIL! 🐉</button><button class="dragon-home" type="button">DÜZLEŞ ↺</button></div>
+          <p class="ring-status dragon-status" role="status" aria-live="polite">Hazır · kafasını tut, ejderhan peşinden gelsin</p>
+          <div class="ring-actions"><button class="ring-download dragon-download" type="button">EJDERHANI İNDİR ↓</button><a class="ring-quote dragon-quote" target="_blank" rel="noopener noreferrer">WhatsApp’tan fiyat iste ↗</a></div>
+          <p class="ring-note">Eklemli oyuncak tasarım önizlemesi. Eklem uyumunu, renk uygulamasını ve malzemeyi teklifte netleştiririz. PNG taslağını sohbete ayrıca ekleyebilirsin.</p>
+        </div>
+      </div>
+    </section>
+  </dialog>
 
   <dialog class="ring-dialog shadow-dialog" id="shadow-studio" aria-labelledby="shadow-title" aria-describedby="shadow-help">
     <section class="ring-shell shadow-shell">
@@ -743,6 +776,8 @@
   <script src="gear-studio.js?v=1" defer></script>
   <script src="shadow-model.js?v=1" defer></script>
   <script src="shadow-studio.js?v=1" defer></script>
+  <script src="dragon-model.js?v=1" defer></script>
+  <script src="dragon-studio.js?v=1" defer></script>
   <script src="workshop.js?v=3" defer></script>
   <script src="gift-finder.js?v=1" defer></script>
   <script src="main.js?v=44" defer></script>
