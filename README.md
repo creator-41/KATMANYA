@@ -99,3 +99,9 @@ küçültülür. Doku en uzun kenarı 128 örnekle oluşturulur. Çok dar/uzun k
 uyarı alır. Fotoğraf hiçbir sunucuya aktarılmaz. WhatsApp yalnızca ayarları
 hazırlar; orijinal fotoğraf ve PNG kullanıcı tarafından eklenir. Önizleme
 üretim garantisi değildir; malzeme, ölçü, taban ve LED teklifte netleşir.
+
+### Tasarım atölyesi
+Ana ekran tek bir atölye butonu sunar. Çizim, fotoğraf kabartma, iki parça,
+açıya göre mesaj, labirent, ses ve fotoğraf lambası araçları erişilebilir
+kartlarla aynı modalda toplanır. Araç kapatılınca atölyeye dönülür; atölye
+kapatılınca sayfanın önceki kaydırma konumu geri yüklenir.
