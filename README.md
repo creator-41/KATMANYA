@@ -105,3 +105,10 @@ Ana ekran tek bir atölye butonu sunar. Çizim, fotoğraf kabartma, iki parça,
 açıya göre mesaj, labirent, ses ve fotoğraf lambası araçları erişilebilir
 kartlarla aynı modalda toplanır. Araç kapatılınca atölyeye dönülür; atölye
 kapatılınca sayfanın önceki kaydırma konumu geri yüklenir.
+
+Atölyedeki “Bana bir tasarım bul” sekiz başlangıç seçeneğini karıştırır:
+üç anahtarlık, üç plaka ve iki tamamlayıcı set. Aynı seçenek art arda gelmez;
+her turdaki seçenekler tükenmeden tekrar seçilmez. Açılan tasarım düzenlenebilir;
+“Bir daha karıştır” mevcut araçtan güvenle çıkıp yeni bir başlangıç açar.
+İsim alanları boş kalır. Önceden düzenlenmiş bir tasarım değiştirilecekse
+ziyaretçiye değiştirme, başka seçenek bulma ve iptal seçenekleri gösterilir.

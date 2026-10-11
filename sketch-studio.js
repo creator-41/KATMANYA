@@ -728,6 +728,22 @@
     if(!storyObjectUrl||storyDownload.disabled)return;
     const link=document.createElement('a');link.href=storyObjectUrl;link.download=storyFilename;document.body.append(link);link.click();link.remove();
   });
+  window.KatmanyaStarters ||= {};
+  window.KatmanyaStarters.sketch = {
+    hasDraft: () => !!paths.length || !!otherPaths.length || !!textInput?.value.trim(),
+    signature: () => JSON.stringify({paths,otherPaths,keychain,finish,otherFinish,face,color,text:textInput?.value}),
+    apply(spec){
+      if(!['bolt','heart','star','triangle','circle','rectangle'].includes(spec.shape)||!colors[spec.color])return false;
+      open();remember();const previous=history[history.length-1];paths=[];otherPaths=[];selected=null;activeStroke=null;transform=null;
+      keychain={enabled:false,hole:[.5,.1]};face=modelFace='front';finish=otherFinish='raised';color=spec.color;
+      mesh=null;changed=true;building=false;progress=1;yaw=-.48;pitch=.72;
+      if(textInput)textInput.value='';if(textAdd)textAdd.disabled=true;
+      dialog.querySelectorAll('[data-sketch-color]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sketchColor===color)));
+      preset(spec.shape);if(spec.keychain)toggleKeychain();finish=spec.finish==='engrave'?'engrave':'raised';
+      history.splice(Math.max(0,history.length-(spec.keychain?3:2)),spec.keychain?3:2,previous);
+      chooseTool('move');markChanged();build();return true;
+    }
+  };
   function open(){
     if(dialog.open)return;
     saved={scrollY:window.scrollY,body:{position:document.body.style.position,top:document.body.style.top,width:document.body.style.width}};

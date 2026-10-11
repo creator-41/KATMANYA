@@ -56,6 +56,17 @@
       const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='katmanya-iki-parca-'+snapshot.shape+'.png';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);status.textContent='Taslağınız indirildi · sohbetinize ekleyebilirsiniz';
     }catch{if(current===revision)status.textContent='Taslak indirilemedi. Tekrar deneyebilirsin.';}finally{exporting=false;actions();}
   }
+  window.KatmanyaStarters ||= {};
+  window.KatmanyaStarters.puzzle = {
+    hasDraft: () => names().some(Boolean) || shape!=='heart' || colorA!=='Yeşil' || colorB!=='Mavi',
+    signature: () => JSON.stringify({names:names(),shape,colorA,colorB}),
+    apply(spec){
+      if(!['heart','puzzle'].includes(spec.shape)||!['Yeşil','Mavi','Beyaz','Siyah'].includes(spec.colorA)||!['Yeşil','Mavi','Beyaz','Siyah'].includes(spec.colorB))return false;
+      open();nameA.value='';nameB.value='';shape=spec.shape;colorA=spec.colorA;colorB=spec.colorB;
+      part='both';separation=.15;distance.value='15';yaw=-.2;pitch=1.02;drag=null;
+      rebuild();view('preview');status.textContent='Setin hazır · düzenleme bölümünde kendi isimlerinizi yazın';return true;
+    }
+  };
   function open(){if(dialog.open)return;saved={y:window.scrollY,style:{position:document.body.style.position,top:document.body.style.top,width:document.body.style.width}};document.body.style.position='fixed';document.body.style.top=-saved.y+'px';document.body.style.width='100%';dialog.showModal();if(!design)rebuild();view('edit');actions();q('.puzzle-close').focus({preventScroll:true});}
   function close(){revision++;if(frame)cancelAnimationFrame(frame);frame=0;joining=false;drag=null;if(saved){Object.assign(document.body.style,saved.style);window.scrollTo({top:saved.y,left:0,behavior:'instant'});saved=null;}actions();trigger.focus({preventScroll:true});}
   trigger.disabled=false;trigger.addEventListener('click',open);q('.puzzle-close').addEventListener('click',()=>dialog.close());dialog.addEventListener('close',close);

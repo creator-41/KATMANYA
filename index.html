@@ -35,7 +35,7 @@
   <link rel="icon" type="image/svg+xml" href="./assets/katmanya-icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/katmanya-192.png">
   <link rel="apple-touch-icon" href="./assets/katmanya-180.png">
-  <link rel="stylesheet" href="styles.css?v=89">
+  <link rel="stylesheet" href="styles.css?v=90">
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#top" aria-label="KATMANYA ana sayfa"><img class="katmanya-brand" src="./assets/katmanya-logo.svg" width="631" height="128" alt="KATMANYA"></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a><a href="#sss">Sık sorulanlar</a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="KATMANYA uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
@@ -136,6 +136,11 @@
     </footer>
   <dialog class="workshop-dialog" id="design-workshop" aria-labelledby="workshop-title" aria-describedby="workshop-help">
     <header class="sketch-head"><div><span class="workshop-eyebrow">KATMANYA / FİKRİNDEN BAŞLA</span><h2 id="workshop-title">Tasarım <em>atölyesi.</em></h2><p id="workshop-help">Bir araç seç, fikrini katmanlara dönüştür.</p></div><button class="sketch-close workshop-close" type="button" aria-label="Tasarım atölyesini kapat">×</button></header>
+    <section class="workshop-surprise" aria-label="Sürpriz tasarım">
+      <div><span class="workshop-eyebrow">NEREDEN BAŞLAYACAĞINI BİLMİYOR MUSUN?</span><strong>Bir fikri sana biz bulalım.</strong><p>Hazır bir tasarımla başla, kendi dokunuşunu ekle.</p></div>
+      <button class="workshop-random" type="button" aria-haspopup="dialog" disabled>Bana bir tasarım bul <span aria-hidden="true">🎲</span></button>
+    </section>
+    <p class="workshop-random-status" role="status" hidden></p>
     <div class="workshop-grid">
       <button class="workshop-card sketch-trigger" type="button" aria-haspopup="dialog" aria-controls="sketch-studio" disabled><svg class="workshop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19l4-1L20 7l-4-4L5 14v5ZM13 6l4 4"/></svg><strong>Çiz, katmana dönüşsün</strong><small>Çizim, metin ve simgelerle kendi parçanı tasarla.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
       <button class="workshop-card sketch-trigger photo-trigger" type="button" aria-haspopup="dialog" aria-controls="photo-studio" disabled><svg class="workshop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18v16H3zM3 16l6-6 5 5 3-3 4 4M16 8h.01"/></svg><strong>Fotoğraftan kabartma</strong><small>Fotoğrafını dokulu bir kabartmaya dönüştür.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
@@ -147,12 +152,17 @@
     </div>
     <p class="workshop-footer">Bir araçtan çıkınca buraya geri dönersin. Kaldığın yerden devam et.</p>
   </dialog>
+  <dialog class="starter-confirm" id="starter-confirm" aria-labelledby="starter-confirm-title" aria-describedby="starter-confirm-help">
+    <header class="sketch-head"><div><span class="workshop-eyebrow">KATMANYA / YENİ BİR BAŞLANGIÇ</span><h2 id="starter-confirm-title">Tasarımın <em>burada.</em></h2></div><button class="sketch-close starter-confirm-close" type="button" aria-label="Tasarım değiştirmeyi iptal et">×</button></header>
+    <div class="starter-confirm-body"><p id="starter-confirm-help">Bu araçta daha önce düzenlediğin bir tasarım var. Yeni başlangıç onu değiştirir.</p><strong class="starter-pending-name"></strong><div class="starter-confirm-actions"><button class="starter-confirm-apply" type="button">Yeni tasarıma geç</button><button class="starter-confirm-shuffle" type="button">Başka seçenek bul 🎲</button></div><p>Mevcut tasarımını korumak için bu pencereyi kapatabilirsin.</p></div>
+  </dialog>
   <dialog class="sketch-dialog" id="sketch-studio" aria-labelledby="sketch-title" aria-describedby="sketch-help">
     <div class="sketch-shell">
       <header class="sketch-head">
         <div><p class="sketch-eyebrow">KATMANYA / SENİN ÇİZGİN</p><h2 id="sketch-title">Çiz, <em>katmana dönüşsün.</em></h2><p id="sketch-help">Fikrini çiz. Plakanı veya çift taraflı anahtarlığını döndürerek keşfet.</p></div>
         <button class="sketch-close" type="button" aria-label="Çizim stüdyosunu kapat">×</button>
       </header>
+      <div class="starter-strip" hidden><div><span>SANA ÇIKAN TASARIM</span><strong class="starter-name" role="status"></strong></div><button class="starter-reroll" type="button">Bir daha karıştır <span aria-hidden="true">🎲</span></button></div>
       <div class="sketch-view-switch" role="group" aria-label="Çizim stüdyosu görünümü"><button type="button" data-sketch-view="draw" aria-pressed="true">01 · ÇİZİM</button><button type="button" data-sketch-view="preview" aria-pressed="false">02 · 3B TASLAK</button></div>
       <div class="sketch-workspace">
         <section class="sketch-draw-pane" aria-label="Çizim alanı">
@@ -223,6 +233,7 @@
   <dialog class="puzzle-dialog" id="puzzle-studio" aria-labelledby="puzzle-title" aria-describedby="puzzle-help">
     <div class="puzzle-shell">
       <header class="sketch-head"><div><p class="sketch-eyebrow">KATMANYA / BİRLİKTE TAMAMLANIYORUZ</p><h2 id="puzzle-title">İki parça, <em>bir hikâye.</em></h2><p id="puzzle-help">Bir yarısı sende, diğer yarısı sevdiğinde. İsimlerinizi yaz, anahtarlıklarınız birleşsin.</p></div><button class="sketch-close puzzle-close" type="button" aria-label="Puzzle anahtarlık stüdyosunu kapat">×</button></header>
+      <div class="starter-strip" hidden><div><span>SANA ÇIKAN TASARIM</span><strong class="starter-name" role="status"></strong></div><button class="starter-reroll" type="button">Bir daha karıştır <span aria-hidden="true">🎲</span></button></div>
       <div class="puzzle-tabs" role="group" aria-label="Puzzle stüdyosu görünümü"><button type="button" data-puzzle-tab="edit" aria-pressed="true">01 · TASARLA</button><button type="button" data-puzzle-tab="preview" aria-pressed="false">02 · BİRLEŞTİR</button></div>
       <div class="puzzle-workspace">
         <section class="puzzle-edit" aria-label="İki parçalı anahtarlık ayarları">
@@ -463,11 +474,11 @@
   <script src="story-card.js?v=1" defer></script>
   <script src="vendor/mp4-muxer.js?v=1" defer></script>
   <script src="story-video.js?v=2" defer></script>
-  <script src="sketch-studio.js?v=21" defer></script>
+  <script src="sketch-studio.js?v=22" defer></script>
   <script src="photo-relief.js?v=1" defer></script>
   <script src="photo-studio.js?v=1" defer></script>
   <script src="puzzle-model.js?v=1" defer></script>
-  <script src="puzzle-studio.js?v=2" defer></script>
+  <script src="puzzle-studio.js?v=3" defer></script>
   <script src="angle-model.js?v=1" defer></script>
   <script src="angle-studio.js?v=2" defer></script>
   <script src="maze-model.js?v=1" defer></script>
@@ -476,7 +487,7 @@
   <script src="voice-studio.js?v=2" defer></script>
   <script src="lamp-model.js?v=1" defer></script>
   <script src="lamp-studio.js?v=1" defer></script>
-  <script src="workshop.js?v=1" defer></script>
+  <script src="workshop.js?v=2" defer></script>
   <script src="main.js?v=44" defer></script>
 
   <aside id="quote-chat" aria-label="KATMANYA teklif asistanı">
