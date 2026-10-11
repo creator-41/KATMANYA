@@ -35,7 +35,7 @@
   <link rel="icon" type="image/svg+xml" href="./assets/katmanya-icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/katmanya-192.png">
   <link rel="apple-touch-icon" href="./assets/katmanya-180.png">
-  <link rel="stylesheet" href="styles.css?v=90">
+  <link rel="stylesheet" href="styles.css?v=91">
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#top" aria-label="KATMANYA ana sayfa"><img class="katmanya-brand" src="./assets/katmanya-logo.svg" width="631" height="128" alt="KATMANYA"></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a><a href="#sss">Sık sorulanlar</a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="KATMANYA uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
@@ -149,6 +149,7 @@
       <button class="workshop-card sketch-trigger maze-trigger" type="button" aria-haspopup="dialog" aria-controls="maze-studio" disabled><svg class="workshop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h18v18H3V3Zm4 0v10h6V7h4v14M3 17h6v4"/></svg><strong>Labirentin cebinde</strong><small>Kendi labirentini oluştur, çıkışı bul.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
       <button class="workshop-card sketch-trigger voice-trigger" type="button" aria-haspopup="dialog" aria-controls="voice-studio" disabled><svg class="workshop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10v4m4-8v12m5-15v18m5-15v12m4-8v4"/></svg><strong>Sesin katmanlarda</strong><small>Sesini bir anahtarlığın üzerine işle.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
       <button class="workshop-card sketch-trigger lamp-trigger" type="button" aria-haspopup="dialog" aria-controls="lamp-studio" disabled><svg class="workshop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6m-5 3h4M8 15a7 7 0 1 1 8 0l-1 3H9l-1-3Z"/></svg><strong>Işıkta bir hatıra</strong><small>Fotoğrafının ışıkla ortaya çıkışını izle.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
+      <button class="workshop-card sketch-trigger phone-trigger" type="button" aria-haspopup="dialog" aria-controls="phone-studio" disabled><svg class="workshop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v14H7zM10 14h4M4 21h16M6 21l2-4m10 4-2-4"/></svg><strong>Telefonun park yeri</strong><small>Telefon standını tasarla, telefonu koy ve çıkar.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
     </div>
     <p class="workshop-footer">Bir araçtan çıkınca buraya geri dönersin. Kaldığın yerden devam et.</p>
   </dialog>
@@ -283,6 +284,38 @@
     </div>
   </dialog>
 
+
+  <dialog class="phone-dialog" id="phone-studio" aria-labelledby="phone-title" aria-describedby="phone-help">
+    <section class="phone-shell">
+      <header class="sketch-head"><div><p class="sketch-eyebrow">KATMANYA / MASANDA BİR YERİ OLSUN</p><h2 id="phone-title">Telefonun <em>park yeri.</em></h2><p id="phone-help">Standını kişiselleştir. Telefonu koy, çıkar, her açıdan keşfet.</p></div><button class="sketch-close phone-close" type="button" aria-label="Telefon standı stüdyosunu kapat">×</button></header>
+      <nav class="phone-tabs" aria-label="Telefon standı stüdyosu görünümü"><button type="button" data-phone-tab="edit" aria-pressed="false">01 / TASARLA</button><button type="button" data-phone-tab="preview" aria-pressed="true">02 / STANDIN</button></nav>
+      <div class="phone-workspace">
+        <div class="phone-edit">
+          <fieldset class="phone-settings"><legend>01 / TELEFONUNA GÖRE</legend>
+            <div class="phone-options" role="group" aria-label="Telefonun kullanım yönü"><button type="button" data-phone-orientation="portrait" aria-pressed="true">DİK ↥</button><button type="button" data-phone-orientation="landscape" aria-pressed="false">YATAY ↔</button></div>
+            <p class="phone-field-note">Telefonunu kılıfıyla ölç. Ölçüler milimetre cinsinden.</p>
+            <div class="phone-measures"><label for="phone-width">EN<input id="phone-width" class="phone-width" type="number" min="60" max="90" step="1" value="72" inputmode="decimal" required><small>60–90 mm</small></label><label for="phone-height">BOY<input id="phone-height" class="phone-height" type="number" min="125" max="180" step="1" value="150" inputmode="decimal" required><small>125–180 mm</small></label><label for="phone-thickness">KALINLIK<input id="phone-thickness" class="phone-thickness" type="number" min="7" max="18" step="1" value="10" inputmode="decimal" required><small>7–18 mm</small></label></div>
+            <label class="phone-range" for="phone-angle"><span>STAND EĞİMİ <output class="phone-angle-value">65°</output></span><input id="phone-angle" class="phone-angle" type="range" min="55" max="75" step="1" value="65"></label>
+            <button class="phone-cable" type="button" aria-pressed="true">ŞARJ BOŞLUĞU AÇIK ✓</button>
+            <span class="phone-label">GÖVDE RENGİ</span><div class="phone-colors" role="group" aria-label="Stand gövdesinin rengi"><button type="button" data-phone-color="Yeşil" style="--phone-swatch:#c7fa5f" aria-label="Yeşil stand gövdesi" aria-pressed="true"></button><button type="button" data-phone-color="Beyaz" style="--phone-swatch:#f3f1ec" aria-label="Beyaz stand gövdesi" aria-pressed="false"></button><button type="button" data-phone-color="Mavi" style="--phone-swatch:#5795ef" aria-label="Mavi stand gövdesi" aria-pressed="false"></button><button type="button" data-phone-color="Siyah" style="--phone-swatch:#454e48" aria-label="Siyah stand gövdesi" aria-pressed="false"></button></div>
+            <span class="phone-label">ÖN BÖLÜM RENGİ</span><div class="phone-colors" role="group" aria-label="Standın ön bölüm rengi"><button type="button" data-phone-accent="Yeşil" style="--phone-swatch:#c7fa5f" aria-label="Yeşil ön bölüm" aria-pressed="false"></button><button type="button" data-phone-accent="Beyaz" style="--phone-swatch:#f3f1ec" aria-label="Beyaz ön bölüm" aria-pressed="false"></button><button type="button" data-phone-accent="Mavi" style="--phone-swatch:#5795ef" aria-label="Mavi ön bölüm" aria-pressed="false"></button><button type="button" data-phone-accent="Siyah" style="--phone-swatch:#454e48" aria-label="Siyah ön bölüm" aria-pressed="true"></button></div>
+            <label class="phone-label" for="phone-text">ÖNDEKİ YAZI <small>İSTEĞE BAĞLI · EN FAZLA 18 KARAKTER</small></label><input id="phone-text" class="phone-text" type="text" maxlength="18" placeholder="Bir yazı ekleyin" autocomplete="off">
+            <span class="phone-label">SİMGE</span><div class="phone-icons" role="group" aria-label="Standın önündeki simge"><button type="button" data-phone-icon="none" aria-pressed="true">Yok</button><button type="button" data-phone-icon="bolt" aria-pressed="false">Şimşek ϟ</button><button type="button" data-phone-icon="heart" aria-pressed="false">Kalp ♡</button><button type="button" data-phone-icon="star" aria-pressed="false">Yıldız ☆</button><button type="button" data-phone-icon="circle" aria-pressed="false">Daire ○</button><button type="button" data-phone-icon="triangle" aria-pressed="false">Üçgen △</button></div>
+          </fieldset>
+          <button class="phone-build" type="button">BASKIYI İZLE ↗</button>
+        </div>
+        <div class="phone-result">
+          <div class="phone-topline"><span class="phone-label">02 / MASANA ÖZEL</span><span class="phone-status" role="status">Standın hazırlanıyor</span></div>
+          <div class="phone-model"><canvas class="phone-preview" role="img" tabindex="0" aria-label="Telefon standının 3B önizlemesi"></canvas><span class="phone-tag">TELEFON STANDI</span><span class="phone-drag-hint">SÜRÜKLE · 360° KEŞFET</span></div>
+          <p class="phone-dimensions"></p>
+          <button class="phone-toggle" type="button" aria-pressed="true">TELEFONU ÇIKAR ↑</button>
+          <div class="phone-views" role="group" aria-label="Telefon standının bakış açısı"><button type="button" data-phone-view="front">ÖN</button><button type="button" data-phone-view="left">SOL</button><button type="button" data-phone-view="back">ARKA</button><button type="button" data-phone-view="right">SAĞ</button></div>
+          <div class="phone-actions"><button class="phone-download" type="button">TASLAĞI İNDİR ↓</button><a class="phone-quote" target="_blank" rel="noopener noreferrer" aria-disabled="true" tabindex="-1">WhatsApp’tan fiyat iste ↗</a></div>
+          <p class="phone-note">Telefon görseli ölçülerine göre değişir. Son uyum, kablo ucu ve malzeme detaylarını teklifte netleştiririz. PNG taslağını WhatsApp sohbetine ekleyebilirsin.</p>
+        </div>
+      </div>
+    </section>
+  </dialog>
 
   <dialog class="lamp-dialog" id="lamp-studio" aria-labelledby="lamp-title" aria-describedby="lamp-help">
     <section class="lamp-shell">
@@ -487,6 +520,8 @@
   <script src="voice-studio.js?v=2" defer></script>
   <script src="lamp-model.js?v=1" defer></script>
   <script src="lamp-studio.js?v=1" defer></script>
+  <script src="phone-model.js?v=1" defer></script>
+  <script src="phone-studio.js?v=1" defer></script>
   <script src="workshop.js?v=2" defer></script>
   <script src="main.js?v=44" defer></script>
 

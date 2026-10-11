@@ -653,3 +653,36 @@ body{max-width:100%;touch-action:pan-y}
  .starter-confirm-body{padding:18px 16px 22px}
 }
 @media(max-width:359px){.starter-strip{flex-wrap:wrap}.starter-reroll{width:100%}}
+
+/* Personal phone stand studio. */
+.phone-dialog{width:min(1150px,calc(100vw - 32px));height:min(870px,calc(100dvh - 40px));max-height:calc(100dvh - 24px);padding:0;border:1px solid #c7fa5f55;border-radius:20px;background:#111913;color:#f3f1ec;overflow:hidden;box-shadow:0 28px 100px #0009}
+.phone-dialog::backdrop{background:#050907cc;backdrop-filter:blur(8px)}
+.phone-shell{height:100%;display:flex;flex-direction:column;min-height:0}
+.phone-tabs{display:none}.phone-workspace{display:grid;grid-template-columns:.8fr 1.2fr;flex:1;min-height:0}
+.phone-edit,.phone-result{padding:24px;min-width:0;min-height:0;overflow:auto;overscroll-behavior:contain}.phone-edit{border-right:1px solid #c7fa5f25}
+.phone-result{display:flex;flex-direction:column}.phone-settings{border:0;padding:0;margin:0 0 20px;min-width:0}.phone-settings legend,.phone-label{display:block;margin:0 0 12px;color:#a0b393;font:9px/1.5 var(--mono);letter-spacing:.06em}
+.phone-options{display:flex;gap:8px;margin:10px 0 14px}.phone-options button,.phone-icons button,.phone-cable,.phone-views button{min-height:40px;padding:9px 13px;border:1px solid #c7fa5f35;border-radius:8px;background:transparent;color:#a9b69e;font:10px/1.4 var(--mono);cursor:pointer}
+.phone-options button{flex:1}.phone-dialog [aria-pressed="true"]{border-color:#c7fa5f;background:#c7fa5f15;color:#c7fa5f}
+.phone-field-note{margin:0 0 12px;color:#a9b69e;font:11px/1.6 var(--sans)}
+.phone-measures{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px}.phone-measures label{min-width:0;color:#a9b69e;font:9px var(--mono)}
+.phone-measures input,.phone-text{display:block;min-width:0;width:100%;min-height:43px;margin-top:8px;padding:10px;border:1px solid #c7fa5f35;border-radius:8px;background:#0f1511;color:#f3f1ec;font:16px var(--sans)}
+.phone-measures input[aria-invalid="true"]{border-color:#ffa879}.phone-measures small{display:block;margin-top:7px;color:#7f9574;font:8px var(--mono)}
+.phone-range{display:block;margin-bottom:16px}.phone-range>span{display:flex;justify-content:space-between;color:#a9b69e;font:9px var(--mono)}.phone-range output{color:#c7fa5f}.phone-range input{width:100%;margin:14px 0 0;accent-color:#c7fa5f;cursor:pointer}
+.phone-cable{width:100%;margin-bottom:22px;min-height:43px}
+.phone-colors{display:flex;gap:14px;margin:0 0 22px}.phone-colors button{width:30px;height:30px;padding:0;border:0;border-radius:50%;background:var(--phone-swatch);outline:1px solid #ffffff25;cursor:pointer}.phone-dialog .phone-colors button[aria-pressed="true"]{background:var(--phone-swatch);outline:2px solid #c7fa5f;outline-offset:4px}
+.phone-label small{display:block;margin-top:4px;font:7px var(--mono);color:#7f9574}.phone-text{margin:0 0 20px}.phone-icons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.phone-icons button{font:11px/1.4 var(--sans);padding:8px 5px}
+.phone-build,.phone-download,.phone-toggle{min-height:44px;padding:12px 15px;border:0;border-radius:8px;background:#c7fa5f;color:#101212;font:600 11px/1.4 var(--mono);cursor:pointer}.phone-build{width:100%}
+.phone-topline{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px;flex-shrink:0}.phone-topline .phone-label{margin:0}.phone-status{font:9px/1.5 var(--mono);color:#c7fa5f;text-align:right;max-width:68%}
+.phone-model{position:relative;flex:1;min-height:265px;border:1px solid #c7fa5f25;border-radius:12px;background:radial-gradient(ellipse at 50% 40%,#253526,#0d140f 75%);overflow:hidden}.phone-preview{position:absolute;inset:0;display:block;width:100%;height:100%;touch-action:none;cursor:grab}.phone-preview:active{cursor:grabbing}
+.phone-tag,.phone-drag-hint{position:absolute;font:8px var(--mono);color:#9cb18d;pointer-events:none}.phone-tag{top:14px;left:14px}.phone-drag-hint{bottom:14px;left:50%;transform:translateX(-50%);white-space:nowrap}
+.phone-dimensions{margin:12px 0;color:#9cb18d;font:8px/1.6 var(--mono);text-align:center;flex-shrink:0}
+.phone-toggle{width:100%;margin-bottom:10px;flex-shrink:0}.phone-dialog .phone-toggle[aria-pressed="true"]{background:#c7fa5f;color:#101212}
+.phone-views{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;flex-shrink:0}.phone-views button{min-height:36px;font-size:9px;padding:8px}
+.phone-actions{display:grid;grid-template-columns:1fr 1.15fr;gap:10px;flex-shrink:0}.phone-quote{display:flex;align-items:center;justify-content:center;min-height:44px;padding:10px;border:1px solid #c7fa5f65;border-radius:8px;color:#c7fa5f;font:11px/1.5 var(--sans);text-align:center;text-decoration:none}.phone-quote[aria-disabled="true"]{opacity:.32;pointer-events:none}
+.phone-note{font:10px/1.65 var(--sans);color:#a9b69e;margin:12px 0 0;flex-shrink:0}.phone-dialog button:disabled{opacity:.32;cursor:default}.phone-dialog :is(button,a,input,canvas):focus-visible{outline:2px solid #c7fa5f;outline-offset:3px}
+@media(max-width:800px){
+ .phone-dialog{width:calc(100% - 16px);height:calc(100dvh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom));max-height:calc(100dvh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom));border-radius:14px}#phone-help{font-size:10px}
+ .phone-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 16px;flex-shrink:0;border-bottom:1px solid #c7fa5f20}.phone-tabs button{min-height:36px;border:1px solid #c7fa5f35;border-radius:7px;background:transparent;color:#8ca47b;font:9px var(--mono);cursor:pointer}
+ .phone-workspace{display:block;overflow:auto;overscroll-behavior:contain}.phone-edit,.phone-result{padding:16px;min-height:100%;overflow:visible;border:0}.phone-dialog[data-phone-tab="edit"] .phone-result,.phone-dialog[data-phone-tab="preview"] .phone-edit{display:none}
+ .phone-model{flex:none;height:clamp(240px,calc(100dvh - 430px),420px);min-height:240px}.phone-tag,.phone-drag-hint{font-size:7px}.phone-actions>*{font-size:10px}.phone-status{font-size:8px}.phone-topline>.phone-label{font-size:8px;white-space:nowrap}.phone-dimensions{font-size:7px}.phone-measures{gap:8px}.phone-measures small{font-size:7px}.phone-label small{font-size:7px}
+}

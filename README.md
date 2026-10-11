@@ -112,3 +112,14 @@ her turdaki seçenekler tükenmeden tekrar seçilmez. Açılan tasarım düzenle
 “Bir daha karıştır” mevcut araçtan güvenle çıkıp yeni bir başlangıç açar.
 İsim alanları boş kalır. Önceden düzenlenmiş bir tasarım değiştirilecekse
 ziyaretçiye değiştirme, başka seçenek bulma ve iptal seçenekleri gösterilir.
+
+### Telefonun park yeri
+Atölyedeki telefon standı 3B modelle dik/yatay kullanım, 55–75° eğim,
+kılıf dahil telefon ölçüleri (en 60–90, boy 125–180, kalınlık 7–18 mm),
+gövde/ön bölüm renkleri, boş başlangıç yazısı ve beş simge sunar.
+Şarj seçimi tabanı ve tutucuyu gerçekten böler; ön yazı köprüsünün altında
+kablo geçişi kalır. İki destek nervürü arka paneli ayağa bağlar. Önizlemedeki
+telefon ölçülere göre değişir; koy/çıkar animasyonu, sürükleme/klavye ile 360°
+açı, alttan yükselen baskı ve telefonlu/boş iki görünüm içeren PNG vardır.
+WhatsApp doğrudan işletme numarasına ayarlarla açılır. Son uyum ve malzeme
+teklif sırasında netleşir; telefon bir ölçü önizlemesidir.
