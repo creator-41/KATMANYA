@@ -377,3 +377,21 @@ açık gösterir; indirme butonunun yanındaki açıklama bunu belirtir. WhatsAp
 yalnızca 905304815341 numarası için okunur tasarım metnini açar; dosya ayrıca eklenir.
 Hiçbir kişisel isim hazır değer değildir; veri sunucuya aktarılmaz. Fiziksel
 toleranslar, malzeme ve kilitleme teklifte doğrulanır; bu bir STL/CAD çıktısı değildir.
+
+## Kaydır, resmi tamamla
+
+`slide-model.js` 3×3 / sekiz parça oyun kurallarını, tersinir yasal karıştırmayı,
+çözülebilirlik paritesini ve tek boş kareye rijit kayma çizimini yönetir. Karıştırma
+yalnızca çözülmüş durumdan yasal hamlelerle üretilir; sağ alt parça boş kare olur.
+Fotoğrafın her parçası kendi orijinal dilimine bağlıdır, hareketle görsel değişmez.
+
+`slide-studio.js` yerel JPG/PNG/WebP yükleme (20 MB / 40 MP sınırı), merkez kırpma
+ve tamamını sığdırma, kaynak 1280 px küçültme, 900 px kare yüzey, numaralar,
+çerçeve rengi ve isteğe bağlı 20 karakter yazı sunar. Parçaya dokunma veya boş
+kareye sürükleme, semantik tile düğmeleri/klavye, hamle/geri alma/oyunu başa alma,
+oyunu bozmayan tamamlanmış görünüm ve sonlu kayma animasyonu vardır. Gizli sekme,
+kapanış ve azaltılmış hareket animasyonu güvenle sonlandırır; taslak bellekte kalır.
+PNG 1600×1400 tamamlanmış tasarım gösterir, devam eden oyunu değiştirmez.
+WhatsApp doğrudan 905304815341 için yalnızca okunur metni hazırlar; fotoğraf
+ve PNG ayrıca eklenir. Yüzeye görsel uygulama ve toleranslar teklif sırasında
+netleştirilir. Sunucuya fotoğraf aktarılmaz; STL veya hazır üretim dosyası değildir.
