@@ -335,3 +335,27 @@ sekme gizlenmesi ve modal kapanmasında durma, renkli yerel taslak korunması,
 1600×1400 PNG ve gerçek satır sonlu doğrudan WhatsApp taslağını sağlar.
 Mesaj, tüm parçaların satır/sütun/tür/yön/renk listesini içerir. Veri yalnızca
 bu sekmenin belleğindedir; veritabanına veya puan tablosuna gönderilmez.
+
+
+## Mekanik dalga oyuncağı
+
+“Döndür, dalga yürüsün” Hediye ve Oyun filtrelerinden açılır. Sekiz parçanın
+rengi ayrı seçilir; isteğe bağlı sekiz karakter ön yüzlere bağlı olarak hareket
+eder. Başlangıçta yazı boştur. Türkçe büyük harf ve NFC normalizasyonu korunur.
+Boşluk, ilgili parçayı yazısız bırakır. İskelet ve taban renkleri ayrıdır.
+
+`wave-model.js` ortak milin sekiz dairesel kamını 45° aralıkla döndürür.
+Kam merkezlerinin 6 mm eksantrik hareketi, üst temas noktalarını ve dikey
+kaydırıcı yüksekliğini belirler. Kaydırıcı çubukları ve üst blokların boyu
+sabittir; renkler ve harfler kendi parçalarında kalır. Çevirme kolu aynı
+mil açısını kullanır. Bir tam turda geometri başlangıca döner. Bu mekanizma
+ve tasarım önizlemesidir; üretime hazır CAD/STL veya tolerans doğrulaması
+iddiası yoktur. Mil, kam, kılavuz, ağırlık/sürtünme ve malzeme teklifte netleşir.
+
+`wave-studio.js` sağdaki kolu daire çizerek sürükleme, parçaya dokunarak seçim,
+±45° düğmeleri, 0–360° sürgü, ok/Home/boşluk klavye kontrolü ve sekiz saniyelik
+iki turlu sonlu deneme sağlar. Sekme gizlenmesi, mobil tasarım sekmesine dönüş
+ve modal kapanması animasyonu durdurur. Azaltılmış harekette otomatik deneme
+kapalıdır; elle ve adım düğmeleriyle kontrol devam eder. Renk/yazı/açı taslağı
+aynı sekmede korunur. 1600×1400 PNG ve gerçek satır sonlu doğrudan WhatsApp
+taslağı vardır; veri bellekte tutulur, veritabanına gönderilmez.
