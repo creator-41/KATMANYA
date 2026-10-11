@@ -1,4 +1,4 @@
-const CACHE_NAME = "katmanya-shell-v59";
+const CACHE_NAME = "katmanya-shell-v60";
 const BASE = self.registration.scope;
 const CORE_ASSETS = [
   "./",
@@ -48,7 +48,7 @@ const CORE_ASSETS = [
   "./squeeze-model.js?v=1",
   "./squeeze-studio.js?v=1",
   "./slide-model.js?v=1",
-  "./slide-studio.js?v=1",
+  "./slide-studio.js?v=2",
   "./workshop.js?v=3",
   "./gift-finder.js?v=1",
   "./assets/workshop/sketch.webp",

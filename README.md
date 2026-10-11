@@ -386,7 +386,7 @@ yalnızca çözülmüş durumdan yasal hamlelerle üretilir; sağ alt parça bo�
 Fotoğrafın her parçası kendi orijinal dilimine bağlıdır, hareketle görsel değişmez.
 
 `slide-studio.js` yerel JPG/PNG/WebP yükleme (20 MB / 40 MP sınırı), merkez kırpma
-ve tamamını sığdırma, kaynak 1280 px küçültme, 900 px kare yüzey, numaralar,
+ve tamamını sığdırma, açık/koyu görsel zemini, kaynak 1280 px küçültme, 900 px kare yüzey, numaralar,
 çerçeve rengi ve isteğe bağlı 20 karakter yazı sunar. Parçaya dokunma veya boş
 kareye sürükleme, semantik tile düğmeleri/klavye, hamle/geri alma/oyunu başa alma,
 oyunu bozmayan tamamlanmış görünüm ve sonlu kayma animasyonu vardır. Gizli sekme,
@@ -395,3 +395,7 @@ PNG 1600×1400 tamamlanmış tasarım gösterir, devam eden oyunu değiştirmez.
 WhatsApp doğrudan 905304815341 için yalnızca okunur metni hazırlar; fotoğraf
 ve PNG ayrıca eklenir. Yüzeye görsel uygulama ve toleranslar teklif sırasında
 netleştirilir. Sunucuya fotoğraf aktarılmaz; STL veya hazır üretim dosyası değildir.
+
+Şeffaf görsellerde görünen piksellerin ağırlıklı parlaklığına göre ilk zemin
+açık veya koyu seçilir; kullanıcı iki düğmeyle değiştirir. Zemin değişikliği
+oyun düzenini korur. Beyaz yazılı şeffaf logolar böylece açık fonda kaybolmaz.
