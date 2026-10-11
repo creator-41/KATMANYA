@@ -171,8 +171,8 @@ sunucuya kaydedilmez. Fiziksel baskının mekanik payları ve malzemesi teklifte
 `gear-model.js` geometri/bağlı dönüş/çizimi, `gear-studio.js` etkileşimleri yönetir.
 
 ### Atölye ürün vitrini
-11 araç Tümü / Hediye / Masaüstü / Oyun filtreleriyle gezilir. Kategoriler çoklu
-üyeliğe izin verir (8 hediye, 5 masaüstü, 3 oyun); sonuç ve kategori adetleri
+12 araç Tümü / Hediye / Masaüstü / Oyun filtreleriyle gezilir. Kategoriler çoklu
+üyeliğe izin verir (9 hediye, 6 masaüstü, 3 oyun); sonuç ve kategori adetleri
 kartların veri alanlarından hesaplanır. Düğmeler basılı durumunu ve sonuç sayısını
 bildirir. Kartların 480×300 WebP ürün önizlemeleri mevcut model çizimlerinden
 üretilmiş statik örneklerdir; açılan araçların taslağını değiştirmez veya kişisel isim
@@ -197,3 +197,29 @@ Tümü seçilir. Kullanılamayan araç pasif kalır. Seçimler yalnızca mevcut 
 oturumunun belleğindedir; sunucuya veya kalıcı depolamaya yazılmaz. Native
 modal, kapatma/Escape, fokus ve body/kaydırma restorasyonu kullanılır.
 `gift-finder.js` eşleştirmeyi ve arayüzü yönetir; sürpriz tasarım düğmesi korunur.
+
+
+## Gölge mesaj stüdyosu
+
+Tasarım atölyesindeki **Işığı tut, gizli mesajı gör** kartı, 14 karakterlik
+kısa bir mesajı ışık yönüne göre değişen bir gölge tasarımına dönüştürür.
+Giriş boş başlar; tasarım ve mesaj yalnızca geçerli sekmede tutulur.
+
+- Dört parça rengi ve iki yaklaşık ölçü; mobilde mesaj/önizleme sekmeleri.
+- Tuval sürükleme, iki erişilebilir kaydırıcı ve ok tuşlarıyla ışığı taşıma.
+- Doğru açı 40° / 50°; Home ve doğru açı düğmesiyle hizalama.
+- Işık aç/kapat, farklı açıya geçiş, açı uyumu göstergesi.
+- 1600 × 1400 PNG: seçilen ışık ve birleşen gölge, mesaj, renk ve ölçü.
+- İşletmenin WhatsApp numarasına gerçek satır sonlarıyla teklif taslağı.
+
+`shadow-model.js`, mesaj maskesinin yatay sıralarından eğik prizmalar oluşturur.
+Her prizmanın yüksekliği farklıdır; gölge, mevcut ışık yönünde tüm ağ
+yüzlerinin zemine izdüşümünden çizilir. Gölge görünümünde `fillText` ile
+mesaj eklenmez. Solda parçanın perspektifi, sağda aynı ağın üstten gölge
+görünümü bulunur. 40° / 50° yönünde bütün yükseklikler kaynak maskede birleşir.
+
+Bu geometri bir tasarım önizlemesidir; STL veya üretime hazır bağlantılı
+model sunmaz. Taban, bağlantılar, üretim ve gerçek ışık kurulumu teklifte
+netleştirilir. `shadow-studio.js` etkileşim, modal, odak, animasyon ve dışa
+aktarmayı yönetir; kapatma, sekme gizlenmesi ve azaltılmış hareket tercihi
+animasyonu durdurur.

@@ -35,7 +35,7 @@
   <link rel="icon" type="image/svg+xml" href="./assets/katmanya-icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/katmanya-192.png">
   <link rel="apple-touch-icon" href="./assets/katmanya-180.png">
-  <link rel="stylesheet" href="styles.css?v=97">
+  <link rel="stylesheet" href="styles.css?v=98">
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#top" aria-label="KATMANYA ana sayfa"><img class="katmanya-brand" src="./assets/katmanya-logo.svg" width="631" height="128" alt="KATMANYA"></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a><a href="#sss">Sık sorulanlar</a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="KATMANYA uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
@@ -162,6 +162,7 @@
       <button class="workshop-card sketch-trigger ring-trigger" data-workshop-categories="gift" aria-labelledby="workshop-ring-title workshop-ring-description" type="button" aria-haspopup="dialog" aria-controls="message-ring-studio" disabled><span class="workshop-preview" aria-hidden="true"><img src="./assets/workshop/ring.webp" width="480" height="300" alt="" loading="lazy" decoding="async"></span><span class="workshop-product-tag" aria-hidden="true">DÖNEN HALKA · GİZLİ MESAJLAR</span><strong id="workshop-ring-title">Döndür, mesaj değişsin</strong><small id="workshop-ring-description">Bir halkayı çevir, kendi mesajlarını keşfet.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
       <button class="workshop-card sketch-trigger capsule-trigger" data-workshop-categories="gift play" aria-labelledby="workshop-capsule-title workshop-capsule-description" type="button" aria-haspopup="dialog" aria-controls="capsule-studio" disabled><span class="workshop-preview" aria-hidden="true"><img src="./assets/workshop/capsule.webp" width="480" height="300" alt="" loading="lazy" decoding="async"></span><span class="workshop-product-tag" aria-hidden="true">ŞİFRE · SÜRPRİZ KAPSÜL</span><strong id="workshop-capsule-title">Şifreni çevir, sürprizi aç</strong><small id="workshop-capsule-description">Üç halkalı kapsülüne bir şifre ve gizli mesaj ekle.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
       <button class="workshop-card sketch-trigger gear-trigger" data-workshop-categories="play" aria-labelledby="workshop-gear-title workshop-gear-description" type="button" aria-haspopup="dialog" aria-controls="gear-studio" disabled><span class="workshop-preview" aria-hidden="true"><img src="./assets/workshop/gear.webp" width="480" height="300" alt="" loading="lazy" decoding="async"></span><span class="workshop-product-tag" aria-hidden="true">ÜÇ DİŞLİ · TEK HAREKET</span><strong id="workshop-gear-title">Birini çevir, hepsi hareket etsin</strong><small id="workshop-gear-description">Üç dişlini renklendir, birbirine bağlı hareketi dene.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
+      <button class="workshop-card sketch-trigger shadow-trigger" data-workshop-categories="gift desk" aria-labelledby="workshop-shadow-title workshop-shadow-description" type="button" aria-haspopup="dialog" aria-controls="shadow-studio" disabled><span class="workshop-preview" aria-hidden="true"><img src="./assets/workshop/shadow.webp" width="480" height="300" alt="" loading="lazy" decoding="async"></span><span class="workshop-product-tag" aria-hidden="true">IŞIK · GÖLGEDE GİZLİ MESAJ</span><strong id="workshop-shadow-title">Işığı tut, gizli mesajı gör</strong><small id="workshop-shadow-description">Işığı taşı, gölgede kendi mesajını ortaya çıkar.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
     </div>
     <p class="workshop-footer">Bir araçtan çıkınca buraya geri dönersin. Kaldığın yerden devam et.</p>
   </dialog>
@@ -330,6 +331,38 @@
     </div>
   </dialog>
 
+
+  <dialog class="ring-dialog shadow-dialog" id="shadow-studio" aria-labelledby="shadow-title" aria-describedby="shadow-help">
+    <section class="ring-shell shadow-shell">
+      <header class="sketch-head"><div><p class="sketch-eyebrow">KATMANYA / MESAJIN IŞIKTA SAKLI</p><h2 id="shadow-title">Işığı tut, <em>gizli mesajı gör.</em></h2><p id="shadow-help">Kısa mesajını yaz. Işığı taşı, parçanın gölgesi doğru açıda birleşsin.</p></div><button class="sketch-close shadow-close" type="button" aria-label="Gölge mesaj stüdyosunu kapat">×</button></header>
+      <nav class="ring-tabs shadow-tabs" aria-label="Gölge mesaj stüdyosu görünümü"><button type="button" data-shadow-tab="edit" aria-pressed="true">01 / MESAJINI YAZ</button><button type="button" data-shadow-tab="preview" aria-pressed="false">02 / IŞIĞI TAŞI</button></nav>
+      <div class="ring-workspace shadow-workspace">
+        <div class="ring-edit shadow-edit">
+          <fieldset class="ring-settings shadow-settings"><legend>01 / IŞIKTA ORTAYA ÇIKSIN</legend>
+            <label class="ring-label" for="shadow-message">GÖLGEDEKİ MESAJIN</label><input id="shadow-message" class="ring-message shadow-message" type="text" maxlength="14" placeholder="Kısa mesajını yaz" autocomplete="off" spellcheck="false" aria-describedby="shadow-message-help"><p class="shadow-length" aria-hidden="true">0 / 14</p><p class="ring-field-note" id="shadow-message-help">En fazla 14 karakter. Kısa kelimeler gölgede daha rahat okunur.</p>
+            <span class="ring-label">YAKLAŞIK ÖLÇÜ</span><div class="ring-options" role="group" aria-label="Gölge mesaj tasarımı ölçüsü"><button type="button" data-shadow-format="mini" aria-pressed="true">MİNİ · 125 × 65 MM</button><button type="button" data-shadow-format="wide" aria-pressed="false">GENİŞ · 156 × 81 MM</button></div>
+            <span class="ring-label">PARÇANIN RENGİ</span><div class="ring-colors" role="group" aria-label="Gölge mesaj parçasının rengi">
+              <button type="button" data-shadow-color="Yeşil" style="--ring-swatch:#c7fa5f" aria-label="Yeşil gölge mesaj parçası" aria-pressed="true"></button>
+              <button type="button" data-shadow-color="Beyaz" style="--ring-swatch:#f3f1ec" aria-label="Beyaz gölge mesaj parçası" aria-pressed="false"></button>
+              <button type="button" data-shadow-color="Mavi" style="--ring-swatch:#5795ef" aria-label="Mavi gölge mesaj parçası" aria-pressed="false"></button>
+              <button type="button" data-shadow-color="Siyah" style="--ring-swatch:#39443c" aria-label="Siyah gölge mesaj parçası" aria-pressed="false"></button>
+            </div>
+          </fieldset><button class="ring-download shadow-rehearse" type="button" disabled>IŞIKLA KEŞFET ↗</button><p class="ring-field-note">Mesajın cihazında işlenir. Sunucuya gönderilmez.</p>
+        </div>
+        <div class="ring-result shadow-result">
+          <div class="ring-topline"><span class="ring-label">02 / IŞIĞI TAŞI, MESAJI BUL</span></div>
+          <div class="ring-model shadow-model"><canvas class="ring-preview shadow-preview" role="img" tabindex="0" aria-label="Gizli mesaj parçası ve ışıkla oluşan gölgesi"></canvas><div class="shadow-empty"><strong>Gölgen ne söylesin?</strong><span>Mesajını yaz, ışıkla keşfet.</span></div><span class="ring-drag-hint">SÜRÜKLE · IŞIĞIN YÖNÜ DEĞİŞSİN</span></div>
+          <p class="shadow-view-note">Solda parçan, sağda aynı parçanın gölgesi.</p><p class="ring-dimensions shadow-dimensions"></p>
+          <div class="shadow-alignment"><span class="shadow-score">MESAJINI EKLE</span><meter class="shadow-meter" min="0" max="100" value="0" aria-label="Işık açısının mesajla uyumu"></meter></div>
+          <div class="shadow-sliders"><label for="shadow-horizontal">SAĞ / SOL <output class="shadow-horizontal-value" for="shadow-horizontal">−35°</output></label><input id="shadow-horizontal" class="shadow-horizontal" type="range" min="-60" max="60" value="-35" step="1" disabled><label for="shadow-reach">YAKIN / UZAK <output class="shadow-reach-value" for="shadow-reach">25°</output></label><input id="shadow-reach" class="shadow-reach" type="range" min="15" max="65" value="25" step="1" disabled></div>
+          <div class="shadow-light-actions"><button class="ring-download shadow-align" type="button" disabled>DOĞRU AÇIYI GÖSTER ↗</button><button class="shadow-scramble" type="button" disabled>AÇIYI DEĞİŞTİR ↺</button><button class="shadow-light" type="button" aria-pressed="true" disabled>IŞIĞI KAPAT ◐</button></div>
+          <p class="ring-status shadow-status" role="status" aria-live="polite">Kısa bir mesaj yaz; gölgesi burada oluşsun.</p>
+          <div class="ring-actions"><button class="ring-download shadow-download" type="button" disabled>TASLAĞI İNDİR ↓</button><a class="ring-quote shadow-quote" target="_blank" rel="noopener noreferrer" aria-disabled="true" tabindex="-1">WhatsApp’tan fiyat iste ↗</a></div>
+          <p class="ring-note">Gölge tasarım önizlemesi. Tabanı, parça bağlantılarını ve aydınlatmayı teklifte netleştiririz. PNG görselini sohbete ayrıca ekleyebilirsin.</p>
+        </div>
+      </div>
+    </section>
+  </dialog>
 
   <dialog class="ring-dialog gear-dialog" id="gear-studio" aria-labelledby="gear-title" aria-describedby="gear-help">
     <section class="ring-shell gear-shell">
@@ -708,6 +741,8 @@
   <script src="capsule-studio.js?v=1" defer></script>
   <script src="gear-model.js?v=1" defer></script>
   <script src="gear-studio.js?v=1" defer></script>
+  <script src="shadow-model.js?v=1" defer></script>
+  <script src="shadow-studio.js?v=1" defer></script>
   <script src="workshop.js?v=3" defer></script>
   <script src="gift-finder.js?v=1" defer></script>
   <script src="main.js?v=44" defer></script>
