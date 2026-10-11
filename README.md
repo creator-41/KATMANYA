@@ -359,3 +359,21 @@ ve modal kapanması animasyonu durdurur. Azaltılmış harekette otomatik deneme
 kapalıdır; elle ve adım düğmeleriyle kontrol devam eder. Renk/yazı/açı taslağı
 aynı sekmede korunur. 1600×1400 PNG ve gerçek satır sonlu doğrudan WhatsApp
 taslağı vardır; veri bellekte tutulur, veritabanına gönderilmez.
+
+## Sıkıştır, sürpriz çıksın
+
+`squeeze-model.js` iki eşzamanlı yatay kaydırıcıyı ve sabit 50 mm uzunluktaki
+kolları geometriyle bağlar. Kaydırıcı mafsalları ±47 mm'den ±25 mm'ye gider;
+ortadaki mafsalın yüksekliği `10 + sqrt(50² − x²)` olur. Rijit mesaj plakası
+yaklaşık 26,2 mm yükselerek kutunun üstünden çıkar. Kapalıyken plaka ve
+yazı opak duvarın altında gizlidir. Harfler ve semboller plakanın yüzüne bağlıdır.
+
+`squeeze-studio.js` iki yandan birini içeri sürükleme, 0–100 sürgüsü, aç/gizle,
+sonlu dört saniyelik aç–kapat denemesi, azaltılmış hareket, mobil düzenleme/
+önizleme sekmeleri, sekme belleğinde taslak ve odak/scroll geri dönüşünü yönetir.
+En fazla 24 karakterlik mesaj, beş geometrik sembol, mesaj/sembol/ikisi modu
+ve kutu/yan parça/plaka için ayrı renkler vardır. PNG 1600×1400 ve mesajı
+açık gösterir; indirme butonunun yanındaki açıklama bunu belirtir. WhatsApp
+yalnızca 905304815341 numarası için okunur tasarım metnini açar; dosya ayrıca eklenir.
+Hiçbir kişisel isim hazır değer değildir; veri sunucuya aktarılmaz. Fiziksel
+toleranslar, malzeme ve kilitleme teklifte doğrulanır; bu bir STL/CAD çıktısı değildir.
