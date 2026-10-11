@@ -1,15 +1,15 @@
-const CACHE_NAME = "katmanya-shell-v60";
+const CACHE_NAME = "katmanya-shell-v61";
 const BASE = self.registration.scope;
 const CORE_ASSETS = [
   "./",
   "./index.html",
-  "./manifest.webmanifest?v=katmanya-1",
-  "./styles.css?v=107",
+  "./manifest.webmanifest?v=katmanya-2",
+  "./styles.css?v=108",
   "./desk-set.js?v=1",
   "./vendor/qrcodegen.js?v=1",
-  "./story-card.js?v=1",
+  "./story-card.js?v=2",
   "./vendor/mp4-muxer.js?v=1",
-  "./story-video.js?v=2",
+  "./story-video.js?v=3",
   "./sketch-studio.js?v=22",
   "./photo-relief.js?v=1",
   "./photo-studio.js?v=1",
@@ -79,12 +79,11 @@ const CORE_ASSETS = [
   "./assets/desk-nameplate.webp",
   "./assets/dual-controller-stand.webp",
   "./assets/bulk-production.webp",
-  "./assets/katmanya-logo.svg",
-  "./assets/katmanya-icon.svg",
-  "./assets/katmanya-mark.svg",
-  "./assets/katmanya-192.png",
-  "./assets/katmanya-180.png",
-  "./assets/katmanya-512.png"
+  "./assets/katmanya-logo-green-v3.webp",
+  "./assets/katmanya-green-v3-32.png",
+  "./assets/katmanya-green-v3-192.png",
+  "./assets/katmanya-green-v3-180.png",
+  "./assets/katmanya-green-v3-512.png"
 ].map(path => new URL(path, BASE).href);
 
 self.addEventListener("install", event => {

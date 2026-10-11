@@ -57,3 +57,7 @@ h1 em{font-style:normal;color:var(--acid)}
   .lost-footer span:last-child{text-align:right}
 }
 @media(prefers-reduced-motion:reduce){.home-button{transition:none}.home-button:hover{transform:none}}
+
+.lost-brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.06em}
+.lost-brand img{width:62px;height:62px;object-fit:contain;border-radius:50%}
+@media(max-width:800px){.lost-brand img{width:44px;height:44px}.lost-brand{gap:8px;font-size:13px}}

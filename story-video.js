@@ -35,7 +35,7 @@
   function brand(){
     if(!brandPromise)brandPromise=new Promise((resolve,reject)=>{
       const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>{brandPromise=null;reject(Error('logo'));};
-      image.src=new URL('assets/katmanya-logo.svg',document.baseURI).href;
+      image.src=new URL('assets/katmanya-logo-green-v3.webp',document.baseURI).href;
     });
     return brandPromise;
   }
@@ -52,7 +52,7 @@
       c.fillStyle=glow;c.fillRect(0,0,WIDTH,HEIGHT);
       c.strokeStyle='#c7fa5f12';c.lineWidth=1;
       for(let y=360;y<945;y+=32){c.beginPath();c.moveTo(40,y);c.lineTo(680,y);c.stroke();}
-      c.drawImage(logo,48,90,310,310*128/631);
+      c.drawImage(logo,48,72,90,90);c.fillStyle='#f3f1ec';c.font='800 30px Manrope, sans-serif';c.fillText('KATMANYA',152,130);
       c.fillStyle='#a9b9a1';c.font='500 14px "DM Mono", monospace';c.fillText('SENİN ÇİZGİN. SENİN KATMANIN.',50,193);
       c.font='800 68px Manrope, sans-serif';c.fillStyle='#f3f1ec';c.fillText('Bunu ben',48,284);c.fillStyle='#c7fa5f';c.fillText('tasarladım.',48,363);
       c.fillStyle='#b2c6a8';c.font='500 14px "DM Mono", monospace';c.fillText(product+' / '+finish+(side?' / '+side:''),50,409);

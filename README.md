@@ -57,10 +57,11 @@ tercihi desteklenir ve boşta sürekli çizim yapılmaz.
 
 ## Marka
 
-Katmanlı küp amblemi `assets/katmanya-mark.svg`, yatay logo
-`assets/katmanya-logo.svg` dosyasındadır. SVG logosundaki yazı konturlara
-dönüştürülmüştür; ayrı bir yazı tipi dosyası yüklemez. PWA simgeleri ve
-sosyal bağlantı görseli aynı amblemden hazırlanmıştır.
+Yeşil çemberli KATMANYA 3D logosu `assets/katmanya-logo-green-v3.webp`
+dosyasındadır. Tam kare görselin oranı korunur; başlık ve hikâye çıktılarında
+okunabilir marka adı ayrıca yer alır. PWA ve tarayıcı simgeleri aynı görselin
+boyutlandırılmış `katmanya-green-v3-*.png` sürümleridir. Önceki SVG dosyaları
+geri dönüş için saklanır.
 
 ## Alan adı
 
