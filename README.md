@@ -138,3 +138,19 @@ WhatsApp doğrudan işletme sohbetine mesajları ve ayarları hazırlar.
 Bu bir tasarım önizlemesidir; döner parça baskı payı ve malzeme teklif
 aşamasında netleştirilir. `message-ring-model.js` çizimi,
 `message-ring-studio.js` girişleri ve etkileşim yaşam döngüsünü yönetir.
+
+### Şifreni çevir, sürprizi aç
+Üç döner halkalı kapsül 000–999 şifre, 80 karaktere kadar iç mesaj,
+35×85 / 45×105 mm taslak ölçüleri ve bağımsız gövde/halka renkleri sunar.
+Başlangıç alanları boştur. Sürükleme, halka seçimi ve rakam düğmeleri;
+klavyede sol/sağ halka, yukarı/aşağı rakam ve Enter deneme kontrolü vardır.
+Yanlış kombinasyon kapağı açmaz; doğru kombinasyonda kapak/taşıyıcı yükselir
+ve mesaj görünür. Açık kapsül yeniden karıştırılmadan halkaları dönmez.
+Karıştırma doğru şifreyi üretmez. Şifre veya mesaj düzenlenince kapak kapanır.
+Hareket azaltma tercihi bütün geçişleri anında tamamlar; kapatınca animasyon
+ve pointer yakalama temizlenir. PNG kapalı/açık görünüm ve mesaj içerir;
+halka rakamları maskelenir, şifre görsele yazılmaz. WhatsApp teklifi için
+kapsüle seçilen şifre, mesaj ve ayarlar gönderilecek taslağa eklenir.
+Veri bu araçtan hiçbir sunucuya kaydedilmez. Bu bir hediye bulmacası ve tasarım
+önizlemesidir; gerçek baskının mekanik payları ve malzemesi teklifte netleşir.
+`capsule-model.js` çizimi, `capsule-studio.js` arayüz ve yaşam döngüsünü yönetir.

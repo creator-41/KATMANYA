@@ -35,7 +35,7 @@
   <link rel="icon" type="image/svg+xml" href="./assets/katmanya-icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/katmanya-192.png">
   <link rel="apple-touch-icon" href="./assets/katmanya-180.png">
-  <link rel="stylesheet" href="styles.css?v=92">
+  <link rel="stylesheet" href="styles.css?v=93">
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#top" aria-label="KATMANYA ana sayfa"><img class="katmanya-brand" src="./assets/katmanya-logo.svg" width="631" height="128" alt="KATMANYA"></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a><a href="#sss">Sık sorulanlar</a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="KATMANYA uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
@@ -151,6 +151,7 @@
       <button class="workshop-card sketch-trigger lamp-trigger" type="button" aria-haspopup="dialog" aria-controls="lamp-studio" disabled><svg class="workshop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6m-5 3h4M8 15a7 7 0 1 1 8 0l-1 3H9l-1-3Z"/></svg><strong>Işıkta bir hatıra</strong><small>Fotoğrafının ışıkla ortaya çıkışını izle.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
       <button class="workshop-card sketch-trigger phone-trigger" type="button" aria-haspopup="dialog" aria-controls="phone-studio" disabled><svg class="workshop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v14H7zM10 14h4M4 21h16M6 21l2-4m10 4-2-4"/></svg><strong>Telefonun park yeri</strong><small>Telefon standını tasarla, telefonu koy ve çıkar.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
       <button class="workshop-card sketch-trigger ring-trigger" type="button" aria-haspopup="dialog" aria-controls="message-ring-studio" disabled><svg class="workshop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 1-2-5M20 3v6h-6M7 11h10v4H7z"/></svg><strong>Döndür, mesaj değişsin</strong><small>Bir halkayı çevir, kendi mesajlarını keşfet.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
+      <button class="workshop-card sketch-trigger capsule-trigger" type="button" aria-haspopup="dialog" aria-controls="capsule-studio" disabled><svg class="workshop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h12v14H6zM6 9h12M6 13h12M6 17h12M10 2h4v3M10 21h4"/></svg><strong>Şifreni çevir, sürprizi aç</strong><small>Üç halkalı kapsülüne bir şifre ve gizli mesaj ekle.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
     </div>
     <p class="workshop-footer">Bir araçtan çıkınca buraya geri dönersin. Kaldığın yerden devam et.</p>
   </dialog>
@@ -286,6 +287,47 @@
   </dialog>
 
 
+  <dialog class="ring-dialog capsule-dialog" id="capsule-studio" aria-labelledby="capsule-title" aria-describedby="capsule-help">
+    <section class="ring-shell capsule-shell">
+      <header class="sketch-head"><div><p class="sketch-eyebrow">KATMANYA / SÜRPRİZİN ŞİFRESİ SENDE</p><h2 id="capsule-title">Şifreni çevir, <em>sürprizi aç.</em></h2><p id="capsule-help">Üç halkayı çevir. Şifreyi tuttur, içerideki mesajı ortaya çıkar.</p></div><button class="sketch-close capsule-close" type="button" aria-label="Şifreli kapsül stüdyosunu kapat">×</button></header>
+      <nav class="ring-tabs capsule-tabs" aria-label="Şifreli kapsül stüdyosu görünümü"><button type="button" data-capsule-tab="edit" aria-pressed="true">01 / TASARLA</button><button type="button" data-capsule-tab="preview" aria-pressed="false">02 / ŞİFRENİ DENE</button></nav>
+      <div class="ring-workspace capsule-workspace">
+        <div class="ring-edit capsule-edit">
+          <fieldset class="ring-settings capsule-settings"><legend>01 / SÜRPRİZİNİ HAZIRLA</legend>
+            <label class="ring-label" for="capsule-code">KAPSÜLÜN ŞİFRESİ</label><input id="capsule-code" class="ring-message capsule-code" type="text" inputmode="numeric" pattern="[0-9]{3}" maxlength="3" placeholder="3 rakam seç" autocomplete="off" spellcheck="false" aria-describedby="capsule-code-help"><p class="ring-field-note capsule-code-help" id="capsule-code-help">000 dahil, 3 rakamdan oluşan bir şifre seç.</p>
+            <label class="ring-label" for="capsule-message">İÇERİDEKİ MESAJ</label><textarea id="capsule-message" class="ring-message capsule-message" rows="3" maxlength="80" placeholder="Kapsül açılınca ne söylesin?" autocomplete="off"></textarea><p class="capsule-length" aria-hidden="true">0 / 80</p>
+            <span class="ring-label">KAPSÜL ÖLÇÜSÜ</span><div class="ring-options" role="group" aria-label="Kapsül ölçüsü"><button type="button" data-capsule-format="mini" aria-pressed="true">MİNİ · 35 × 85 MM</button><button type="button" data-capsule-format="wide" aria-pressed="false">GENİŞ · 45 × 105 MM</button></div>
+            <span class="ring-label">SABİT GÖVDE VE KAPAK</span><div class="ring-colors" role="group" aria-label="Kapsül gövdesinin rengi">
+              <button type="button" data-capsule-body="Yeşil" style="--ring-swatch:#c7fa5f" aria-label="Yeşil kapsül gövdesi" aria-pressed="false"></button>
+              <button type="button" data-capsule-body="Beyaz" style="--ring-swatch:#f3f1ec" aria-label="Beyaz kapsül gövdesi" aria-pressed="false"></button>
+              <button type="button" data-capsule-body="Mavi" style="--ring-swatch:#5795ef" aria-label="Mavi kapsül gövdesi" aria-pressed="false"></button>
+              <button type="button" data-capsule-body="Siyah" style="--ring-swatch:#39443c" aria-label="Siyah kapsül gövdesi" aria-pressed="true"></button>
+            </div><span class="ring-label">DÖNEN ŞİFRE HALKALARI</span><div class="ring-colors" role="group" aria-label="Şifre halkalarının rengi">
+              <button type="button" data-capsule-rings="Yeşil" style="--ring-swatch:#c7fa5f" aria-label="Yeşil şifre halkaları" aria-pressed="true"></button>
+              <button type="button" data-capsule-rings="Beyaz" style="--ring-swatch:#f3f1ec" aria-label="Beyaz şifre halkaları" aria-pressed="false"></button>
+              <button type="button" data-capsule-rings="Mavi" style="--ring-swatch:#5795ef" aria-label="Mavi şifre halkaları" aria-pressed="false"></button>
+              <button type="button" data-capsule-rings="Siyah" style="--ring-swatch:#39443c" aria-label="Siyah şifre halkaları" aria-pressed="false"></button>
+            </div>
+          </fieldset>
+          <button class="ring-download capsule-rehearse" type="button" disabled>KARIŞTIR VE DENE ↗</button><p class="ring-field-note capsule-local-note">Şifre ve mesaj bu ekranda kalır. Fiyat isterken üretim bilgileri WhatsApp taslağına eklenir.</p>
+        </div>
+        <div class="ring-result capsule-result">
+          <div class="ring-topline"><span class="ring-label">02 / KİLİDİ ÇÖZ</span><span class="capsule-status" role="status" aria-live="polite">Kapsülün hazırlanıyor</span></div>
+          <div class="ring-model capsule-model"><canvas class="ring-preview capsule-preview" role="img" tabindex="0" aria-label="Şifreli sürpriz kapsülü"></canvas><span class="ring-tag capsule-tag">ŞİFREYİ TUTTUR · KAPAĞI AÇ</span><span class="ring-drag-hint">HALKAYI SAĞA / SOLA SÜRÜKLE</span></div>
+          <p class="ring-dimensions capsule-dimensions"></p>
+          <div class="capsule-wheels" role="group" aria-label="Kapsülün üç şifre halkası">
+            <div class="capsule-wheel"><button class="capsule-band" type="button" data-capsule-band="0" aria-pressed="true">1. HALKA</button><div class="capsule-stepper"><button type="button" data-capsule-turn="0" data-capsule-delta="-1" aria-label="1. halkayı bir rakam azalt">−</button><output data-capsule-value="0" aria-live="off">0</output><button type="button" data-capsule-turn="0" data-capsule-delta="1" aria-label="1. halkayı bir rakam artır">+</button></div></div>
+            <div class="capsule-wheel"><button class="capsule-band" type="button" data-capsule-band="1" aria-pressed="false">2. HALKA</button><div class="capsule-stepper"><button type="button" data-capsule-turn="1" data-capsule-delta="-1" aria-label="2. halkayı bir rakam azalt">−</button><output data-capsule-value="1" aria-live="off">0</output><button type="button" data-capsule-turn="1" data-capsule-delta="1" aria-label="2. halkayı bir rakam artır">+</button></div></div>
+            <div class="capsule-wheel"><button class="capsule-band" type="button" data-capsule-band="2" aria-pressed="false">3. HALKA</button><div class="capsule-stepper"><button type="button" data-capsule-turn="2" data-capsule-delta="-1" aria-label="3. halkayı bir rakam azalt">−</button><output data-capsule-value="2" aria-live="off">0</output><button type="button" data-capsule-turn="2" data-capsule-delta="1" aria-label="3. halkayı bir rakam artır">+</button></div></div>
+          </div>
+          <div class="capsule-play"><button class="ring-download capsule-unlock" type="button" disabled>ŞİFREYİ DENE 🔓</button><button class="capsule-mix" type="button" disabled>KAPAT VE KARIŞTIR ↻</button></div>
+          <div class="capsule-reveal" hidden><span>SÜRPRİZİN BURADA</span><p class="capsule-reveal-message"></p></div>
+          <div class="ring-actions"><button class="ring-download capsule-download" type="button" disabled>TASLAĞI İNDİR ↓</button><a class="ring-quote capsule-quote" target="_blank" rel="noopener noreferrer" aria-disabled="true" tabindex="-1">WhatsApp’tan fiyat iste ↗</a></div>
+          <p class="ring-export-help capsule-export-help"></p><p class="ring-note">Tasarım önizlemesi. Hareketli parçaların uyumunu ve malzemeyi teklifte netleştiririz. PNG taslağını sohbete ayrıca ekleyebilirsin.</p>
+        </div>
+      </div>
+    </section>
+  </dialog>
   <dialog class="ring-dialog" id="message-ring-studio" aria-labelledby="ring-title" aria-describedby="ring-help">
     <section class="ring-shell">
       <header class="sketch-head"><div><p class="sketch-eyebrow">KATMANYA / BİR HALKA, BİRKAÇ SÜRPRİZ</p><h2 id="ring-title">Döndür, <em>mesaj değişsin.</em></h2><p id="ring-help">Kendi mesajlarını yaz. Halkayı çevir, pencerede ortaya çıksın.</p></div><button class="sketch-close ring-close" type="button" aria-label="Dönen mesaj stüdyosunu kapat">×</button></header>
@@ -566,6 +608,8 @@
   <script src="phone-studio.js?v=1" defer></script>
   <script src="message-ring-model.js?v=1" defer></script>
   <script src="message-ring-studio.js?v=1" defer></script>
+  <script src="capsule-model.js?v=1" defer></script>
+  <script src="capsule-studio.js?v=1" defer></script>
   <script src="workshop.js?v=2" defer></script>
   <script src="main.js?v=44" defer></script>
 
