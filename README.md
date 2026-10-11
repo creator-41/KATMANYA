@@ -123,3 +123,18 @@ telefon ölçülere göre değişir; koy/çıkar animasyonu, sürükleme/klavye 
 açı, alttan yükselen baskı ve telefonlu/boş iki görünüm içeren PNG vardır.
 WhatsApp doğrudan işletme numarasına ayarlarla açılır. Son uyum ve malzeme
 teklif sırasında netleşir; telefon bir ölçü önizlemesidir.
+
+### Döndür, mesaj değişsin
+Atölyedeki hareketli anahtarlıkta 3/4 mesaj, 60/72 mm çap ve bağımsız
+sabit gövde/dönen halka renkleri seçilir. Alanlar başlangıçta boştur;
+önizlemedeki MESAJ 01–04 yer tutucuları teklife aktarılmaz. Dış tırtıklı
+halka ile mesaj çarkı birlikte döner; sabit kapaktaki gerçek açık pencere
+arkasından dönen yazılar kesilerek görünür. Sürükleme açısı, 3/4 durak
+aralığına oturma animasyonu, önceki/sonraki ve klavye kontrolü vardır.
+Hareket azaltma seçeneğinde durak anında seçilir. Boş aktif mesaj varsa
+indirme ve teklif kapalıdır. Dördüncü mesaj 3 mesaja geçilince saklanır.
+1600×1400 PNG bütün aktif mesajları ayrı pencereler halinde gösterir.
+WhatsApp doğrudan işletme sohbetine mesajları ve ayarları hazırlar.
+Bu bir tasarım önizlemesidir; döner parça baskı payı ve malzeme teklif
+aşamasında netleştirilir. `message-ring-model.js` çizimi,
+`message-ring-studio.js` girişleri ve etkileşim yaşam döngüsünü yönetir.

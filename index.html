@@ -35,7 +35,7 @@
   <link rel="icon" type="image/svg+xml" href="./assets/katmanya-icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/katmanya-192.png">
   <link rel="apple-touch-icon" href="./assets/katmanya-180.png">
-  <link rel="stylesheet" href="styles.css?v=91">
+  <link rel="stylesheet" href="styles.css?v=92">
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#top" aria-label="KATMANYA ana sayfa"><img class="katmanya-brand" src="./assets/katmanya-logo.svg" width="631" height="128" alt="KATMANYA"></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a><a href="#sss">Sık sorulanlar</a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="KATMANYA uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
@@ -150,6 +150,7 @@
       <button class="workshop-card sketch-trigger voice-trigger" type="button" aria-haspopup="dialog" aria-controls="voice-studio" disabled><svg class="workshop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10v4m4-8v12m5-15v18m5-15v12m4-8v4"/></svg><strong>Sesin katmanlarda</strong><small>Sesini bir anahtarlığın üzerine işle.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
       <button class="workshop-card sketch-trigger lamp-trigger" type="button" aria-haspopup="dialog" aria-controls="lamp-studio" disabled><svg class="workshop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6m-5 3h4M8 15a7 7 0 1 1 8 0l-1 3H9l-1-3Z"/></svg><strong>Işıkta bir hatıra</strong><small>Fotoğrafının ışıkla ortaya çıkışını izle.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
       <button class="workshop-card sketch-trigger phone-trigger" type="button" aria-haspopup="dialog" aria-controls="phone-studio" disabled><svg class="workshop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v14H7zM10 14h4M4 21h16M6 21l2-4m10 4-2-4"/></svg><strong>Telefonun park yeri</strong><small>Telefon standını tasarla, telefonu koy ve çıkar.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
+      <button class="workshop-card sketch-trigger ring-trigger" type="button" aria-haspopup="dialog" aria-controls="message-ring-studio" disabled><svg class="workshop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 1-2-5M20 3v6h-6M7 11h10v4H7z"/></svg><strong>Döndür, mesaj değişsin</strong><small>Bir halkayı çevir, kendi mesajlarını keşfet.</small><span class="workshop-arrow" aria-hidden="true">↗</span></button>
     </div>
     <p class="workshop-footer">Bir araçtan çıkınca buraya geri dönersin. Kaldığın yerden devam et.</p>
   </dialog>
@@ -285,6 +286,47 @@
   </dialog>
 
 
+  <dialog class="ring-dialog" id="message-ring-studio" aria-labelledby="ring-title" aria-describedby="ring-help">
+    <section class="ring-shell">
+      <header class="sketch-head"><div><p class="sketch-eyebrow">KATMANYA / BİR HALKA, BİRKAÇ SÜRPRİZ</p><h2 id="ring-title">Döndür, <em>mesaj değişsin.</em></h2><p id="ring-help">Kendi mesajlarını yaz. Halkayı çevir, pencerede ortaya çıksın.</p></div><button class="sketch-close ring-close" type="button" aria-label="Dönen mesaj stüdyosunu kapat">×</button></header>
+      <nav class="ring-tabs" aria-label="Dönen mesaj stüdyosu görünümü"><button type="button" data-ring-tab="edit" aria-pressed="false">01 / MESAJLARIN</button><button type="button" data-ring-tab="preview" aria-pressed="true">02 / HALKANI ÇEVİR</button></nav>
+      <div class="ring-workspace">
+        <div class="ring-edit">
+          <fieldset class="ring-settings"><legend>01 / KENDİ SÜRPRİZLERİNİ YAZ</legend>
+            <span class="ring-label">MESAJ SAYISI</span><div class="ring-options" role="group" aria-label="Mesaj sayısı"><button type="button" data-ring-count="3" aria-pressed="false">3 MESAJ</button><button type="button" data-ring-count="4" aria-pressed="true">4 MESAJ</button></div>
+            <p class="ring-field-note">Her mesaj en fazla 18 karakter. Kısa yaz, pencereye rahatça sığsın.</p>
+            <div class="ring-message-row"><label for="ring-message-1">MESAJ 01<output data-ring-length="0" aria-hidden="true">0 / 18</output></label><input id="ring-message-1" class="ring-message" type="text" maxlength="18" placeholder="1. mesajını yaz" autocomplete="off" spellcheck="false"></div>
+            <div class="ring-message-row"><label for="ring-message-2">MESAJ 02<output data-ring-length="1" aria-hidden="true">0 / 18</output></label><input id="ring-message-2" class="ring-message" type="text" maxlength="18" placeholder="2. mesajını yaz" autocomplete="off" spellcheck="false"></div>
+            <div class="ring-message-row"><label for="ring-message-3">MESAJ 03<output data-ring-length="2" aria-hidden="true">0 / 18</output></label><input id="ring-message-3" class="ring-message" type="text" maxlength="18" placeholder="3. mesajını yaz" autocomplete="off" spellcheck="false"></div>
+            <div class="ring-message-row"><label for="ring-message-4">MESAJ 04<output data-ring-length="3" aria-hidden="true">0 / 18</output></label><input id="ring-message-4" class="ring-message" type="text" maxlength="18" placeholder="4. mesajını yaz" autocomplete="off" spellcheck="false"></div>
+            <span class="ring-label">ANAHTARLIK ÇAPI</span><div class="ring-options" role="group" aria-label="Anahtarlık çapı"><button type="button" data-ring-size="60" aria-pressed="true">60 MM</button><button type="button" data-ring-size="72" aria-pressed="false">72 MM</button></div>
+            <span class="ring-label">SABİT GÖVDE</span><div class="ring-colors" role="group" aria-label="Sabit gövdenin rengi">
+              <button type="button" data-ring-body="Yeşil" style="--ring-swatch:#c7fa5f" aria-label="Yeşil sabit gövde" aria-pressed="false"></button>
+              <button type="button" data-ring-body="Beyaz" style="--ring-swatch:#f3f1ec" aria-label="Beyaz sabit gövde" aria-pressed="false"></button>
+              <button type="button" data-ring-body="Mavi" style="--ring-swatch:#5795ef" aria-label="Mavi sabit gövde" aria-pressed="false"></button>
+              <button type="button" data-ring-body="Siyah" style="--ring-swatch:#39443c" aria-label="Siyah sabit gövde" aria-pressed="true"></button>
+            </div><span class="ring-label">DÖNEN HALKA VE MESAJ ÇARKI</span><div class="ring-colors" role="group" aria-label="Dönen halkanın rengi">
+              <button type="button" data-ring-wheel="Yeşil" style="--ring-swatch:#c7fa5f" aria-label="Yeşil dönen halka" aria-pressed="true"></button>
+              <button type="button" data-ring-wheel="Beyaz" style="--ring-swatch:#f3f1ec" aria-label="Beyaz dönen halka" aria-pressed="false"></button>
+              <button type="button" data-ring-wheel="Mavi" style="--ring-swatch:#5795ef" aria-label="Mavi dönen halka" aria-pressed="false"></button>
+              <button type="button" data-ring-wheel="Siyah" style="--ring-swatch:#39443c" aria-label="Siyah dönen halka" aria-pressed="false"></button>
+            </div>
+          </fieldset>
+          <p class="ring-field-note">Yazdıkların bu ekranda kalır. Fiyat isterken mesajların WhatsApp taslağına eklenir.</p>
+        </div>
+        <div class="ring-result">
+          <div class="ring-topline"><span class="ring-label">02 / SÜRPRİZİ ORTAYA ÇIKAR</span><span class="ring-current-number">01 / 04</span></div>
+          <div class="ring-model"><canvas class="ring-preview" role="img" tabindex="0" aria-label="Dönen mesaj anahtarlığı"></canvas><span class="ring-tag">HAREKETLİ ANAHTARLIK</span><span class="ring-drag-hint">HALKAYI SÜRÜKLE · BIRAKINCA MESAJINA OTURSUN</span></div>
+          <p class="ring-dimensions"></p>
+          <div class="ring-controls"><button class="ring-turn ring-prev" type="button" aria-label="Önceki mesaj">↶</button><div class="ring-current-message">MESAJ 01</div><button class="ring-turn ring-next" type="button" aria-label="Sonraki mesaj">↷</button></div>
+          <div class="ring-stops" role="group" aria-label="Pencerede gösterilecek mesaj"><button type="button" data-ring-select="0" aria-label="1. mesajı göster" aria-pressed="true">01</button><button type="button" data-ring-select="1" aria-label="2. mesajı göster" aria-pressed="false">02</button><button type="button" data-ring-select="2" aria-label="3. mesajı göster" aria-pressed="false">03</button><button type="button" data-ring-select="3" aria-label="4. mesajı göster" aria-pressed="false">04</button></div>
+          <p class="ring-status" role="status" aria-live="polite"></p>
+          <div class="ring-actions"><button class="ring-download" type="button" disabled>TASLAĞI İNDİR ↓</button><a class="ring-quote" target="_blank" rel="noopener noreferrer" aria-disabled="true" tabindex="-1">WhatsApp’tan fiyat iste ↗</a></div>
+          <p class="ring-export-help"></p><p class="ring-note">Hareketli parçaların baskı payını ve malzemeyi teklifte netleştiririz. PNG taslağını WhatsApp sohbetine ayrıca ekleyebilirsin.</p>
+        </div>
+      </div>
+    </section>
+  </dialog>
   <dialog class="phone-dialog" id="phone-studio" aria-labelledby="phone-title" aria-describedby="phone-help">
     <section class="phone-shell">
       <header class="sketch-head"><div><p class="sketch-eyebrow">KATMANYA / MASANDA BİR YERİ OLSUN</p><h2 id="phone-title">Telefonun <em>park yeri.</em></h2><p id="phone-help">Standını kişiselleştir. Telefonu koy, çıkar, her açıdan keşfet.</p></div><button class="sketch-close phone-close" type="button" aria-label="Telefon standı stüdyosunu kapat">×</button></header>
@@ -522,6 +564,8 @@
   <script src="lamp-studio.js?v=1" defer></script>
   <script src="phone-model.js?v=1" defer></script>
   <script src="phone-studio.js?v=1" defer></script>
+  <script src="message-ring-model.js?v=1" defer></script>
+  <script src="message-ring-studio.js?v=1" defer></script>
   <script src="workshop.js?v=2" defer></script>
   <script src="main.js?v=44" defer></script>
 
