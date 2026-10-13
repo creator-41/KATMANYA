@@ -1,4 +1,4 @@
-const CACHE_NAME = "katmanya-shell-v62";
+const CACHE_NAME = "katmanya-shell-v63";
 const BASE = self.registration.scope;
 const CORE_ASSETS = [
   "./",
@@ -12,7 +12,7 @@ const CORE_ASSETS = [
   "./tesekkurler.html",
   "./index.html",
   "./manifest.webmanifest?v=katmanya-2",
-  "./styles.css?v=109",
+  "./styles.css?v=110",
   "./desk-set.js?v=1",
   "./vendor/qrcodegen.js?v=1",
   "./story-card.js?v=2",
@@ -88,6 +88,8 @@ const CORE_ASSETS = [
   "./assets/dual-controller-stand.webp",
   "./assets/bulk-production.webp",
   "./assets/katmanya-logo-green-v3.webp",
+  "./assets/katmanya-logo-green-v3-128.webp",
+  "./assets/katmanya-logo-green-v3-256.webp",
   "./assets/katmanya-green-v3-32.png",
   "./assets/katmanya-green-v3-192.png",
   "./assets/katmanya-green-v3-180.png",
