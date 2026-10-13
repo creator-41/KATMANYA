@@ -35,7 +35,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="./assets/katmanya-green-v3-32.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/katmanya-green-v3-192.png">
   <link rel="apple-touch-icon" href="./assets/katmanya-green-v3-180.png">
-  <link rel="stylesheet" href="styles.css?v=108">
+  <link rel="stylesheet" href="styles.css?v=109">
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#top" aria-label="KATMANYA ana sayfa"><img class="katmanya-brand" src="./assets/katmanya-logo-green-v3.webp" width="640" height="640" alt="KATMANYA 3D"><span class="brand-name" aria-hidden="true">KATMANYA</span></a><nav aria-label="Ana menü"><a href="#deneyim">Baskıyı keşfet</a><a href="#atolye">Neler üretiyoruz</a><a href="#surec">Nasıl çalışır</a><a href="#fikir">Fikrini paylaş <span>↗</span></a><a href="#sss">Sık sorulanlar</a></nav><a class="mobile-nav" href="#atolye">Hizmetler ↗</a><button class="install-app" id="install-app" type="button" aria-label="KATMANYA uygulamasını yükle"><span class="install-long">Uygulamayı yükle</span><span class="install-short">Yükle</span></button></header>
@@ -67,7 +67,7 @@
     <section class="print-story" id="deneyim" aria-label="Kaydırmayla ilerleyen üç boyutlu baskı deneyimi">
       <div class="print-sticky">
         <div class="ambient" aria-hidden="true"></div>
-        <div class="scene-wrap"><canvas id="printer" aria-label="Kaydırdıkça hareket eden KATMANYA yazıcısı ve katman katman basılan robot kaskı"></canvas><div class="printer-badge" aria-hidden="true">KATMANYA</div><div class="scene-fallback" hidden><p>Aklındaki fikri üretelim.</p><small>Bu cihazda 3D görünüm açılamadı. Ürünleri kaydırarak inceleyebilirsin.</small></div></div>
+        <div class="scene-wrap"><p id="scene-loading" class="scene-loading" role="status">3D atölye hazırlanıyor…</p><canvas id="printer" aria-label="Kaydırdıkça hareket eden KATMANYA yazıcısı ve katman katman basılan robot kaskı"></canvas><div class="printer-badge" aria-hidden="true">KATMANYA</div><div class="scene-fallback" hidden><p>Aklındaki fikri üretelim.</p><small>Bu cihazda 3D görünüm açılamadı. Ürünleri kaydırarak inceleyebilirsin.</small></div></div>
         <button class="printer-explore-trigger" type="button" aria-haspopup="dialog" aria-controls="printer-explorer" disabled>YAZICIYI KEŞFET <span aria-hidden="true">↗</span></button>
         <div class="story-copies">
           <article class="chapter active" data-chapter="0"><p class="eyebrow"><span class="live-dot"></span> KATMANYA · İLK ÜRETİMLER İÇİN TEKLİF ALIYORUZ</p><h1>Fikrini anlat, <br><em>üretelim.</em></h1><p class="chapter-desc">İlk ürünler için teklif topluyoruz. Fikrini ve ölçünü gönder; fiyatı ve teslim süresini birlikte netleştirelim.</p><a class="scroll-invite" href="#baski-baslangici"><span class="scroll-line"></span> KEŞFETMEK İÇİN KAYDIR <b>↓</b></a><button class="workshop-trigger" type="button" aria-haspopup="dialog" aria-controls="design-workshop" disabled>TASARIM ATÖLYESİ <span aria-hidden="true">↗</span></button></article>
@@ -124,7 +124,7 @@
         </div>
       </div>
     </section>
-    <footer class="site-footer" aria-label="Sosyal medya">
+    <footer class="site-footer" aria-label="İletişim ve site bilgileri" id="site-info">
       <div class="site-footer-inner">
         <img class="site-footer-brand" src="./assets/katmanya-logo-green-v3.webp" width="640" height="640" alt="KATMANYA" loading="lazy">
         <a class="instagram-link" href="https://www.instagram.com/katmanya_3d/" target="_blank" rel="noopener noreferrer" aria-label="Üretimleri Instagram’da takip et: @katmanya_3d, yeni sekmede açılır">
@@ -133,6 +133,7 @@
           <span class="instagram-arrow" aria-hidden="true">↗</span>
         </a>
       </div>
+      <div class="site-info-links"><a href="/iletisim.html">İletişim</a><a href="tel:+905304815341">+90 530 481 53 41</a><a href="/gizlilik.html">Gizlilik</a><a href="/kullanim-kosullari.html">Kullanım koşulları</a><a href="/cerezler.html">Çerezler</a><button type="button" data-consent-open>Çerez tercihleri</button></div>
     </footer>
   <dialog class="workshop-dialog" id="design-workshop" aria-labelledby="workshop-title" aria-describedby="workshop-help">
     <header class="sketch-head"><div><span class="workshop-eyebrow">KATMANYA / FİKRİNDEN BAŞLA</span><h2 id="workshop-title">Tasarım <em>atölyesi.</em></h2><p id="workshop-help">Bir araç seç, fikrini katmanlara dönüştür.</p></div><button class="sketch-close workshop-close" type="button" aria-label="Tasarım atölyesini kapat">×</button></header>
@@ -923,6 +924,8 @@
     </section>
   </dialog>
   </main>
+  <script src="site-preferences.js?v=1" defer></script>
+  <script src="site-experience.js?v=1" defer></script>
   <script src="desk-set.js?v=1" defer></script>
   <script src="vendor/qrcodegen.js?v=1" defer></script>
   <script src="story-card.js?v=2" defer></script>
@@ -969,7 +972,7 @@
   <script src="slide-studio.js?v=2" defer></script>
   <script src="workshop.js?v=3" defer></script>
   <script src="gift-finder.js?v=1" defer></script>
-  <script src="main.js?v=44" defer></script>
+  <script src="main.js?v=45" defer></script>
 
   <aside id="quote-chat" aria-label="KATMANYA teklif asistanı">
     <section id="quote-chat-panel" class="quote-chat-panel" role="dialog" aria-modal="false" aria-labelledby="quote-chat-title" hidden>
@@ -984,6 +987,19 @@
       <span class="quote-chat-badge" role="status" aria-label="Yeni mesaj" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg></span>
     </button>
   </aside>
-  <script src="chatbot.js?v=19" defer></script>
+  <script src="chatbot.js?v=20" defer></script>
+  <dialog id="quote-thanks" class="info-dialog" aria-labelledby="thanks-title">
+    <button type="button" class="info-close" aria-label="Pencereyi kapat">×</button>
+    <h2 id="thanks-title">İlgin için teşekkürler!</h2>
+    <p>WhatsApp bağlantısını açtık. Teklif talebini tamamlamak için mesajı WhatsApp’ta göndermelisin.</p>
+    <p>Bu site mesajının gönderildiğini doğrulayamaz. Sohbet açılmadıysa aşağıdaki bağlantıyı kullan.</p>
+    <a id="thanks-retry" class="button" target="_blank" rel="noopener noreferrer">WhatsApp’ı tekrar aç ↗</a>
+    <a class="thanks-details" href="/tesekkurler.html">Tekliften sonra ne olur?</a>
+  </dialog>
+  <section id="consent-banner" class="consent-banner" aria-labelledby="consent-title" hidden>
+    <h2 id="consent-title">Çerez ve cihaz tercihleri</h2><p>Site için gerekli depolama kullanılır. İzin verirsen uygulama yükleme hatırlatmasını erteleme tercihini de hatırlarız. Ziyaret ölçümü ve reklam takibi etkin değil. <a href="/cerezler.html">Ayrıntılar</a></p>
+    <div class="consent-actions"><button type="button" data-consent-reject>Yalnızca gerekli</button><button type="button" data-consent-accept>İşlevsel tercihlere izin ver</button><button type="button" data-consent-open>Ayarlar</button></div>
+  </section>
+  <dialog id="consent-dialog" class="info-dialog" aria-labelledby="consent-settings-title"><button class="info-close" type="button" aria-label="Tercihleri kapat">×</button><h2 id="consent-settings-title">Depolama tercihleri</h2><p>Gerekli: uygulama önbelleği ve bu tercihin hatırlanması.</p><label class="consent-choice"><input type="checkbox" id="consent-functional"> Uygulama yükleme hatırlatmasını erteleme tercihini hatırla</label><p>Ziyaret ölçümü etkin değildir. Reklam takibi kullanılmaz.</p><button class="consent-save" type="button">Tercihlerimi kaydet</button><p id="consent-status" role="status"></p></dialog>
   </body></html>
 

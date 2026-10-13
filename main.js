@@ -20,6 +20,7 @@
   const gl = canvas.getContext('webgl', { alpha: true, antialias: true, powerPreference: 'low-power' });
   function fallback() {
     rendererAvailable=false;
+    window.dispatchEvent(new Event("katmanya:scene-ready"));
     if(exploreTrigger)exploreTrigger.disabled=true;
     if(exploreDialog?.open)exploreDialog.close();
     document.querySelector('.scene-fallback').hidden = false;
@@ -432,6 +433,7 @@
   window.addEventListener('pageshow',()=>{if(exploreDialog?.open)exploreDialog.close();current=0;target=0;window.scrollTo({top:0,left:0,behavior:'instant'});measure();render(0);});
   window.scrollTo({top:0,left:0,behavior:'instant'});
   measure();render(0);
+  window.dispatchEvent(new Event("katmanya:scene-ready"));
   const briefCopy=document.querySelector("#brief-copy");
   briefCopy?.addEventListener("click",async()=>{const text="KATMANYA teklif talebi\n\nÜrün/fikir: \nÖlçüler: \nAdet: \nKullanım amacı: \nRenk tercihi: \nFotoğraf veya 3B dosya: ";const status=document.querySelector("#copy-status");try{await navigator.clipboard.writeText(text);status.textContent="Mesaj taslağı kopyalandı; bilgilerini doldurup bize gönderebilirsin.";}catch{status.textContent="Kopyalama desteklenmiyor. Bilgi listesini kullanarak mesajını hazırlayabilirsin.";} });
   document.querySelectorAll(".product-slide").forEach(slide=>{
@@ -471,9 +473,8 @@
     if(!button||!color||!quantity)return;
     const product=button.dataset.quoteProduct||"Ürün";
     const updateQuote=()=>{
-      const entered=Number.parseInt(quantity.value,10);
-      const amount=Number.isFinite(entered)?Math.min(999,Math.max(1,entered)):1;
-      quantity.value=String(amount);
+      const amount=Number(quantity.value);
+      if(!quantity.checkValidity()||!Number.isInteger(amount))return;
       const shade=color.value||"Henüz karar vermedim";
       const detailValue=detail?.value.trim()||"Mesajda paylaşacağım";
       if(preview){
@@ -711,6 +712,7 @@
   const installPromptDialog=document.querySelector("#install-prompt");
   const installPromptAccept=document.querySelector("#install-prompt-accept");
   const installPromptLater=document.querySelector("#install-prompt-later");
+  let installPromptMemoryUntil=0;
   const installPromptSnoozeKey="katmanya-install-prompt-until";
   const installPromptSnoozeMs=12*60*60*1000;
   let installPromptEvent=null;
@@ -718,11 +720,12 @@
   installButton.hidden=appIsInstalled;
 
   function deferInstallPrompt(){
-    try{localStorage.setItem(installPromptSnoozeKey,String(Date.now()+installPromptSnoozeMs));}catch{}
+    installPromptMemoryUntil=Date.now()+installPromptSnoozeMs;
+    if(window.katmanyaPreferences?.functionalAllowed())try{localStorage.setItem(installPromptSnoozeKey,String(installPromptMemoryUntil));}catch{}
   }
   function installPromptIsDeferred(){
     try{
-      const until=Number(localStorage.getItem(installPromptSnoozeKey)||0);
+      const until=window.katmanyaPreferences?.functionalAllowed()?Number(localStorage.getItem(installPromptSnoozeKey)||0):installPromptMemoryUntil;
       if(until>Date.now())return true;
       if(until)localStorage.removeItem(installPromptSnoozeKey);
     }catch{}

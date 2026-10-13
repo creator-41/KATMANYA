@@ -54,12 +54,12 @@
     if(step>=questions.length){finish();return;}
     const q=questions[step];bubble(q.label,'bot');
     if(q.type==='choice'){showChoices(q.options.map(value=>({label:value,action:()=>answer(value)})));return;}
-    const form=document.createElement('form');form.className='chat-answer-form';
-    const input=document.createElement('input');input.type=q.type==='number'?'number':'text';input.name='answer';input.required=true;input.autocomplete='off';input.maxLength=100;input.placeholder=q.placeholder||'';input.setAttribute('aria-label',q.label);
+    const form=document.createElement('form');form.className='chat-answer-form';form.noValidate=true;
+    const input=document.createElement('input');input.type=q.type==='number'?'number':'text';input.name='answer';input.setAttribute('aria-describedby','chat-input-status');status.id='chat-input-status';input.required=true;input.autocomplete='off';input.maxLength=100;input.placeholder=q.placeholder||'';input.setAttribute('aria-label',q.label);
     if(q.type==='number'){input.min='1';input.max='9999';input.inputMode='numeric';}
     const submit=document.createElement('button');submit.type='submit';submit.className='chat-send';submit.textContent='Devam';
-    form.append(input,submit);form.addEventListener('submit',event=>{event.preventDefault();const value=input.value.trim();if(!value)return;if(q.type==='number'&&(+value<1||+value>9999)){status.textContent='Adedi 1 ile 9999 arasında gir.';return;}status.textContent='';answer(value);});
-    controls.append(form);if(!matchMedia('(max-width:800px)').matches)input.focus({preventScroll:true});scrollLogToBottom();
+    form.append(input,submit);form.addEventListener('submit',event=>{event.preventDefault();const value=input.value.trim();if(!value||!input.checkValidity()||(q.type==='number'&&!Number.isInteger(+value))){input.setAttribute('aria-invalid','true');status.textContent=q.type==='number'?'Adedi 1 ile 9999 arasında tam sayı olarak gir.':'Lütfen bu alanı doldur.';input.focus();return;}input.removeAttribute('aria-invalid');status.textContent='';answer(value);});
+    input.addEventListener('input',()=>{input.removeAttribute('aria-invalid');status.textContent='';});controls.append(form);if(!matchMedia('(max-width:800px)').matches)input.focus({preventScroll:true});scrollLogToBottom();
   }
   function answer(value){const q=questions[step];answers[q.key]=value;bubble(value,'user');step++;askNext();}
   function finish(){
