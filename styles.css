@@ -782,3 +782,5 @@ body{max-width:100%;touch-action:pan-y}
 
 /* Keep the floating quote action above the home indicator and easy to tap. */
 @media(max-width:800px){#quote-chat{bottom:calc(12px + env(safe-area-inset-bottom))}.quote-chat-toggle{min-height:44px;min-width:44px}}
+
+.topbar nav .nav-shop{color:var(--acid);font-weight:800}.topbar nav{gap:clamp(12px,2vw,28px)}@media(min-width:801px) and (max-width:1150px){.topbar nav a[href="#surec"],.topbar nav a[href="#sss"]{display:none}}

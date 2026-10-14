@@ -1,5 +1,11 @@
 (() => {
   'use strict';
+  document.addEventListener('DOMContentLoaded', () => {
+    const requested = new URL(location.href).searchParams.get('urun');
+    if (!requested) return;
+    const card = [...document.querySelectorAll('#design-workshop .workshop-card')].find(button => button.getAttribute('aria-controls') === requested);
+    if (card && !card.disabled) card.click();
+  }, {once:true});
   const loading = document.querySelector('#scene-loading');
   const ready = () => { if (loading) loading.hidden = true; };
   window.addEventListener('katmanya:scene-ready', ready, {once:true});

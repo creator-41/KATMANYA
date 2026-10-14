@@ -1,8 +1,12 @@
-const CACHE_NAME = "katmanya-shell-v63";
+const CACHE_NAME = "katmanya-shell-v64";
 const BASE = self.registration.scope;
 const CORE_ASSETS = [
   "./",
-  "./site-experience.js?v=1",
+  "./magaza.html",
+  "./shop.css?v=1",
+  "./shop.js?v=1",
+  "./shop-catalogue.js?v=1",
+  "./site-experience.js?v=2",
   "./site-preferences.js?v=1",
   "./gizlilik.html",
   "./kullanim-kosullari.html",
@@ -12,7 +16,7 @@ const CORE_ASSETS = [
   "./tesekkurler.html",
   "./index.html",
   "./manifest.webmanifest?v=katmanya-2",
-  "./styles.css?v=110",
+  "./styles.css?v=111",
   "./desk-set.js?v=1",
   "./vendor/qrcodegen.js?v=1",
   "./story-card.js?v=2",
@@ -127,7 +131,7 @@ self.addEventListener("fetch", event => {
         }
         return response;
       } catch {
-        return (await caches.match(new URL("./index.html", BASE))) || Response.error();
+        return (await caches.match(request, {ignoreSearch:true})) || (await caches.match(new URL("./index.html", BASE))) || Response.error();
       }
     })());
     return;
